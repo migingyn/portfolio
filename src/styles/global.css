@@ -1,14 +1,12 @@
 @import "tailwindcss";
 
 /* Latin faces ship in the main stylesheet. Japanese ranges: see fonts-jp.css. */
-@import "@fontsource/manufacturing-consent/latin-400.css";
+@import "@fontsource/grenze-gotisch/latin-900.css";
 @import "@fontsource/dela-gothic-one/latin-400.css";
-@import "@fontsource/michroma/latin-400.css";
-@import "@fontsource/zen-kaku-gothic-new/latin-300.css";
-@import "@fontsource/zen-kaku-gothic-new/latin-400.css";
-@import "@fontsource/zen-kaku-gothic-new/latin-700.css";
-@import "@fontsource/ibm-plex-mono/latin-500.css";
-@import "@fontsource/ibm-plex-mono/latin-600.css";
+@import "@fontsource/zen-maru-gothic/latin-500.css";
+@import "@fontsource/zen-maru-gothic/latin-700.css";
+@import "@fontsource/zen-maru-gothic/latin-900.css";
+@import "@fontsource/yusei-magic/latin-400.css";
 @import "@fontsource/dotgothic16/latin-400.css";
 
 @import "./tokens.css";
@@ -24,6 +22,7 @@
   body {
     font-family: var(--font-body);
     font-size: 1.0625rem;
+    font-weight: 500;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
@@ -48,33 +47,164 @@
   }
 }
 
-/* Ghost button (DESIGN.md section 6). Other variants get added when first used. */
-@utility btn-ghost {
+/* Gel button (DESIGN.md section 6): chrome pill that presses in. */
+@utility btn-gel {
   display: inline-flex;
   min-height: 44px;
   align-items: center;
   justify-content: center;
-  padding: 12px 24px;
-  border: 1px solid var(--color-silver-50);
+  gap: 8px;
+  padding: 10px 22px;
+  border: 2px solid var(--color-ink);
   border-radius: var(--radius-pill);
-  color: var(--color-silver-50);
-  font-family: var(--font-mono);
+  background-image: var(--gradient-chrome);
+  box-shadow:
+    inset 0 2px 0 var(--color-paper),
+    3px 3px 0 var(--color-forward);
+  color: var(--color-ink);
+  font-family: var(--font-body);
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 900;
   line-height: 1.2;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition:
+    translate var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+  &:hover {
+    box-shadow:
+      inset 0 2px 0 var(--color-paper),
+      5px 5px 0 var(--color-forward);
+    translate: -1px -1px;
+  }
+  &:active {
+    box-shadow:
+      inset 0 2px 0 var(--color-paper),
+      0 0 0 var(--color-forward);
+    translate: 3px 3px;
+  }
+}
+
+/* Entrance: elements with .enter pop in once, staggered by --i. Held while the
+   loading screen is up so the cover assembles when it lifts. */
+@media (prefers-reduced-motion: no-preference) {
+  .enter {
+    animation: enter var(--duration-pop) var(--ease-pop) both;
+    animation-delay: calc(var(--i, 0) * 70ms + 80ms);
+  }
+  html[data-loading] .enter {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    scale: 0.7;
+    translate: 0 16px;
+  }
+}
+
+/* Masthead: the site name as a magazine title, and the menu button. */
+.masthead {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: stretch;
+  color: var(--color-paper);
+}
+.masthead-kana {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0.6em 2px;
+  color: var(--color-silver-400);
+  text-align-last: justify;
+  letter-spacing: 0.5em;
+}
+.masthead-name {
+  display: block;
+  padding: 0 0.12em 0.08em;
+  transform: skew(-7deg);
+  text-shadow: 0.045em 0.045em 0 var(--color-forward);
+  white-space: nowrap;
+  transition:
+    translate var(--duration-base) var(--ease-out),
+    text-shadow var(--duration-base) var(--ease-out);
+}
+.masthead:hover .masthead-name {
+  text-shadow: 0.075em 0.075em 0 var(--color-magenta);
+  translate: -0.02em -0.02em;
+}
+.masthead:active .masthead-name {
+  text-shadow: 0 0 0 var(--color-forward);
+  translate: 0.045em 0.045em;
+}
+.masthead-chip {
+  position: absolute;
+  right: -6px;
+  top: 4px;
+  padding: 4px 10px;
+  rotate: 7deg;
+  border: 2px solid var(--color-ink);
+  border-radius: var(--radius-pill);
+  background: var(--color-accent);
+  box-shadow: 3px 3px 0 var(--color-ink);
+  color: var(--color-ink);
+  white-space: nowrap;
+}
+
+/* On phones the sticker rides above the name, beside the katakana, so it never covers a letter. */
+@media (max-width: 47.99rem) {
+  .masthead-kana {
+    padding-right: 7.5rem;
+    letter-spacing: 0.3em;
+  }
+  .masthead-chip {
+    top: -12px;
+  }
+}
+
+.menu-number {
+  display: inline-grid;
+  min-width: 1.9rem;
+  place-items: center;
+  padding: 3px 0;
+  border-radius: var(--radius-pill);
+  background: var(--color-silver-50);
+  color: var(--color-ink);
+}
+.menu-title {
+  display: block;
+  width: fit-content;
+  transform-origin: left bottom;
   transition:
     color var(--duration-fast) var(--ease-out),
-    border-color var(--duration-fast) var(--ease-out),
-    scale var(--duration-base) var(--ease-out);
-  &:hover {
-    border-color: var(--color-forward);
-    color: var(--color-forward);
+    transform var(--duration-base) var(--ease-pop);
+}
+.menu-link:hover .menu-title {
+  color: var(--color-forward);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .masthead-chip {
+    animation: chip-nudge 2.8s var(--ease-pop) infinite;
   }
-  @media (prefers-reduced-motion: no-preference) {
-    &:active {
-      scale: 0.97;
-    }
+  .menu-link:hover .menu-title {
+    transform: translateX(10px) skew(-8deg);
+  }
+}
+
+@keyframes chip-nudge {
+  0%,
+  70%,
+  100% {
+    rotate: 7deg;
+    scale: 1;
+  }
+  80% {
+    rotate: -4deg;
+    scale: 1.08;
+  }
+  90% {
+    rotate: 10deg;
   }
 }

@@ -1,0 +1,62 @@
+---
+/** Phone-strap charm: one small motif per season style, drawn from polar points. */
+interface Props {
+  motif: "leaves" | "snow" | "rain" | "petals";
+}
+const { motif } = Astro.props;
+
+const polar = (deg: number, r: number) => {
+  const a = (deg * Math.PI) / 180;
+  return `${(50 + Math.cos(a) * r).toFixed(1)},${(50 + Math.sin(a) * r).toFixed(1)}`;
+};
+
+/** Maple leaf: seven pointed lobes with shallow valleys between them. */
+const lobes: [number, number][] = [[-90, 46], [-38, 42], [8, 34], [52, 20], [128, 20], [172, 34], [-142, 42]];
+const leaf = lobes
+  .flatMap(([deg, r], i) => {
+    const next = lobes[(i + 1) % lobes.length]![0];
+    const mid = deg + (((next - deg + 540) % 360) - 180) / 2;
+    return [polar(deg, r), polar(mid, 13)];
+  })
+  .join(" ");
+const spokes = [0, 60, 120, 180, 240, 300];
+const petals = [-90, -18, 54, 126, 198];
+---
+
+<svg viewBox="0 0 100 100" class="block w-full overflow-visible" aria-hidden="true">
+  {
+    motif === "leaves" && (
+      <g stroke="var(--color-ink)" stroke-width="4" stroke-linejoin="round">
+        <line x1="50" y1="56" x2="50" y2="92" stroke-linecap="round" />
+        <polygon points={leaf} fill="var(--color-forward)" />
+      </g>
+    )
+  }
+  {
+    motif === "snow" && (
+      <g stroke="var(--color-paper)" stroke-width="7" stroke-linecap="round">
+        {spokes.map((deg) => <line x1="50" y1="50" x2={polar(deg, 40).split(",")[0]} y2={polar(deg, 40).split(",")[1]} />)}
+        <circle cx="50" cy="50" r="9" fill="var(--color-sky)" stroke="var(--color-ink)" stroke-width="4" />
+      </g>
+    )
+  }
+  {
+    motif === "rain" && (
+      <path
+        d="M50 8 C72 40 82 56 82 68 A32 32 0 0 1 18 68 C18 56 28 40 50 8Z"
+        fill="var(--color-sky)"
+        stroke="var(--color-ink)"
+        stroke-width="4"
+        stroke-linejoin="round"
+      />
+    )
+  }
+  {
+    motif === "petals" && (
+      <g stroke="var(--color-ink)" stroke-width="4">
+        {petals.map((deg) => <circle cx={polar(deg, 24).split(",")[0]} cy={polar(deg, 24).split(",")[1]} r="20" fill="var(--color-pink)" />)}
+        <circle cx="50" cy="50" r="9" fill="var(--color-forward)" />
+      </g>
+    )
+  }
+</svg>

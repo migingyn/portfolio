@@ -1,0 +1,57 @@
+---
+/** Starburst sticker. The burst spins slowly; the text on it stays level. */
+interface Props {
+  points?: number;
+  class?: string;
+  [attribute: string]: unknown;
+}
+// The rest carries the parent's style and scoped-style attribute onto the root.
+const { points = 16, class: className, ...rest } = Astro.props;
+
+const shape = Array.from({ length: points * 2 }, (_, i) => {
+  const a = (i / (points * 2)) * Math.PI * 2;
+  const r = i % 2 ? 39 : 49;
+  return `${(50 + Math.cos(a) * r).toFixed(1)},${(50 + Math.sin(a) * r).toFixed(1)}`;
+}).join(" ");
+---
+
+<div class:list={["burst", className]} {...rest}>
+  <svg viewBox="0 0 100 100" aria-hidden="true">
+    <polygon points={shape} fill="var(--color-magenta)" stroke="var(--color-paper)" stroke-width="2.5" stroke-linejoin="round" />
+  </svg>
+  <p><slot /></p>
+</div>
+
+<style>
+  .burst {
+    position: relative;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    filter: drop-shadow(4px 4px 0 var(--color-ink));
+  }
+  svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  p {
+    position: relative;
+    rotate: -10deg;
+    color: var(--color-ink);
+    line-height: 1;
+    text-align: center;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    svg {
+      animation: spin 24s linear infinite;
+    }
+  }
+  @keyframes spin {
+    to {
+      rotate: 360deg;
+    }
+  }
+</style>

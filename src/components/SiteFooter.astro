@@ -8,21 +8,17 @@ const { year } = Astro.props;
 const readyNav = site.nav.filter((item) => item.ready);
 ---
 
-<footer class="flex items-end justify-between gap-4 px-(--page-x) pb-2">
-  <p class="type-meta flex min-h-11 items-center gap-2 text-silver-500">
-    <span class="type-label bg-red px-2 py-1 text-paper" aria-hidden="true">MN</span>
-    <span>&copy; {year} / {site.city}</span>
+<footer class="flex items-end justify-between gap-4 px-(--page-x) pb-2 pt-1">
+  <p class="type-label flex min-h-11 items-center gap-2 text-silver-400">
+    <span class="bg-red px-2 py-1 text-paper" aria-hidden="true">MN</span>
+    <span>&copy; {year} {site.name} / {site.city}</span>
   </p>
   <ul class="flex items-center gap-4">
     {
       site.footerLinks.map((link) => (
         <li>
-          <a
-            href={link.href}
-            rel="me noopener"
-            class="type-label flex min-h-11 items-center text-silver-400 hover:text-forward"
-          >
-            {link.label}
+          <a href={link.href} rel="me noopener" class="type-label flex min-h-11 items-center text-silver-50 hover:text-forward">
+            {link.label} &#8599;
           </a>
         </li>
       ))

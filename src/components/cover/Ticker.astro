@@ -1,0 +1,68 @@
+---
+/**
+ * Marquee band. Decorative: every item repeats something already on the page,
+ * so the whole band is hidden from assistive tech. Pauses on hover.
+ */
+interface Props {
+  items: string[];
+}
+const { items } = Astro.props;
+---
+
+<div class="ticker type-label" aria-hidden="true">
+  <div class="track">
+    {
+      [0, 1].map(() => (
+        <ul>
+          {items.map((item) => (
+            <li>
+              <span>{item}</span>
+              <span class="star">&#9733;</span>
+            </li>
+          ))}
+        </ul>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .ticker {
+    overflow: hidden;
+    border-block: 2px solid var(--color-ink);
+    background: var(--color-accent);
+    color: var(--color-ink);
+    font-size: 0.8125rem;
+  }
+  .track {
+    display: flex;
+    width: max-content;
+  }
+  ul {
+    display: flex;
+    flex-shrink: 0;
+  }
+  li {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 8px 0 8px 16px;
+    white-space: nowrap;
+  }
+  .star {
+    color: var(--color-magenta);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .track {
+      animation: marquee 36s linear infinite;
+    }
+    .ticker:hover .track {
+      animation-play-state: paused;
+    }
+  }
+  @keyframes marquee {
+    to {
+      translate: -50% 0;
+    }
+  }
+</style>

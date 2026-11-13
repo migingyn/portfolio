@@ -24,12 +24,13 @@ npm run build
 
 | What | Where |
 |---|---|
-| Name, tagline, menu links, "Now" card copy, footer links, current season | `src/site.config.ts` |
+| Name, tagline, menu links, cover lines, "Now" copy, footer links, current season | `src/site.config.ts` |
 | Seasons (one markdown file each) | `src/content/seasons/` |
 | Design tokens as CSS variables and Tailwind theme | `src/styles/tokens.css` |
 | Page shell (head, fonts, menu, footer) | `src/layouts/BaseLayout.astro` |
-| Wordmark and slide-in menu | `src/components/SiteMenu.tsx` |
-| Home page pieces | `src/components/home/` |
+| Masthead and slide-in menu | `src/components/SiteMenu.tsx` |
+| Home page (magazine cover) pieces | `src/components/cover/` |
+| First-visit loading screen (add `?intro` to the URL to replay it) | `src/components/LoadingScreen.astro`, `src/scripts/ascii-pose.ts` |
 
 To start a new season, add a file to `src/content/seasons/` and set `currentSeason`
 in `src/site.config.ts` to its file name.

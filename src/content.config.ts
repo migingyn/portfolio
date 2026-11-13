@@ -9,8 +9,10 @@ const seasons = defineCollection({
   loader: glob({ pattern: "*.md", base: "./src/content/seasons" }),
   schema: z.object({
     name: z.string(),
-    /** Optional kanji or short Japanese name, drawn large in the hero. */
+    /** Kanji or short Japanese name, e.g. 秋. */
     nameJa: z.string().optional(),
+    /** Japanese cover headline for the season, e.g. 秋、はじまる。 */
+    headlineJa: z.string().optional(),
     start: z.coerce.date(),
     end: z.coerce.date(),
     /** Overrides DESIGN.md's two accent roles only. The dark base never changes. */
@@ -18,6 +20,7 @@ const seasons = defineCollection({
       accent: hex,
       forward: hex.optional(),
     }),
+    /** What blows past the character on the ASCII loading screen. */
     ascii: z.enum(["leaves", "snow", "rain", "petals"]),
     mood: z.string(),
     /** Empty until a playlist is added. */

@@ -1,0 +1,129 @@
+---
+/** The "Now" readout, written for the phone's LCD: what I'm building, filming, and local time. */
+import { site } from "../../site.config";
+---
+
+<section aria-labelledby="now-heading" class="now">
+  <p class="status" aria-hidden="true">
+    <span class="bars"><i></i><i></i><i></i><i></i></span>
+    <span>i</span>
+    <span class="battery"><i></i><i></i><i></i></span>
+  </p>
+  <h2 id="now-heading" class="title">
+    <span lang="ja">いま</span> / NOW
+  </h2>
+  <dl>
+    <dt>&#9654; BUILDING</dt>
+    <dd>{site.now.building}</dd>
+    <dt>&#9654; FILMING</dt>
+    <dd>{site.now.filming}</dd>
+  </dl>
+  <p class="clock">
+    <span class="city">{site.city.toUpperCase()}</span>
+    <time data-clock data-time-zone={site.timeZone}>--:--:--</time>
+  </p>
+</section>
+
+<style>
+  .now {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    min-height: inherit;
+    flex-direction: column;
+    gap: 0.45em;
+  }
+  .status {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    line-height: 1;
+  }
+  .bars,
+  .battery {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 1px;
+  }
+  .bars i {
+    width: 0.22em;
+    background: currentColor;
+  }
+  .bars i:nth-child(1) { height: 0.3em; }
+  .bars i:nth-child(2) { height: 0.5em; }
+  .bars i:nth-child(3) { height: 0.7em; }
+  .bars i:nth-child(4) { height: 0.9em; }
+  .battery {
+    padding: 1px;
+    border: 1px solid currentColor;
+  }
+  .battery i {
+    width: 0.28em;
+    height: 0.5em;
+    background: currentColor;
+  }
+  .title {
+    padding: 0.15em 0.4em;
+    background: var(--color-ink);
+    color: var(--color-accent);
+  }
+  dt {
+    margin-top: 0.3em;
+  }
+  dd {
+    padding-left: 1em;
+  }
+  .clock {
+    display: flex;
+    flex-direction: column;
+    margin-top: auto;
+    padding-top: 0.4em;
+    border-top: 1px dashed currentColor;
+  }
+  .clock time {
+    font-size: 1.55em;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .bars i:nth-child(4) {
+      animation: signal 2.4s steps(1) infinite;
+    }
+  }
+  @keyframes signal {
+    50% {
+      opacity: 0.15;
+    }
+  }
+</style>
+
+<script>
+  let timer = 0;
+
+  function startClocks() {
+    window.clearInterval(timer);
+    const clocks = document.querySelectorAll<HTMLTimeElement>("time[data-clock]");
+    if (!clocks.length) return;
+
+    const tick = () => {
+      const now = new Date();
+      for (const clock of clocks) {
+        const format = new Intl.DateTimeFormat("en-US", {
+          timeZone: clock.dataset.timeZone,
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hourCycle: "h23",
+        });
+        clock.textContent = format.format(now);
+        clock.dateTime = now.toISOString();
+      }
+    };
+    tick();
+    timer = window.setInterval(tick, 1000);
+  }
+
+  document.addEventListener("astro:page-load", startClocks);
+  document.addEventListener("astro:before-swap", () => window.clearInterval(timer));
+</script>

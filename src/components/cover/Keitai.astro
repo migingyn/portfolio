@@ -1,0 +1,312 @@
+---
+/**
+ * The cover star: a flip phone drawn in CSS. Its LCD is a slot for real content
+ * (the "Now" readout). Everything else is decoration and hidden from assistive tech.
+ * Sized by --keitai-w on the parent; every measurement scales from it.
+ */
+const keys = [
+  ["1", "あ"], ["2", "か"], ["3", "さ"],
+  ["4", "た"], ["5", "な"], ["6", "は"],
+  ["7", "ま"], ["8", "や"], ["9", "ら"],
+  ["*", ""], ["0", "わ"], ["#", ""],
+];
+---
+
+<div class="keitai" data-keitai>
+  <div class="tilt" data-keitai-tilt>
+    <span class="antenna" aria-hidden="true"><i class="led"></i></span>
+
+    <div class="lid">
+      <span class="speaker" aria-hidden="true"></span>
+      <div class="bezel">
+        <div class="screen type-pixel">
+          <slot />
+        </div>
+      </div>
+      <span class="model" aria-hidden="true">MN-01</span>
+    </div>
+
+    <span class="hinge" aria-hidden="true"></span>
+
+    <div class="base" aria-hidden="true">
+      <div class="controls">
+        <i class="soft"></i>
+        <i class="dpad"><b></b></i>
+        <i class="soft"></i>
+      </div>
+      <div class="keys">
+        {keys.map(([digit, kana]) => (
+          <span class="key">
+            <b>{digit}</b>
+            {kana && <small lang="ja">{kana}</small>}
+          </span>
+        ))}
+      </div>
+      <span class="mic"></span>
+    </div>
+
+    <div class="strap" aria-hidden="true">
+      <span class="cord"></span>
+      <span class="charm"><slot name="charm" /></span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .keitai {
+    --u: calc(var(--keitai-w, 240px) / 100);
+    position: relative;
+    width: calc(var(--u) * 100);
+    perspective: 900px;
+  }
+  .tilt {
+    position: relative;
+    rotate: -5deg;
+    transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+    transition: transform 400ms var(--ease-out);
+    filter: drop-shadow(0 5px 30px rgb(0 0 0 / 0.3));
+  }
+
+  .antenna {
+    position: absolute;
+    right: calc(var(--u) * 14);
+    top: calc(var(--u) * -9);
+    width: calc(var(--u) * 7);
+    height: calc(var(--u) * 14);
+    border: 2px solid var(--color-ink);
+    border-radius: var(--radius-pill) var(--radius-pill) 0 0;
+    background: var(--gradient-chrome);
+  }
+  .led {
+    position: absolute;
+    inset: calc(var(--u) * 1.5) calc(var(--u) * 1.2) auto;
+    aspect-ratio: 1;
+    border-radius: var(--radius-pill);
+    background: var(--color-magenta);
+  }
+
+  .lid,
+  .base {
+    position: relative;
+    border: 2px solid var(--color-ink);
+    background: var(--gradient-chrome);
+    box-shadow:
+      inset 0 2px 0 var(--color-paper),
+      inset 0 -3px 0 var(--color-silver-500);
+  }
+  .lid {
+    padding: calc(var(--u) * 9) calc(var(--u) * 7) calc(var(--u) * 6);
+    border-radius: calc(var(--u) * 16) calc(var(--u) * 16) calc(var(--u) * 5) calc(var(--u) * 5);
+  }
+  .speaker {
+    position: absolute;
+    left: 50%;
+    top: calc(var(--u) * 3.6);
+    width: calc(var(--u) * 16);
+    height: calc(var(--u) * 2);
+    translate: -50% 0;
+    border-radius: var(--radius-pill);
+    background: var(--color-carbon-3);
+  }
+  .bezel {
+    padding: calc(var(--u) * 2.5);
+    border-radius: calc(var(--u) * 6);
+    background: var(--color-carbon);
+    box-shadow: inset 0 0 0 2px var(--color-carbon-3);
+  }
+  .screen {
+    position: relative;
+    overflow: hidden;
+    min-height: calc(var(--u) * 92);
+    padding: calc(var(--u) * 3) calc(var(--u) * 4);
+    border-radius: calc(var(--u) * 3.5);
+    background: var(--color-accent);
+    color: var(--color-ink);
+    font-size: max(11px, calc(var(--u) * 5.2));
+    text-align: left;
+  }
+  /* LCD pixel grid */
+  .screen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgb(16 17 20 / 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(16 17 20 / 0.07) 1px, transparent 1px);
+    background-size: 3px 3px;
+    pointer-events: none;
+  }
+  .model {
+    display: block;
+    margin-top: calc(var(--u) * 2.5);
+    color: var(--color-silver-600);
+    font-family: var(--font-body);
+    font-size: calc(var(--u) * 4);
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    line-height: 1;
+    text-align: center;
+  }
+
+  .hinge {
+    display: block;
+    width: 78%;
+    height: calc(var(--u) * 7);
+    margin: -2px auto;
+    border: 2px solid var(--color-ink);
+    border-radius: var(--radius-pill);
+    background: linear-gradient(180deg, var(--color-silver-400), var(--color-silver-50) 40%, var(--color-silver-500));
+    position: relative;
+    z-index: 1;
+  }
+
+  .base {
+    padding: calc(var(--u) * 6) calc(var(--u) * 8) calc(var(--u) * 9);
+    border-radius: calc(var(--u) * 5) calc(var(--u) * 5) calc(var(--u) * 18) calc(var(--u) * 18);
+  }
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: calc(var(--u) * 5);
+  }
+  .soft {
+    width: calc(var(--u) * 20);
+    height: calc(var(--u) * 8);
+    border: 2px solid var(--color-ink);
+    border-radius: var(--radius-pill);
+    background: var(--color-pink);
+    box-shadow: inset 0 2px 0 rgb(255 255 255 / 0.6);
+  }
+  .dpad {
+    display: grid;
+    place-items: center;
+    width: calc(var(--u) * 26);
+    aspect-ratio: 1;
+    border: 2px solid var(--color-ink);
+    border-radius: var(--radius-pill);
+    background: var(--color-silver-50);
+    box-shadow: inset 0 -3px 0 var(--color-silver-400);
+  }
+  .dpad b {
+    width: 42%;
+    aspect-ratio: 1;
+    border: 2px solid var(--color-ink);
+    border-radius: var(--radius-pill);
+    background: var(--color-forward);
+  }
+  .keys {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: calc(var(--u) * 3);
+  }
+  .key {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: calc(var(--u) * 1.5);
+    padding: calc(var(--u) * 2) 0;
+    border: 2px solid var(--color-ink);
+    border-radius: calc(var(--u) * 4);
+    background: var(--color-silver-50);
+    box-shadow: inset 0 -3px 0 var(--color-silver-400);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    line-height: 1;
+  }
+  .key b {
+    font-size: calc(var(--u) * 6.5);
+    font-weight: 900;
+  }
+  .key small {
+    font-size: calc(var(--u) * 4);
+    font-weight: 500;
+  }
+  .mic {
+    position: absolute;
+    left: 50%;
+    bottom: calc(var(--u) * 4);
+    width: calc(var(--u) * 3);
+    aspect-ratio: 1;
+    translate: -50% 0;
+    border-radius: var(--radius-pill);
+    background: var(--color-carbon-3);
+  }
+
+  .strap {
+    position: absolute;
+    left: calc(var(--u) * -3);
+    top: 49%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform-origin: 50% 0;
+    rotate: 8deg;
+  }
+  .cord {
+    width: 2px;
+    height: calc(var(--u) * 26);
+    background: var(--color-paper);
+  }
+  .charm {
+    display: block;
+    width: calc(var(--u) * 30);
+    margin-top: -2px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .keitai {
+      animation: bob 5s ease-in-out infinite;
+    }
+    .strap {
+      animation: swing 2.6s ease-in-out infinite alternate;
+    }
+    .led {
+      animation: blink 1.6s steps(1) infinite;
+    }
+  }
+
+  @keyframes bob {
+    50% {
+      translate: 0 -10px;
+    }
+  }
+  @keyframes swing {
+    from {
+      rotate: 16deg;
+    }
+    to {
+      rotate: -6deg;
+    }
+  }
+  @keyframes blink {
+    50% {
+      background: var(--color-carbon-3);
+    }
+  }
+</style>
+
+<script>
+  // The phone leans a few degrees toward the pointer. Mouse only, and never
+  // under reduced motion.
+  function bindTilt() {
+    const keitai = document.querySelector<HTMLElement>("[data-keitai]");
+    const tilt = keitai?.querySelector<HTMLElement>("[data-keitai-tilt]");
+    if (!keitai || !tilt) return;
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const onMove = (event: PointerEvent) => {
+      const x = event.clientX / window.innerWidth - 0.5;
+      const y = event.clientY / window.innerHeight - 0.5;
+      tilt.style.setProperty("--tilt-y", `${(x * 16).toFixed(2)}deg`);
+      tilt.style.setProperty("--tilt-x", `${(-y * 10).toFixed(2)}deg`);
+    };
+    window.addEventListener("pointermove", onMove, { passive: true });
+    document.addEventListener("astro:before-swap", () => window.removeEventListener("pointermove", onMove), {
+      once: true,
+    });
+  }
+
+  document.addEventListener("astro:page-load", bindTilt);
+</script>

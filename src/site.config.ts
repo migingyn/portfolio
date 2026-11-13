@@ -9,8 +9,21 @@ export interface NavItem {
   ready: boolean;
 }
 
+export interface CoverLine {
+  /** Magazine-style kicker in Japanese, e.g. 大特集 ("big feature"). */
+  kickerJa: string;
+  title: string;
+  /** One line of Japanese cover copy, with its English meaning. */
+  copyJa: string;
+  copyEn: string;
+  /** Must match a nav item; the line becomes a link once that page is ready. */
+  href: string;
+}
+
 export const site = {
   name: "Mikey Nguyen",
+  /** Katakana reading shown above the masthead. Check this is how you want it written. */
+  nameJa: "マイキー・グエン",
   tagline: "Backend engineer and creative builder.",
   description: "Portfolio of Mikey Nguyen, backend engineer and creative builder in San Diego.",
 
@@ -30,10 +43,35 @@ export const site = {
     { label: "Links", labelJa: "リンク", href: "/links", ready: false },
   ] satisfies NavItem[],
 
-  /** "Now" card on the home page. PLACEHOLDER copy: replace with your own. */
+  /** Cover lines on the home page, left column first. */
+  coverLines: [
+    {
+      kickerJa: "大特集",
+      title: "Projects",
+      copyJa: "作ったもの、ぜんぶ見せます。",
+      copyEn: "Everything I have built.",
+      href: "/projects",
+    },
+    {
+      kickerJa: "特別付録",
+      title: "Resume",
+      copyJa: "履歴書つき。",
+      copyEn: "Resume included.",
+      href: "/resume",
+    },
+    {
+      kickerJa: "新連載",
+      title: "Blog",
+      copyJa: "考えたこと、書いていきます。",
+      copyEn: "Notes on what I am thinking about.",
+      href: "/blog",
+    },
+  ] satisfies CoverLine[],
+
+  /** "Now" readout on the home page phone. PLACEHOLDER copy: replace with your own. */
   now: {
-    building: "This site: seasons, a persistent player, and the project archive.",
-    filming: "Placeholder. Add what you are filming in src/site.config.ts.",
+    building: "This site, one season at a time.",
+    filming: "Placeholder: edit in site.config.ts",
   },
 
   /** Small links in the bottom corner of every page. */

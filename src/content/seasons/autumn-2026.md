@@ -1,9 +1,9 @@
 ---
 name: Autumn 2026
-# PLACEHOLDER cover headline, one entry per line: replace with your own.
-headline:
-  - Autumn
-  - starts now.
+# Home page photo for this season. Put the file next to this one and uncomment both
+# lines. Until then the site uses a generated stand-in (src/assets/hero-standin.jpg).
+# hero: ./autumn-2026.jpg
+# heroAlt: One sentence describing the photo.
 start: 2026-09-22
 end: 2026-12-20
 # Accent roles from DESIGN.md. "accent" replaces Lime, "forward" replaces Orange.

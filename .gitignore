@@ -9,5 +9,6 @@ dist/
 
 # Working files the vendored design skills write while they run
 .taste-skill/
-.impeccable/
+.impeccable/*
+!.impeccable/surfaces/
 shots/

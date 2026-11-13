@@ -7,9 +7,9 @@ export interface NavItem {
   ready: boolean;
 }
 
-export interface CoverLine {
+export interface HomeLine {
   title: string;
-  /** One short line of cover copy. */
+  /** One short line of copy. */
   copy: string;
   /** Must match a nav item; the line becomes a link once that page is ready. */
   href: string;
@@ -36,14 +36,14 @@ export const site = {
     { label: "Links", href: "/links", ready: false },
   ] satisfies NavItem[],
 
-  /** Cover lines on the home page: the first sits left of the phone, the rest right. */
-  coverLines: [
+  /** Section lines on the home page. */
+  homeLines: [
     { title: "Projects", copy: "Everything I have built.", href: "/projects" },
     { title: "Resume", copy: "One page, with a download.", href: "/resume" },
     { title: "Blog", copy: "Notes on what I am working through.", href: "/blog" },
-  ] satisfies CoverLine[],
+  ] satisfies HomeLine[],
 
-  /** "Now" readout on the home page phone. PLACEHOLDER copy: replace with your own. */
+  /** "Now" readout on the home page. PLACEHOLDER copy: replace with your own. */
   now: {
     building: "This site, one season at a time.",
     filming: "Placeholder: edit in site.config.ts",

@@ -17,24 +17,20 @@
   --color-carbon-3: #272a33;
   --color-hairline: #3a3e4a;
 
-  /* Chrome (devices and gel only) */
+  /* Neutrals */
+  --color-paper: #ffffff;
   --color-silver-50: #f4f5f8;
   --color-silver-200: #d9dde5;
   --color-silver-400: #aab0bd;
   --color-silver-500: #8a91a1;
   --color-silver-600: #6f7686;
-
-  /* Inks */
-  --color-paper: #ffffff;
   --color-ink: #101114;
-  --color-sky: #a9c6f0;
-  --color-ice: #dfeaf9;
-  --color-pink: #f6a6c1;
-  --color-magenta: #ff3d9a;
-  --color-indigo: #2f2a95;
+
+  /* Signals */
   --color-lime: #c8f31d;
   --color-orange: #ff7a00;
   --color-red: #e60012;
+  --color-fringe: #47c8e0;
   --color-focus: #2997ff;
 
   /* Season roles. Components use these two; the current season may override
@@ -46,7 +42,6 @@
   --font-masthead: "Grenze Gotisch", "Arial Black", serif;
   --font-shout: "Dela Gothic One", "Arial Black", Impact, sans-serif;
   --font-body: "Zen Maru Gothic", "Helvetica Neue", Arial, sans-serif;
-  --font-hand: "Yusei Magic", "Zen Maru Gothic", cursive;
   --font-pixel: "DotGothic16", ui-monospace, monospace;
   --font-ascii: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
 
@@ -54,11 +49,7 @@
   /* No pill shapes anywhere: controls and tags are rectangles. `full` is for true circles only. */
   --radius-none: 0px;
   --radius-xs: 2px;
-  --radius-md: 12px;
   --radius-full: 9999px;
-
-  /* Depth: the one soft shadow, for cutout products and devices. */
-  --shadow-product: 0 5px 30px rgb(0 0 0 / 0.3);
 
   /* Layout */
   --breakpoint-sm: 30rem; /* 480 */
@@ -73,13 +64,12 @@
 }
 
 :root {
-  --gradient-chrome: linear-gradient(180deg, #f4f5f8 0%, #d9dde5 45%, #aab0bd 100%);
-  --gradient-sky: linear-gradient(180deg, #a9c6f0 0%, #dfeaf9 70%, #ffffff 100%);
   --duration-fast: 120ms;
   --duration-base: 180ms;
   --duration-press: 160ms;
   --duration-slow: 280ms;
   --duration-enter: 360ms;
+  --duration-develop: 1400ms;
   /* Page padding: 16px mobile, 48px desktop. */
   --page-x: 16px;
 }
@@ -146,12 +136,6 @@
   line-height: 1.2;
   letter-spacing: 0.06em;
 }
-@utility type-hand {
-  font-family: var(--font-hand);
-  font-size: 1.125rem;
-  font-weight: 400;
-  line-height: 1.35;
-}
 @utility type-pixel {
   font-family: var(--font-pixel);
   font-size: 0.875rem;
@@ -159,22 +143,8 @@
   line-height: 1.25;
 }
 
-/* Chrome gradient with a hard 1px bevel. Devices and gel buttons only. */
-@utility chrome {
-  background-image: var(--gradient-chrome);
-  box-shadow:
-    inset 0 1px 0 var(--color-silver-50),
-    inset 0 -1px 0 var(--color-silver-600);
-}
-
 /* Halftone: 1px dots on a 4px grid at 6% white. Quiet texture for panels. */
 @utility halftone {
   background-image: radial-gradient(rgb(255 255 255 / 0.06) 0.5px, transparent 0.6px);
   background-size: 4px 4px;
-}
-
-/* Outlined display type, for the masthead and the cover headline only. */
-@utility ink-outline {
-  -webkit-text-stroke: 0.08em var(--color-ink);
-  paint-order: stroke fill;
 }

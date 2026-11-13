@@ -51,7 +51,9 @@ const year = new Date().getFullYear();
       Skip to content
     </a>
     <slot name="overlay" />
+    <div class="grain" aria-hidden="true"></div>
     <div id="shell" class="relative isolate flex min-h-svh flex-col">
+      <slot name="backdrop" />
       <SiteMenu
         client:load
         name={site.name}

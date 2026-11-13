@@ -29,10 +29,14 @@ npm run build
 | Design tokens as CSS variables and Tailwind theme | `src/styles/tokens.css` |
 | Page shell (head, fonts, menu, footer) | `src/layouts/BaseLayout.astro` |
 | Masthead and slide-in menu | `src/components/SiteMenu.tsx` |
-| Home page (magazine cover) pieces | `src/components/cover/` |
+| Home page pieces (photo treatment, flip phone, Now screen) | `src/components/home/` |
 | First-visit loading screen (add `?intro` to the URL to replay it) | `src/components/LoadingScreen.astro`, `src/scripts/ascii-pose.ts` |
 
 To start a new season, add a file to `src/content/seasons/` and set `currentSeason`
 in `src/site.config.ts` to its file name.
+
+**Home page photo.** Put your photo next to the season file (for example
+`src/content/seasons/autumn-2026.jpg`) and set `hero` and `heroAlt` in that file. Until
+then the page shows a generated stand-in, `src/assets/hero-standin.jpg`.
 
 No secrets live in this repo. API keys go in Vercel environment variables.

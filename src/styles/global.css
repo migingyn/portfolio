@@ -8,7 +8,6 @@
 @import "@fontsource/zen-maru-gothic/latin-500.css";
 @import "@fontsource/zen-maru-gothic/latin-700.css";
 @import "@fontsource/zen-maru-gothic/latin-900.css";
-@import "@fontsource/yusei-magic/latin-400.css";
 @import "@fontsource/dotgothic16/latin-400.css";
 
 @import "./tokens.css";
@@ -127,21 +126,58 @@ html[data-motion="paused"] *::after {
   animation-play-state: paused !important;
 }
 
-/* Masthead: the site name as a magazine title, and the menu button. */
+/* Film grain over the whole site. A tiny generated noise tile, re-seated a few
+   times a second so it flickers like film. */
+.grain {
+  position: fixed;
+  inset: -100%;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.3;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+@media (prefers-reduced-motion: no-preference) {
+  .grain {
+    animation: grain 0.9s steps(1) infinite;
+  }
+}
+@keyframes grain {
+  0% { translate: 0 0; }
+  12% { translate: -3% 2%; }
+  25% { translate: 2% -4%; }
+  37% { translate: -5% -1%; }
+  50% { translate: 4% 3%; }
+  62% { translate: -1% 5%; }
+  75% { translate: 3% -2%; }
+  87% { translate: -4% -3%; }
+}
+
+/* Masthead: the site name, and the menu button. Bone white with a faint colour
+   fringe and bloom, like type photographed off a page. */
 .masthead {
   position: relative;
   display: inline-block;
   color: var(--color-paper);
 }
 .masthead-name {
+  --fringe: 0.012em;
   display: block;
   padding: 0 0.12em 0.08em;
   transform: skew(-7deg);
-  text-shadow: 0.045em 0.045em 0 var(--color-forward);
+  text-shadow:
+    calc(var(--fringe) * -1) 0 0 color-mix(in srgb, var(--color-red) 60%, transparent),
+    var(--fringe) 0 0 color-mix(in srgb, var(--color-fringe) 60%, transparent),
+    0 0 0.22em rgb(255 255 255 / 0.28);
   white-space: nowrap;
   transition:
-    translate var(--duration-press) var(--ease-out),
-    text-shadow var(--duration-press) var(--ease-out);
+    --fringe var(--duration-base) var(--ease-out),
+    scale var(--duration-press) var(--ease-out);
+}
+@property --fringe {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
 }
 .masthead-tag {
   position: absolute;
@@ -162,13 +198,12 @@ html[data-motion="paused"] *::after {
   }
 }
 .masthead:active .masthead-name {
-  text-shadow: 0 0 0 var(--color-forward);
-  translate: 0.045em 0.045em;
+  --fringe: 0em;
+  scale: 0.985;
 }
 @media (hover: hover) and (pointer: fine) {
   .masthead:hover .masthead-name {
-    text-shadow: 0.07em 0.07em 0 var(--color-magenta);
-    translate: -0.02em -0.02em;
+    --fringe: 0.035em;
   }
   .masthead:hover .masthead-tag {
     rotate: -3deg;

@@ -1,0 +1,256 @@
+---
+/**
+ * A brushed-silver flip phone, drawn in CSS to read as a product shot rather
+ * than an illustration: metal gradients, soft edges, no outlines. Its LCD is a
+ * slot for real content (the "Now" readout); everything else is decoration.
+ * Sized by --keitai-w on the parent; every measurement scales from it.
+ */
+const keys = [
+  ["1", ""], ["2", "abc"], ["3", "def"],
+  ["4", "ghi"], ["5", "jkl"], ["6", "mno"],
+  ["7", "pqrs"], ["8", "tuv"], ["9", "wxyz"],
+  ["*", ""], ["0", "+"], ["#", ""],
+];
+---
+
+<div class="keitai">
+  <div class="body">
+    <span class="antenna" aria-hidden="true"></span>
+
+    <div class="lid">
+      <span class="speaker" aria-hidden="true"></span>
+      <div class="bezel">
+        <div class="screen type-pixel">
+          <slot />
+        </div>
+      </div>
+      <span class="model" aria-hidden="true">MN-01</span>
+    </div>
+
+    <span class="hinge" aria-hidden="true"></span>
+
+    <div class="base" aria-hidden="true">
+      <div class="controls">
+        <i class="soft"></i>
+        <i class="dial"><b></b></i>
+        <i class="soft"></i>
+      </div>
+      <div class="keys">
+        {keys.map(([digit, letters]) => (
+          <span class="key">
+            <b>{digit}</b>
+            {letters && <small>{letters}</small>}
+          </span>
+        ))}
+      </div>
+      <span class="mic"></span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .keitai {
+    --u: calc(var(--keitai-w, 240px) / 100);
+    --metal: linear-gradient(
+      100deg,
+      var(--color-silver-50) 0%,
+      var(--color-silver-200) 22%,
+      var(--color-silver-500) 50%,
+      var(--color-silver-200) 74%,
+      var(--color-silver-600) 100%
+    );
+    position: relative;
+    width: calc(var(--u) * 100);
+  }
+  .body {
+    position: relative;
+    rotate: -7deg;
+    /* Sit in the photograph: a soft cast shadow and slightly faded colour. */
+    filter: drop-shadow(0 calc(var(--u) * 10) calc(var(--u) * 14) rgb(16 17 20 / 0.6)) saturate(0.85) contrast(0.96);
+  }
+
+  .antenna {
+    position: absolute;
+    right: calc(var(--u) * 15);
+    top: calc(var(--u) * -8);
+    width: calc(var(--u) * 6);
+    height: calc(var(--u) * 12);
+    border-radius: calc(var(--u) * 2) calc(var(--u) * 2) 0 0;
+    background: linear-gradient(90deg, var(--color-silver-600), var(--color-silver-200) 45%, var(--color-silver-600));
+  }
+
+  .lid,
+  .base {
+    position: relative;
+    background: var(--metal);
+    box-shadow:
+      inset 0 0 0 1px rgb(255 255 255 / 0.35),
+      inset 0 calc(var(--u) * 1.5) calc(var(--u) * 2) rgb(255 255 255 / 0.7),
+      inset 0 calc(var(--u) * -5) calc(var(--u) * 8) rgb(16 17 20 / 0.32);
+  }
+  .lid {
+    padding: calc(var(--u) * 9) calc(var(--u) * 7) calc(var(--u) * 6);
+    border-radius: calc(var(--u) * 17) calc(var(--u) * 17) calc(var(--u) * 5) calc(var(--u) * 5);
+  }
+  .speaker {
+    position: absolute;
+    left: 50%;
+    top: calc(var(--u) * 3.6);
+    width: calc(var(--u) * 15);
+    height: calc(var(--u) * 1.6);
+    translate: -50% 0;
+    border-radius: var(--radius-xs);
+    background: var(--color-carbon-3);
+    box-shadow: inset 0 1px 1px rgb(16 17 20 / 0.7);
+  }
+  .bezel {
+    padding: calc(var(--u) * 2.6);
+    border-radius: calc(var(--u) * 6);
+    background: var(--color-carbon);
+    box-shadow:
+      inset 0 0 0 1px var(--color-carbon-3),
+      0 1px 0 rgb(255 255 255 / 0.5);
+  }
+  .screen {
+    position: relative;
+    overflow: hidden;
+    min-height: calc(var(--u) * 86);
+    padding: calc(var(--u) * 3) calc(var(--u) * 4);
+    border-radius: calc(var(--u) * 3.5);
+    /* A backlit LCD: brighter in the middle, falling off toward the edges. */
+    background:
+      radial-gradient(ellipse at 45% 35%, rgb(255 255 255 / 0.28), rgb(255 255 255 / 0) 60%),
+      linear-gradient(rgb(16 17 20 / 0), rgb(16 17 20 / 0.22)),
+      var(--color-accent);
+    box-shadow: inset 0 0 calc(var(--u) * 5) rgb(16 17 20 / 0.45);
+    color: var(--color-ink);
+    font-size: max(11px, calc(var(--u) * 5.2));
+    text-align: left;
+  }
+  /* LCD pixel grid */
+  .screen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgb(16 17 20 / 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(16 17 20 / 0.08) 1px, transparent 1px);
+    background-size: 3px 3px;
+    pointer-events: none;
+  }
+  .model {
+    display: block;
+    margin-top: calc(var(--u) * 2.5);
+    color: var(--color-carbon-3);
+    font-family: var(--font-body);
+    font-size: calc(var(--u) * 3.6);
+    font-weight: 900;
+    letter-spacing: 0.24em;
+    line-height: 1;
+    opacity: 0.7;
+    text-align: center;
+  }
+
+  .hinge {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 80%;
+    height: calc(var(--u) * 7);
+    margin: -1px auto;
+    border-radius: calc(var(--u) * 2.5);
+    background: linear-gradient(
+      180deg,
+      var(--color-silver-600),
+      var(--color-silver-50) 38%,
+      var(--color-silver-400) 62%,
+      var(--color-carbon-3)
+    );
+  }
+
+  .base {
+    padding: calc(var(--u) * 6) calc(var(--u) * 8) calc(var(--u) * 9);
+    border-radius: calc(var(--u) * 5) calc(var(--u) * 5) calc(var(--u) * 19) calc(var(--u) * 19);
+  }
+  .controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: calc(var(--u) * 5);
+  }
+  .soft,
+  .key {
+    background: linear-gradient(180deg, var(--color-silver-50), var(--color-silver-400));
+    box-shadow:
+      0 calc(var(--u) * 0.6) calc(var(--u) * 0.8) rgb(16 17 20 / 0.45),
+      inset 0 1px 0 rgb(255 255 255 / 0.9);
+  }
+  .soft {
+    width: calc(var(--u) * 20);
+    height: calc(var(--u) * 7);
+    border-radius: calc(var(--u) * 2);
+  }
+  .dial {
+    display: grid;
+    place-items: center;
+    width: calc(var(--u) * 26);
+    aspect-ratio: 1;
+    border-radius: var(--radius-full);
+    background: radial-gradient(circle at 35% 30%, var(--color-silver-50), var(--color-silver-500));
+    box-shadow:
+      0 calc(var(--u) * 0.8) calc(var(--u) * 1.2) rgb(16 17 20 / 0.5),
+      inset 0 1px 0 rgb(255 255 255 / 0.9);
+  }
+  .dial b {
+    width: 44%;
+    aspect-ratio: 1;
+    border-radius: var(--radius-full);
+    background: radial-gradient(circle at 35% 30%, var(--color-silver-400), var(--color-carbon-3));
+    box-shadow: inset 0 1px 2px rgb(16 17 20 / 0.7);
+  }
+  .keys {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: calc(var(--u) * 3);
+  }
+  .key {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: calc(var(--u) * 1);
+    padding: calc(var(--u) * 2) 0;
+    border-radius: calc(var(--u) * 3.5);
+    color: var(--color-carbon-3);
+    font-family: var(--font-body);
+    line-height: 1;
+  }
+  .key b {
+    font-size: calc(var(--u) * 6);
+    font-weight: 900;
+  }
+  .key small {
+    font-size: calc(var(--u) * 3.2);
+    font-weight: 700;
+  }
+  .mic {
+    position: absolute;
+    left: 50%;
+    bottom: calc(var(--u) * 4);
+    width: calc(var(--u) * 2.4);
+    aspect-ratio: 1;
+    translate: -50% 0;
+    border-radius: var(--radius-full);
+    background: var(--color-carbon-3);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .keitai {
+      animation: drift 6s var(--ease-in-out) infinite alternate;
+    }
+  }
+  @keyframes drift {
+    to {
+      translate: 0 -8px;
+    }
+  }
+</style>

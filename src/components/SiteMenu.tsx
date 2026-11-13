@@ -138,7 +138,7 @@ export default function SiteMenu({ name, tagline, items, currentPath, isHome, ha
               aria-modal="true"
               aria-label="Site menu"
               onKeyDown={trapFocus}
-              className="halftone fixed inset-y-0 left-0 z-50 flex w-full flex-col overflow-y-auto bg-carbon text-left md:w-[30rem] md:border-r-8 md:border-accent"
+              className="halftone fixed inset-y-0 left-0 z-50 flex w-full flex-col overflow-y-auto bg-carbon text-left md:w-[30rem] md:border-r md:border-hairline"
               initial={still ? false : { x: "-100%" }}
               animate={{ x: 0 }}
               exit={still ? { opacity: 0, transition: { duration: 0 } } : { x: "-100%", transition: { duration: EXIT, ease: EASE } }}

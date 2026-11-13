@@ -45,20 +45,19 @@
   /* Type families */
   --font-masthead: "Grenze Gotisch", "Arial Black", serif;
   --font-shout: "Dela Gothic One", "Arial Black", Impact, sans-serif;
-  --font-body: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Zen Maru Gothic", "Helvetica Neue", Arial, sans-serif;
   --font-hand: "Yusei Magic", "Zen Maru Gothic", cursive;
   --font-pixel: "DotGothic16", ui-monospace, monospace;
   --font-ascii: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
 
   /* Radius */
+  /* No pill shapes anywhere: controls and tags are rectangles. `full` is for true circles only. */
   --radius-none: 0px;
   --radius-xs: 2px;
-  --radius-sm: 6px;
-  --radius-md: 16px;
-  --radius-pill: 9999px;
+  --radius-md: 12px;
+  --radius-full: 9999px;
 
-  /* Depth: hard offset "misprint" shadow, and the one soft shadow for cutout products. */
-  --shadow-pop: 4px 4px 0 var(--color-ink);
+  /* Depth: the one soft shadow, for cutout products and devices. */
   --shadow-product: 0 5px 30px rgb(0 0 0 / 0.3);
 
   /* Layout */
@@ -70,7 +69,7 @@
 
   /* Motion */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-  --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 :root {
@@ -78,8 +77,9 @@
   --gradient-sky: linear-gradient(180deg, #a9c6f0 0%, #dfeaf9 70%, #ffffff 100%);
   --duration-fast: 120ms;
   --duration-base: 180ms;
+  --duration-press: 160ms;
   --duration-slow: 280ms;
-  --duration-pop: 480ms;
+  --duration-enter: 360ms;
   /* Page padding: 16px mobile, 48px desktop. */
   --page-x: 16px;
 }
@@ -93,7 +93,7 @@
 /* Type scale (DESIGN.md section 3). Sizes in rem so browser font scaling works. */
 @utility type-masthead {
   font-family: var(--font-masthead);
-  font-size: clamp(3rem, min(14vw, 16vh), 9rem);
+  font-size: clamp(3rem, min(14vw, 15vh), 8rem);
   font-weight: 900;
   line-height: 0.9;
 }
@@ -167,19 +167,13 @@
     inset 0 -1px 0 var(--color-silver-600);
 }
 
-/* Screentone: 1px dots on a 4px grid at 6% white. Quiet texture for panels. */
+/* Halftone: 1px dots on a 4px grid at 6% white. Quiet texture for panels. */
 @utility halftone {
   background-image: radial-gradient(rgb(255 255 255 / 0.06) 0.5px, transparent 0.6px);
   background-size: 4px 4px;
 }
 
-/* Sticker: paper die-cut edge plus a hard offset shadow. */
-@utility sticker {
-  border: 3px solid var(--color-paper);
-  box-shadow: var(--shadow-pop);
-}
-
-/* Box-art type: ink outline and a hard offset shadow, no blur. */
+/* Outlined display type, for the masthead and the cover headline only. */
 @utility ink-outline {
   -webkit-text-stroke: 0.08em var(--color-ink);
   paint-order: stroke fill;

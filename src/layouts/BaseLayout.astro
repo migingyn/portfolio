@@ -1,7 +1,6 @@
 ---
 import "../styles/global.css";
 import { ClientRouter } from "astro:transitions";
-import jpFontsHref from "../styles/fonts-jp.css?url";
 import mastheadFont from "@fontsource/grenze-gotisch/files/grenze-gotisch-latin-900-normal.woff2?url";
 import bodyFont from "@fontsource/zen-maru-gothic/files/zen-maru-gothic-latin-500-normal.woff2?url";
 import SiteMenu from "../components/SiteMenu";
@@ -36,8 +35,12 @@ const year = new Date().getFullYear();
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preload" as="font" type="font/woff2" href={mastheadFont} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={bodyFont} crossorigin />
-    <link id="fonts-jp" rel="stylesheet" href={jpFontsHref} media="print" onload="this.media='all'" />
-    <noscript><link rel="stylesheet" href={jpFontsHref} /></noscript>
+    <script is:inline>
+      // Restore the "Pause motion" choice before first paint.
+      try {
+        if (localStorage.getItem("mn:motion") === "paused") document.documentElement.dataset.motion = "paused";
+      } catch (e) {}
+    </script>
     <ClientRouter />
   </head>
   <body>
@@ -52,7 +55,6 @@ const year = new Date().getFullYear();
       <SiteMenu
         client:load
         name={site.name}
-        nameJa={site.nameJa}
         tagline={site.tagline}
         items={site.nav}
         currentPath={Astro.url.pathname}

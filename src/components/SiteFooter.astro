@@ -8,17 +8,25 @@ const { year } = Astro.props;
 const readyNav = site.nav.filter((item) => item.ready);
 ---
 
-<footer class="flex items-end justify-between gap-4 px-(--page-x) pb-2 pt-1">
+<footer class="flex flex-wrap items-center justify-between gap-x-6 px-(--page-x) pb-2 pt-1">
   <p class="type-label flex min-h-11 items-center gap-2 text-silver-400">
     <span class="bg-red px-2 py-1 text-paper" aria-hidden="true">MN</span>
-    <span>&copy; {year} {site.name} / {site.city}</span>
+    <span>&copy; {year} {site.name}, {site.city}</span>
   </p>
-  <ul class="flex items-center gap-4">
+  <ul class="flex items-center gap-6">
+    <li>
+      <button type="button" class="type-label flex min-h-11 items-center text-silver-50" data-motion-toggle hidden>
+        <span class="link-draw" data-motion-label>Pause motion</span>
+      </button>
+    </li>
     {
       site.footerLinks.map((link) => (
         <li>
-          <a href={link.href} rel="me noopener" class="type-label flex min-h-11 items-center text-silver-50 hover:text-forward">
-            {link.label} &#8599;
+          <a href={link.href} rel="me noopener" class="type-label flex min-h-11 items-center gap-1 text-silver-50">
+            <span class="link-draw">{link.label}</span>
+            <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M3 9 9 3M4 3h5v5" />
+            </svg>
           </a>
         </li>
       ))
@@ -30,3 +38,40 @@ const readyNav = site.nav.filter((item) => item.ready);
     </nav>
   </noscript>
 </footer>
+
+<script>
+  // Anything that loops for more than a few seconds needs an off switch.
+  const KEY = "mn:motion";
+
+  function bindMotionToggle() {
+    const button = document.querySelector<HTMLButtonElement>("[data-motion-toggle]");
+    const label = button?.querySelector<HTMLElement>("[data-motion-label]");
+    if (!button || !label) return;
+    // Under reduced motion nothing loops, so there is nothing to pause.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const root = document.documentElement;
+    // Page navigation swaps <html> attributes, so restore the saved choice each time.
+    try {
+      if (localStorage.getItem(KEY) === "paused") root.dataset.motion = "paused";
+    } catch {}
+    const sync = () => {
+      const paused = root.dataset.motion === "paused";
+      label.textContent = paused ? "Play motion" : "Pause motion";
+      button.setAttribute("aria-pressed", String(paused));
+    };
+    button.hidden = false;
+    sync();
+    button.onclick = () => {
+      const paused = root.dataset.motion !== "paused";
+      if (paused) root.dataset.motion = "paused";
+      else delete root.dataset.motion;
+      try {
+        localStorage.setItem(KEY, paused ? "paused" : "playing");
+      } catch {}
+      sync();
+    };
+  }
+
+  document.addEventListener("astro:page-load", bindMotionToggle);
+</script>

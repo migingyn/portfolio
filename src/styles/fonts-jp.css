@@ -1,5 +1,0 @@
-/* Japanese ranges for the two families that carry Japanese copy (DESIGN.md section 3).
-   Loaded as a separate, non-blocking stylesheet: each slice has a unicode-range, so the
-   browser only downloads the few font files a page's Japanese text actually needs. */
-@import "@fontsource/zen-maru-gothic/500.css";
-@import "@fontsource/dela-gothic-one/400.css";

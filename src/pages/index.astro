@@ -11,21 +11,17 @@ import { site } from "../site.config";
 import { formatSeasonDate, getCurrentSeason } from "../lib/seasons";
 
 const season = await getCurrentSeason();
-const { name, nameJa, headlineJa, mood, start, end, ascii } = season.data;
+const { name, headline, mood, start, end, ascii } = season.data;
 
 const isReady = (href: string) => site.nav.some((item) => item.href === href && item.ready);
 const [firstLine, ...otherLines] = site.coverLines;
-const tones = ["pink", "sky"] as const;
-
-// "秋、はじまる。" breaks after the comma, like a two-line ad headline.
-const headline = headlineJa?.split(/(?<=、)/) ?? [];
 const issue = `Vol.${season.number}`;
 const ticker = [
   `${issue} ${name}`,
   site.tagline.replace(/\.$/, ""),
   `Now building: ${site.now.building.replace(/\.$/, "")}`,
   `${site.city}, California`,
-  "Menu: tap the name",
+  "Tap the name for the menu",
 ];
 ---
 
@@ -34,13 +30,12 @@ const ticker = [
 
   <section aria-labelledby="issue-name" class="cover">
     <div class="issue enter" style="--i:1">
-      <span class="stamp type-label" lang="ja">創刊号</span>
+      <span class="stamp type-label">First issue</span>
       <p class="type-label">
         <span id="issue-name">{issue} / {name}</span>
-        {nameJa && <span lang="ja"> {nameJa}号</span>}
         <span class="dates">
           <time datetime={start.toISOString().slice(0, 10)}>{formatSeasonDate(start)}</time>
-          <span aria-hidden="true">&rarr;</span><span class="sr-only">to</span>
+          {" to "}
           <time datetime={end.toISOString().slice(0, 10)}>{formatSeasonDate(end)}</time>
         </span>
       </p>
@@ -48,7 +43,7 @@ const ticker = [
 
     {
       headline.length > 0 && (
-        <p class="headline ink-outline enter" style="--i:3" lang="ja">
+        <p class="headline ink-outline enter" style="--i:3">
           {headline.map((part) => <span>{part}</span>)}
         </p>
       )
@@ -63,20 +58,17 @@ const ticker = [
         </Keitai>
       </div>
       <Starburst class="new enter" style="--i:5">
-        <span class="type-shout-sm">NEW!</span><br />
+        <span class="type-shout-sm">New!</span><br />
         <span class="type-label">Season {season.number}</span>
       </Starburst>
       <p class="bubble type-hand enter" style="--i:6">{mood}</p>
-      <span class="sparkle s1" aria-hidden="true">&#10022;</span>
-      <span class="sparkle s2" aria-hidden="true">&#10022;</span>
-      <span class="sparkle s3" aria-hidden="true">&#10022;</span>
     </div>
 
     <ul class="lines lines-left">
       {
         firstLine && (
           <li class="enter" style="--i:4">
-            <CoverLine line={firstLine} ready={isReady(firstLine.href)} tone="accent" />
+            <CoverLine line={firstLine} ready={isReady(firstLine.href)} />
           </li>
         )
       }
@@ -86,7 +78,7 @@ const ticker = [
       {
         otherLines.map((line, i) => (
           <li class="enter" style={`--i:${5 + i}`}>
-            <CoverLine line={line} ready={isReady(line.href)} tone={tones[i % tones.length]!} align="right" />
+            <CoverLine line={line} ready={isReady(line.href)} align="right" />
           </li>
         ))
       }
@@ -94,7 +86,7 @@ const ticker = [
 
     <div class="price enter" style="--i:7">
       <span class="barcode" aria-hidden="true"></span>
-      <p class="type-label"><span lang="ja">定価</span> &yen;0</p>
+      <p class="type-label">Price: free</p>
     </div>
   </section>
 
@@ -128,7 +120,6 @@ const ticker = [
     rotate: -4deg;
     background: var(--color-red);
     color: var(--color-paper);
-    font-size: 0.875rem;
   }
   .dates {
     display: block;
@@ -142,8 +133,8 @@ const ticker = [
     rotate: -5deg;
     color: var(--color-forward);
     font-family: var(--font-shout);
-    font-size: clamp(3rem, 15vw, 4.5rem);
-    line-height: 1.08;
+    font-size: clamp(2.5rem, 11vw, 3.5rem);
+    line-height: 1.05;
     -webkit-text-stroke-color: var(--color-paper);
     text-shadow: 0.07em 0.07em 0 var(--color-magenta);
     pointer-events: none;
@@ -152,7 +143,7 @@ const ticker = [
     display: block;
   }
   .headline span + span {
-    margin-left: 0.6em;
+    margin-left: 0.5em;
   }
 
   .star {
@@ -169,7 +160,7 @@ const ticker = [
     width: calc(var(--keitai-w) * 2.1);
     aspect-ratio: 1;
     translate: -50% -50%;
-    border-radius: var(--radius-pill);
+    border-radius: var(--radius-full);
     background: var(--gradient-sky);
   }
   /* Screentone ring peeking out from behind the disc. */
@@ -201,10 +192,8 @@ const ticker = [
     max-width: 11.5rem;
     padding: 10px 14px;
     rotate: -4deg;
-    border: 2px solid var(--color-ink);
     border-radius: var(--radius-md);
     background: var(--color-paper);
-    box-shadow: var(--shadow-pop);
     color: var(--color-ink);
     font-size: 1rem;
   }
@@ -216,20 +205,8 @@ const ticker = [
     width: 18px;
     height: 18px;
     rotate: 45deg;
-    border: 2px solid var(--color-ink);
-    border-width: 2px 0 0 2px;
     background: var(--color-paper);
   }
-  .sparkle {
-    position: absolute;
-    color: var(--color-paper);
-    font-size: 1.75rem;
-    line-height: 1;
-  }
-  .s1 { left: 4%; top: 12%; color: var(--color-accent); }
-  .s2 { right: 2%; bottom: 30%; font-size: 1.25rem; }
-  .s3 { right: 6%; bottom: -2%; color: var(--color-pink); font-size: 2.25rem; }
-
   .lines {
     display: grid;
     gap: 28px;
@@ -279,7 +256,7 @@ const ticker = [
     .headline {
       align-self: center;
       margin: 0 -40px 0 0;
-      font-size: clamp(3rem, min(6vw, 11vh), 6rem);
+      font-size: clamp(2.5rem, min(4.4vw, 9vh), 4.25rem);
     }
     .star {
       align-self: center;
@@ -288,33 +265,8 @@ const ticker = [
     }
     .new { right: calc(var(--keitai-w) * -0.62); }
     .bubble { left: calc(var(--keitai-w) * -0.66); }
-    .s1 { left: -8%; }
-    .s2 { right: -16%; }
     .lines-left { align-self: end; }
     .lines-right { align-self: center; }
     .price { align-self: end; }
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .sparkle {
-      animation: twinkle 2.2s ease-in-out infinite;
-    }
-    .s2 { animation-delay: 0.7s; }
-    .s3 { animation-delay: 1.3s; }
-    .stamp {
-      animation: wobble 3.2s ease-in-out infinite;
-    }
-  }
-  @keyframes twinkle {
-    50% {
-      scale: 0.5;
-      rotate: 45deg;
-      opacity: 0.4;
-    }
-  }
-  @keyframes wobble {
-    50% {
-      rotate: 3deg;
-    }
   }
 </style>

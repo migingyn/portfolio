@@ -9,10 +9,8 @@ const seasons = defineCollection({
   loader: glob({ pattern: "*.md", base: "./src/content/seasons" }),
   schema: z.object({
     name: z.string(),
-    /** Kanji or short Japanese name, e.g. 秋. */
-    nameJa: z.string().optional(),
-    /** Japanese cover headline for the season, e.g. 秋、はじまる。 */
-    headlineJa: z.string().optional(),
+    /** Cover headline, one entry per line, e.g. ["Autumn", "starts now."]. */
+    headline: z.array(z.string()).default([]),
     start: z.coerce.date(),
     end: z.coerce.date(),
     /** Overrides DESIGN.md's two accent roles only. The dark base never changes. */

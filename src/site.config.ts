@@ -2,28 +2,21 @@
 
 export interface NavItem {
   label: string;
-  /** Japanese sublabel. Must be real, correct Japanese (DESIGN.md D-015). */
-  labelJa: string;
   href: string;
-  /** false = page not built yet; shown in the menu as "Soon" and not clickable. */
+  /** false = page not built yet; shown as "Soon" and not clickable. */
   ready: boolean;
 }
 
 export interface CoverLine {
-  /** Magazine-style kicker in Japanese, e.g. 大特集 ("big feature"). */
-  kickerJa: string;
   title: string;
-  /** One line of Japanese cover copy, with its English meaning. */
-  copyJa: string;
-  copyEn: string;
+  /** One short line of cover copy. */
+  copy: string;
   /** Must match a nav item; the line becomes a link once that page is ready. */
   href: string;
 }
 
 export const site = {
   name: "Mikey Nguyen",
-  /** Katakana reading shown above the masthead. Check this is how you want it written. */
-  nameJa: "マイキー・グエン",
   tagline: "Backend engineer and creative builder.",
   description: "Portfolio of Mikey Nguyen, backend engineer and creative builder in San Diego.",
 
@@ -34,38 +27,20 @@ export const site = {
   timeZone: "America/Los_Angeles",
 
   nav: [
-    { label: "Home", labelJa: "ホーム", href: "/", ready: true },
-    { label: "Projects", labelJa: "プロジェクト", href: "/projects", ready: false },
-    { label: "Experience", labelJa: "経歴", href: "/experience", ready: false },
-    { label: "Resume", labelJa: "履歴書", href: "/resume", ready: false },
-    { label: "Blog", labelJa: "ブログ", href: "/blog", ready: false },
-    { label: "Seasons", labelJa: "シーズン", href: "/seasons", ready: false },
-    { label: "Links", labelJa: "リンク", href: "/links", ready: false },
+    { label: "Home", href: "/", ready: true },
+    { label: "Projects", href: "/projects", ready: false },
+    { label: "Experience", href: "/experience", ready: false },
+    { label: "Resume", href: "/resume", ready: false },
+    { label: "Blog", href: "/blog", ready: false },
+    { label: "Seasons", href: "/seasons", ready: false },
+    { label: "Links", href: "/links", ready: false },
   ] satisfies NavItem[],
 
-  /** Cover lines on the home page, left column first. */
+  /** Cover lines on the home page: the first sits left of the phone, the rest right. */
   coverLines: [
-    {
-      kickerJa: "大特集",
-      title: "Projects",
-      copyJa: "作ったもの、ぜんぶ見せます。",
-      copyEn: "Everything I have built.",
-      href: "/projects",
-    },
-    {
-      kickerJa: "特別付録",
-      title: "Resume",
-      copyJa: "履歴書つき。",
-      copyEn: "Resume included.",
-      href: "/resume",
-    },
-    {
-      kickerJa: "新連載",
-      title: "Blog",
-      copyJa: "考えたこと、書いていきます。",
-      copyEn: "Notes on what I am thinking about.",
-      href: "/blog",
-    },
+    { title: "Projects", copy: "Everything I have built.", href: "/projects" },
+    { title: "Resume", copy: "One page, with a download.", href: "/resume" },
+    { title: "Blog", copy: "Notes on what I am working through.", href: "/blog" },
   ] satisfies CoverLine[],
 
   /** "Now" readout on the home page phone. PLACEHOLDER copy: replace with your own. */

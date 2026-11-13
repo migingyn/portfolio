@@ -9,13 +9,11 @@ import { site } from "../../site.config";
     <span>i</span>
     <span class="battery"><i></i><i></i><i></i></span>
   </p>
-  <h2 id="now-heading" class="title">
-    <span lang="ja">いま</span> / NOW
-  </h2>
+  <h2 id="now-heading" class="title">NOW</h2>
   <dl>
-    <dt>&#9654; BUILDING</dt>
+    <dt>BUILDING</dt>
     <dd>{site.now.building}</dd>
-    <dt>&#9654; FILMING</dt>
+    <dt>FILMING</dt>
     <dd>{site.now.filming}</dd>
   </dl>
   <p class="clock">
@@ -68,10 +66,20 @@ import { site } from "../../site.config";
     color: var(--color-accent);
   }
   dt {
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
     margin-top: 0.3em;
   }
+  /* Pixel arrow, drawn rather than typed. */
+  dt::before {
+    content: "";
+    border: 0.3em solid transparent;
+    border-left: 0.5em solid currentColor;
+    border-right: 0;
+  }
   dd {
-    padding-left: 1em;
+    padding-left: 0.9em;
   }
   .clock {
     display: flex;

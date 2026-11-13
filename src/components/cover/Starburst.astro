@@ -1,5 +1,5 @@
 ---
-/** Starburst sticker. The burst spins slowly; the text on it stays level. */
+/** Starburst. The burst spins slowly; the text on it stays level. */
 interface Props {
   points?: number;
   class?: string;
@@ -28,7 +28,6 @@ const shape = Array.from({ length: points * 2 }, (_, i) => {
     display: grid;
     place-items: center;
     aspect-ratio: 1;
-    filter: drop-shadow(4px 4px 0 var(--color-ink));
   }
   svg {
     position: absolute;

@@ -1,33 +1,23 @@
 ---
 /**
- * Magazine cover line: Japanese kicker box, big title, one line of copy.
- * A link once its page exists; until then it carries a "coming soon" tag.
+ * Magazine cover line: a big title and one line of copy. A link once its page
+ * exists; until then it says so in plain text.
  */
 import type { CoverLine } from "../../site.config";
 
 interface Props {
   line: CoverLine;
   ready: boolean;
-  /** Kicker box color. */
-  tone: "accent" | "pink" | "sky";
   align?: "left" | "right";
 }
-const { line, ready, tone, align = "left" } = Astro.props;
+const { line, ready, align = "left" } = Astro.props;
 const Tag = ready ? "a" : "div";
 ---
 
-<Tag href={ready ? line.href : undefined} class:list={["line", `tone-${tone}`, `align-${align}`, { ready }]}>
-  <span class="kicker type-label" lang="ja">{line.kickerJa}</span>
+<Tag href={ready ? line.href : undefined} class:list={["line", `align-${align}`, { ready }]}>
   <span class="title type-shout-md">{line.title}</span>
-  <span class="copy type-body-sm" lang="ja">{line.copyJa}</span>
-  <span class="en type-label">{line.copyEn}</span>
-  {
-    !ready && (
-      <span class="soon type-label">
-        <span lang="ja">近日公開</span> / Soon
-      </span>
-    )
-  }
+  <span class="copy type-body">{line.copy}</span>
+  {!ready && <span class="soon type-label">Coming soon</span>}
 </Tag>
 
 <style>
@@ -35,49 +25,35 @@ const Tag = ready ? "a" : "div";
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 2px;
     color: var(--color-silver-50);
   }
   .align-right {
     align-items: flex-end;
     text-align: right;
   }
-  .kicker {
-    padding: 4px 8px;
-    rotate: -3deg;
-    color: var(--color-ink);
-    font-size: 0.875rem;
-  }
-  .tone-accent .kicker { background: var(--color-accent); }
-  .tone-pink .kicker { background: var(--color-pink); }
-  .tone-sky .kicker { background: var(--color-sky); }
   .title {
-    margin-top: 4px;
-    font-size: clamp(2rem, 3.6vw, 3rem);
-  }
-  .copy {
-    color: var(--color-silver-50);
-  }
-  .en {
-    color: var(--color-silver-400);
-  }
-  .soon {
-    margin-top: 6px;
-    padding: 3px 8px;
-    border: 1px dashed var(--color-silver-500);
-    border-radius: var(--radius-pill);
-    color: var(--color-silver-400);
-  }
-  .ready:hover .title {
-    color: var(--color-forward);
-  }
-  .title {
+    font-size: clamp(2.25rem, 3.8vw, 3rem);
     transition:
       color var(--duration-fast) var(--ease-out),
       translate var(--duration-base) var(--ease-out);
   }
-  @media (prefers-reduced-motion: no-preference) {
-    .ready.align-left:hover .title { translate: 6px 0; }
-    .ready.align-right:hover .title { translate: -6px 0; }
+  .copy {
+    margin-top: 4px;
+    color: var(--color-silver-50);
+  }
+  .soon {
+    margin-top: 2px;
+    color: var(--color-silver-400);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .ready:hover .title {
+      color: var(--color-forward);
+    }
+    .ready.align-left:hover .title {
+      translate: 6px 0;
+    }
+    .ready.align-right:hover .title {
+      translate: -6px 0;
+    }
   }
 </style>

@@ -1,0 +1,5 @@
+/* Japanese ranges for the body family (DESIGN.md section 3).
+   Loaded as a separate, non-blocking stylesheet: each slice has a unicode-range, so the
+   browser only downloads the few font files a page's Japanese text actually needs.
+   Add "@fontsource/dela-gothic-one/400.css" here when the first Japanese shout headline ships. */
+@import "@fontsource/zen-kaku-gothic-new/400.css";

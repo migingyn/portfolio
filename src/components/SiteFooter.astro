@@ -1,0 +1,36 @@
+---
+import { site } from "../site.config";
+
+interface Props {
+  year: number;
+}
+const { year } = Astro.props;
+const readyNav = site.nav.filter((item) => item.ready);
+---
+
+<footer class="flex items-end justify-between gap-4 px-(--page-x) pb-2">
+  <p class="type-meta flex min-h-11 items-center gap-2 text-silver-500">
+    <span class="type-label bg-red px-2 py-1 text-paper" aria-hidden="true">MN</span>
+    <span>&copy; {year} / {site.city}</span>
+  </p>
+  <ul class="flex items-center gap-4">
+    {
+      site.footerLinks.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            rel="me noopener"
+            class="type-label flex min-h-11 items-center text-silver-400 hover:text-forward"
+          >
+            {link.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+  <noscript>
+    <nav aria-label="Sections" class="type-label absolute inset-x-0 top-0 flex justify-center gap-4 bg-carbon p-3">
+      {readyNav.map((item) => <a href={item.href}>{item.label}</a>)}
+    </nav>
+  </noscript>
+</footer>

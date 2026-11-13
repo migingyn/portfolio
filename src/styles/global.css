@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+/* Latin faces ship in the main stylesheet. Japanese ranges: see fonts-jp.css. */
+@import "@fontsource/manufacturing-consent/latin-400.css";
+@import "@fontsource/dela-gothic-one/latin-400.css";
+@import "@fontsource/michroma/latin-400.css";
+@import "@fontsource/zen-kaku-gothic-new/latin-300.css";
+@import "@fontsource/zen-kaku-gothic-new/latin-400.css";
+@import "@fontsource/zen-kaku-gothic-new/latin-700.css";
+@import "@fontsource/ibm-plex-mono/latin-500.css";
+@import "@fontsource/ibm-plex-mono/latin-600.css";
+@import "@fontsource/dotgothic16/latin-400.css";
+
+@import "./tokens.css";
+
+@layer base {
+  html {
+    color-scheme: dark;
+    background-color: var(--color-carbon);
+    color: var(--color-silver-50);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  a,
+  button {
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  button {
+    cursor: pointer;
+  }
+}
+
+/* Ghost button (DESIGN.md section 6). Other variants get added when first used. */
+@utility btn-ghost {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  border: 1px solid var(--color-silver-50);
+  border-radius: var(--radius-pill);
+  color: var(--color-silver-50);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    scale var(--duration-base) var(--ease-out);
+  &:hover {
+    border-color: var(--color-forward);
+    color: var(--color-forward);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    &:active {
+      scale: 0.97;
+    }
+  }
+}

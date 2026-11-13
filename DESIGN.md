@@ -1,7 +1,7 @@
 ---
-version: 0.1-draft
+version: 0.2
 name: Portfolio "Digital Form"
-status: DRAFT, awaiting owner review. Nothing gets built until this is approved.
+status: In use. Milestone 1 (tokens, layout, menu, home) is built from this file. Tokens are mirrored in src/styles/tokens.css.
 description: >
   A portfolio that reads like a 2000s Japanese tech and fashion magazine bound in a
   carbon folder. A near-black editorial canvas (The Verge) carries full-bleed "ad page"
@@ -33,6 +33,9 @@ colors:
   orange: "#ff7a00"          # Signal Orange: forward cues and hover only
   red: "#e60012"             # Stamp Red: NEW / box stamp only
   focus: "#2997ff"           # keyboard focus ring only
+  # Signal roles. Components use these two names; the current season may override them (D-020).
+  accent: "{colors.lime}"
+  forward: "{colors.orange}"
   # Text
   ink: "#101114"             # text on any light or saturated fill
   on-carbon: "#f4f5f8"
@@ -49,7 +52,9 @@ typography:
     body: "'Zen Kaku Gothic New', 'Helvetica Neue', Arial, sans-serif"  # Latin + Japanese text and UI
     mono: "'IBM Plex Mono', 'Courier New', monospace"                   # uppercase labels only
     pixel: "'DotGothic16', 'IBM Plex Mono', monospace"                  # inside LCD components only
+    blackletter: "'Manufacturing Consent', 'Old English Text MT', serif" # site wordmark only (D-018)
   scale:
+    wordmark:   { family: blackletter, size: "clamp(44px, 6vw, 72px)", weight: 400, lineHeight: 1.0, letterSpacing: "0" }
     shout-xl:   { family: shout,  size: "clamp(56px, 11vw, 144px)", weight: 400, lineHeight: 0.95, letterSpacing: "0" }
     shout-lg:   { family: shout,  size: "clamp(44px, 7vw, 88px)",   weight: 400, lineHeight: 0.98, letterSpacing: "0" }
     shout-md:   { family: shout,  size: "48px",  weight: 400, lineHeight: 1.0,  letterSpacing: "0" }
@@ -177,6 +182,13 @@ except `indigo`, which takes white. These are the only tile colors.
 | `red` | `#e60012` | NEW tag and box stamp, white bold text only | Buttons, links, errors on its own without a text label |
 | `focus` | `#2997ff` | 2px keyboard focus ring with 2px offset | Any non-focus use |
 
+### Seasons
+Components never reference `lime` or `orange` directly. They use two role tokens,
+`accent` (default `lime`) and `forward` (default `orange`). Each season file in
+`src/content/seasons` may override those two and nothing else; canvas, chrome, fills,
+`red`, and `focus` are the same every season. A season color must reach 4.5:1 against
+`carbon` (which also covers `ink` text on it), and the build fails if it does not.
+
 ### Gradients
 Exactly two, both named tokens. `chrome` goes on plates, chrome buttons, and badges.
 `sky` goes on ad-page backdrops behind a cutout subject. No other gradients, no
@@ -191,8 +203,9 @@ glows, no gradient text.
 | **Zen Kaku Gothic New** | Verge's PolySans, Apple's SF Pro Text | Body, headings, UI. Covers Japanese so mixed lines match |
 | **IBM Plex Mono** | Verge's PolySans Mono | Uppercase labels, timestamps, tags, button text. Never lowercase |
 | **DotGothic16** | Phone LCD bitmap text | Inside LCD components only |
+| **Manufacturing Consent** | Chrome Hearts style Old English | The "Mikey Nguyen" wordmark and nothing else (D-018) |
 
-All five are free on Google Fonts. Load Latin subsets first; Japanese ranges load on demand.
+All six are free on Google Fonts and self-hosted. Load Latin subsets first; Japanese ranges load on demand.
 
 ### Scale
 | Token | Font | Size | Weight | Line height | Tracking | Use |
@@ -257,12 +270,45 @@ command bar and footer. No noise overlays, no scanlines, no lens flares.
 
 ## 6. Components
 
-### Masthead
-Site wordmark in `shout-xl`, `silver-50`, full width on first view, with a `whisper`
-eyebrow above and an issue line in `meta` (for example `VOL.01 / 2026 / SAN DIEGO`).
-On scroll it collapses into the command bar.
+### Wordmark header
+"Mikey Nguyen" in `wordmark` (blackletter, `silver-50`), centered at the top of every
+page, with "Backend engineer and creative builder." under it in `whisper`
+(`silver-400`). The wordmark is the menu button: a `meta` "MENU +" hint sits above it,
+and wordmark and hint turn `forward` on hover. On the home page it is the `h1`.
 
-### Command bar (nav)
+### Menu panel
+Opens from the wordmark and slides in from the left over a 75% `carbon` backdrop
+(280ms; fade only under reduced motion). `carbon` with halftone texture, 1px
+`silver-600` right edge, 480px wide on desktop and full screen below 768px.
+Top bar: `techno-sm` "INDEX" and a ghost CLOSE button. Links stack vertically with a
+1px dotted `hairline` between them: `meta` number and Japanese sublabel on one line,
+the section name under it in title-case `shout-md`. Hover turns the name `forward`;
+the current page has a 1px `accent` inset underline. Sections that are not built yet
+show at 40% opacity with a `meta` "SOON" and are not focusable. Bottom line: season
+and city in `meta`. Modal dialog: focus is trapped, Escape or a backdrop click closes
+it, and focus returns to the wordmark.
+
+### Seasonal hero (home)
+One full-screen visual on `carbon`: the season's kanji drawn as a mask of ASCII
+characters in `silver-600` to `silver-400`, with a slow drift of glyphs in the season's
+style (leaves, snow, rain, petals) in `silver-50` and `periwinkle`. Monochrome on
+purpose, so the LCD stays the one accent element. 12 frames per second; a single still
+frame under reduced motion. Furniture: a top-left corner plate with the season name,
+a `meta` and `body-sm` mood line under it, a rotated `techno-lg` season number on the
+right edge (768px and up), and a bottom-right corner plate with the date range
+(1024px and up).
+
+### Now card (home)
+A spec sheet with a `chrome` tab reading NOW: BUILDING and FILMING boxes, then the
+local time in the page's one LCD screen. `carbon-2` fill so it stays readable over the
+hero. Bottom left on desktop, under the hero visual on mobile.
+
+### ASCII intro (home, first visit only)
+Full-screen `carbon` overlay: the name as an ASCII banner in the mono face
+(`silver-50`), three boot lines in `meta` (`silver-400`), and a ghost SKIP INTRO
+button. About 2.5 seconds, then a 280ms fade. Never plays under reduced motion.
+
+### Command bar (parked, see D-019)
 48px `carbon` bar with halftone texture and a 1px `silver-600` bottom line. Small
 wordmark left in `techno-sm`, links in `label` (`silver-400`), one lime pill CTA right.
 Hover turns link text `orange`. Active link has a 1px `lime` inset underline.
@@ -341,7 +387,9 @@ sit over an image in `meta` white only where contrast holds; otherwise below.
 All images have alt text; `loading="lazy"` below the fold.
 
 ### Footer
-`carbon-2` slab with halftone texture, top edge chamfered. Dense by design: index
+On the home page the footer is reduced to the two bottom corners: the red MN box stamp
+and the hallmark line (year, city) in `meta` on the left, small `label` links on the
+right. The full version, for longer pages: `carbon-2` slab with halftone texture, top edge chamfered. Dense by design: index
 links in `label`, fine print in `meta`, the red box stamp, and a silver hallmark
 line (year, city) as the Chrome Hearts nod.
 
@@ -386,7 +434,7 @@ old one `Superseded by D-0xx`. Status is `Proposed` (mine, awaiting your call),
 | ID | Date | Decision | Why | Source | Status |
 |---|---|---|---|---|---|
 | D-001 | 2026-11-13 | The Verge is the structural base; Apple, Nintendo 2001, and Sony 2001 are layers on top | Owner brief | Owner | Accepted |
-| D-002 | 2026-11-13 | Canvas is dark `carbon #101114` with no light mode; light appears only as ad-page tiles | Verge base, Chrome Hearts black and silver; makes the bright ads read as pages in a binder | Verge, Chrome Hearts | Proposed |
+| D-002 | 2026-11-13 | Canvas is dark `carbon #101114` with no light mode; light appears only as ad-page tiles | Verge base, Chrome Hearts black and silver; makes the bright ads read as pages in a binder | Verge, Chrome Hearts | Accepted (owner confirmed dark canvas) |
 | D-003 | 2026-11-13 | "Content is flat, chrome is hardware": bevels and the chrome gradient only on nav, plates, buttons, badges | Resolves Verge (no shadows or gradients) against Nintendo (bevel everything) | Verge, Nintendo | Proposed |
 | D-004 | 2026-11-13 | Primary accent is LCD Lime `#c8f31d`, replacing Verge's mint | Sampled from the flip phone screen; same hazard-accent role, owned by this moodboard | Moodboard 1, Verge | Proposed |
 | D-005 | 2026-11-13 | Orange `#ff7a00` is reserved for forward cues and link hover | Nintendo's "warm means go" rule; hue from the magazine headline | Nintendo, Moodboard 4 | Proposed |
@@ -400,11 +448,23 @@ old one `Superseded by D-0xx`. Status is `Proposed` (mine, awaiting your call),
 | D-013 | 2026-11-13 | Project list is a plain numbered "drop list" on a dated rail | Supreme's index plus Verge's StoryStream timeline | Supreme, Verge | Proposed |
 | D-014 | 2026-11-13 | Moodboard-derived components: corner plate, leader-line callout, spec sheet, colorway chips, LCD screen | Direct lifts of the ads' recurring devices, rebuilt as original UI | Moodboard 1, 2, 5 | Proposed |
 | D-015 | 2026-11-13 | Japanese copy must be real, tagged `lang="ja"`, and paired with English | Respect for the language, screen readers, and credibility | Owner aesthetic | Proposed |
-| D-016 | 2026-11-13 | No blackletter and no third-party logos or wordmarks from the ads | Blackletter fights the techno type; brand marks are not ours to use | Chrome Hearts (declined) | Proposed |
+| D-016 | 2026-11-13 | No blackletter and no third-party logos or wordmarks from the ads | Blackletter fights the techno type; brand marks are not ours to use | Chrome Hearts (declined) | Blackletter clause superseded by D-018; logo clause stands |
 | D-017 | 2026-11-13 | Sony 2001 layer is provisional (silver bodies, model numbers, spec callouts, colorways) | Reference file not available in awesome-design-md or reachable this session | See section 0 | Proposed |
+| D-018 | 2026-11-13 | The site name is set as a blackletter wordmark, and blackletter is used for nothing else. Face: Manufacturing Consent | Owner asked for a Chrome Hearts style wordmark. Most legible of three Old English faces tried | Owner, Chrome Hearts | Accepted (the specific face is Proposed) |
+| D-019 | 2026-11-13 | Navigation is the wordmark opening a left slide-in panel with stacked section links. The command bar and ticker strip specs are parked | Owner brief: Chrome Hearts site structure | Owner | Accepted |
+| D-020 | 2026-11-13 | Seasons override two role tokens only, `accent` (lime role) and `forward` (orange role). `red`, `focus`, and the dark base never change. Season colors must reach 4.5:1 on `carbon` or the build fails | Owner brief: seasons change accents only. Mapping "accents" to these two roles is my reading | Owner, section 8 | Accepted (role mapping is Proposed) |
+| D-021 | 2026-11-13 | Home hero is a monochrome silver ASCII field: season kanji as a character mask plus drifting glyphs per season style, 12fps, still under reduced motion. Uses the mono face for mixed symbols and the body face to shape the kanji | No photography yet; keeps the one-accent-per-viewport rule; ties to the ASCII intro. An exception to "mono is uppercase labels only" | Owner brief (ASCII styles), section 1 rule 3 | Proposed |
+| D-022 | 2026-11-13 | Menu links are title-case `shout-md` with number and Japanese sublabel above. On phones narrower than 370px the size eases below the 44px floor (13vw) | Uppercase "EXPERIENCE" does not fit a phone at 44px; title case does down to 370px | Section 6 (old command bar sheet) | Proposed |
+| D-023 | 2026-11-13 | Sections that are not built yet stay in the menu at 40% opacity with a SOON tag | Shows the full structure without dead links | Section 6 (disabled = 40%) | Proposed |
+| D-024 | 2026-11-13 | A `meta` "MENU +" hint sits above the wordmark; hint and wordmark turn `forward` on hover | A logo that opens a menu is not discoverable on its own | Section 2 (orange = hover) | Proposed |
+| D-025 | 2026-11-13 | Now card is a spec sheet with a chrome tab; local time is the home page's one LCD screen | Reuses two existing components instead of inventing a card | Section 6 | Proposed |
+| D-026 | 2026-11-13 | Home page furniture: top-left plate with season name, mood line under it, rotated season number on the right edge, bottom-right plate with the date range | The hero is treated as an ad tile (two plates on opposite corners, rotated model number) | Section 6 (Ad tile, Corner plate) | Proposed |
+| D-027 | 2026-11-13 | First-visit intro is an ASCII banner in the mono face with three boot lines and a ghost skip button | Owner asked for an ASCII intro; kept to silver on carbon | Owner | Proposed |
+| D-028 | 2026-11-13 | Home footer is two corner groups: red MN box stamp and hallmark left, `label` links right | Owner brief (small corner links) plus the footer's stamp and hallmark | Owner, section 6 Footer | Proposed |
 
 ### Open questions
-1. **Dark or light canvas?** D-002 proposes dark. The alternative is a silver and sky light canvas closer to the ads themselves, with carbon as the accent.
-2. **Sony 2001 file.** Paste it or point me to it and I will revise D-017 and the chrome specs.
-3. **Site name and stack.** The masthead needs the wordmark text, and the build needs a framework choice; neither is set yet.
-4. **Blackletter.** Declined in D-016; say so if you want a Chrome Hearts gothic accent somewhere small (footer hallmark).
+1. **Sony 2001 file.** Paste it or point me to it and I will revise D-017 and the chrome specs.
+2. **Season color in the hero.** D-021 keeps the ASCII visual silver. Tinting the drifting glyphs with the season `accent` would make each season more visible but breaks the one-accent-per-viewport rule; say so if you want that trade.
+3. **Wordmark face.** D-018 picks Manufacturing Consent; UnifrakturCook and Pirata One were the alternatives.
+
+Resolved: dark canvas (D-002), site name and stack (owner brief, 2026-11-13), blackletter (D-018).

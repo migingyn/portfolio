@@ -1,0 +1,52 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import AsciiIntro from "../components/home/AsciiIntro.astro";
+import SeasonCanvas from "../components/home/SeasonCanvas.astro";
+import NowCard from "../components/home/NowCard.astro";
+import CornerPlate from "../components/ui/CornerPlate.astro";
+import { formatSeasonDate, getCurrentSeason } from "../lib/seasons";
+
+const season = await getCurrentSeason();
+const { name, nameJa, mood, start, end, ascii } = season.data;
+---
+
+<BaseLayout isHome>
+  <AsciiIntro slot="overlay" season={season} />
+  <SeasonCanvas slot="backdrop" season={season} />
+
+  <section aria-labelledby="season-name" class="relative flex flex-1 flex-col pt-6 md:pt-8">
+    <p class="sr-only">
+      Seasonal visual: {ascii} drifting in ASCII characters{nameJa && <>{" "}around the character <span lang="ja">{nameJa}</span></>}.
+    </p>
+
+    <div class="relative z-10 flex flex-col items-start gap-3">
+      <CornerPlate corner="top-left">
+        <span id="season-name">{name}</span>
+      </CornerPlate>
+      <div class="max-w-[16rem] px-(--page-x)">
+        <p class="type-meta text-silver-500">Season {season.number} / Mood</p>
+        <p class="type-body-sm mt-1 text-silver-400">{mood}</p>
+      </div>
+    </div>
+
+    <!-- The box the season glyph is centered in: the free middle on mobile, the whole hero on desktop. -->
+    <div class="relative min-h-[52svh] flex-1 lg:absolute lg:inset-0 lg:min-h-0" data-ascii-stage aria-hidden="true">
+      <p
+        class="type-techno-lg absolute right-(--page-x) top-1/2 hidden -translate-y-1/2 text-silver-500 [writing-mode:vertical-rl] md:block"
+      >
+        S/{season.number}
+      </p>
+    </div>
+
+    <div class="relative z-10 flex items-end justify-between gap-6 pb-2 lg:mt-auto">
+      <div class="w-full px-(--page-x) lg:w-auto">
+        <NowCard />
+      </div>
+      <CornerPlate corner="bottom-right" class="hidden shrink-0 lg:block">
+        <time datetime={start.toISOString().slice(0, 10)}>{formatSeasonDate(start)}</time>
+        <span aria-hidden="true"> / </span><span class="sr-only">to</span>
+        <time datetime={end.toISOString().slice(0, 10)}>{formatSeasonDate(end)}</time>
+      </CornerPlate>
+    </div>
+  </section>
+</BaseLayout>

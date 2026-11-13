@@ -1,0 +1,215 @@
+/* Design tokens. One-to-one with the front matter of /DESIGN.md.
+   Change a value there first, log it in the Decision Log, then mirror it here. */
+
+@theme {
+  /* Reset Tailwind defaults so only DESIGN.md values exist. */
+  --color-*: initial;
+  --font-*: initial;
+  --text-*: initial;
+  --radius-*: initial;
+  --shadow-*: initial;
+  --breakpoint-*: initial;
+  --ease-*: initial;
+
+  /* Canvas */
+  --color-carbon: #101114;
+  --color-carbon-2: #1a1c22;
+  --color-carbon-3: #272a33;
+  --color-hairline: #3a3e4a;
+
+  /* Chrome */
+  --color-silver-50: #f4f5f8;
+  --color-silver-200: #d9dde5;
+  --color-silver-400: #aab0bd;
+  --color-silver-500: #8a91a1;
+  --color-silver-600: #6f7686;
+  --color-periwinkle: #7a8aba;
+  --color-indigo: #2f2a95;
+
+  /* Ad-page fills */
+  --color-sky: #a9c6f0;
+  --color-ice: #dfeaf9;
+  --color-pink: #f6a6c1;
+  --color-paper: #ffffff;
+
+  /* Signals (raw) */
+  --color-lime: #c8f31d;
+  --color-orange: #ff7a00;
+  --color-red: #e60012;
+  --color-focus: #2997ff;
+  --color-ink: #101114;
+
+  /* Signals (roles). Components use these two; the current season may override
+     them on <html> (see src/lib/seasons.ts). Everything else never changes. */
+  --color-accent: var(--color-lime);
+  --color-forward: var(--color-orange);
+
+  /* Type families */
+  --font-shout: "Dela Gothic One", "Arial Black", Impact, sans-serif;
+  --font-techno: "Michroma", "Eurostile", Arial, sans-serif;
+  --font-body: "Zen Kaku Gothic New", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", "Courier New", monospace;
+  --font-pixel: "DotGothic16", "IBM Plex Mono", monospace;
+  --font-blackletter: "Manufacturing Consent", "Old English Text MT", serif;
+
+  /* Radius */
+  --radius-none: 0px;
+  --radius-xs: 2px;
+  --radius-sm: 6px;
+  --radius-screen: 14px;
+  --radius-pill: 9999px;
+
+  /* Depth: the single shadow in the system (cutout product imagery only). */
+  --shadow-product: 0 5px 30px rgb(0 0 0 / 0.3);
+
+  /* Layout */
+  --breakpoint-sm: 30rem; /* 480 */
+  --breakpoint-md: 48rem; /* 768 */
+  --breakpoint-lg: 64rem; /* 1024 */
+  --breakpoint-xl: 80rem; /* 1280 */
+  --container-page: 80rem;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+:root {
+  --gradient-chrome: linear-gradient(180deg, #f4f5f8 0%, #d9dde5 45%, #aab0bd 100%);
+  --gradient-sky: linear-gradient(180deg, #a9c6f0 0%, #dfeaf9 70%, #ffffff 100%);
+  --duration-fast: 120ms;
+  --duration-base: 180ms;
+  --duration-slow: 280ms;
+  /* Page padding: 16px mobile, 48px desktop. */
+  --page-x: 16px;
+}
+
+@media (min-width: 48rem) {
+  :root {
+    --page-x: 48px;
+  }
+}
+
+/* Type scale (DESIGN.md section 3). Sizes in rem so browser font scaling works. */
+@utility type-wordmark {
+  font-family: var(--font-blackletter);
+  font-size: clamp(2.75rem, 6vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1;
+}
+@utility type-shout-xl {
+  font-family: var(--font-shout);
+  font-size: clamp(3.5rem, 11vw, 9rem);
+  font-weight: 400;
+  line-height: 0.95;
+}
+@utility type-shout-lg {
+  font-family: var(--font-shout);
+  font-size: clamp(2.75rem, 7vw, 5.5rem);
+  font-weight: 400;
+  line-height: 0.98;
+}
+@utility type-shout-md {
+  font-family: var(--font-shout);
+  font-size: 3rem;
+  font-weight: 400;
+  line-height: 1;
+}
+@utility type-techno-lg {
+  font-family: var(--font-techno);
+  font-size: 1.75rem;
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+@utility type-techno-sm {
+  font-family: var(--font-techno);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+@utility type-heading {
+  font-family: var(--font-body);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+@utility type-heading-sm {
+  font-family: var(--font-body);
+  font-size: 1.1875rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+@utility type-whisper {
+  font-family: var(--font-body);
+  font-size: 1.1875rem;
+  font-weight: 300;
+  line-height: 1.25;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+@utility type-body {
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  font-weight: 400;
+  line-height: 1.6;
+}
+@utility type-body-sm {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+@utility type-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+@utility type-meta {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+@utility type-pixel {
+  font-family: var(--font-pixel);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+/* Depth level 3: chrome gradient with a hard 1px bevel. Chrome elements only. */
+@utility bevel {
+  box-shadow:
+    inset 0 1px 0 var(--color-silver-50),
+    inset 0 -1px 0 var(--color-silver-600);
+}
+@utility chrome {
+  background-image: var(--gradient-chrome);
+  box-shadow:
+    inset 0 1px 0 var(--color-silver-50),
+    inset 0 -1px 0 var(--color-silver-600);
+}
+
+/* The one texture: 1px dots on a 4px grid at 6% white. Nav panel and footer only. */
+@utility halftone {
+  background-image: radial-gradient(rgb(255 255 255 / 0.06) 0.5px, transparent 0.6px);
+  background-size: 4px 4px;
+}
+
+/* 12px chamfers for large plates. Name = the corner that gets cut. */
+@utility chamfer-br {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%);
+}
+@utility chamfer-tl {
+  clip-path: polygon(12px 0, 100% 0, 100% 100%, 0 100%, 0 12px);
+}

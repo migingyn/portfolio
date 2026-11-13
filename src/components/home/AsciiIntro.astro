@@ -1,0 +1,149 @@
+---
+/**
+ * First-visit ASCII intro. Plays once per browser (localStorage), can be skipped
+ * with the button, Escape, Enter, or a click, and never plays under
+ * prefers-reduced-motion.
+ */
+import type { Season } from "../../lib/seasons";
+import { site } from "../../site.config";
+
+interface Props {
+  season: Season;
+}
+const { season } = Astro.props;
+
+const banner = String.raw`
+    __  _________ __ ________  __
+   /  |/  /  _/ //_// ____/\ \/ /
+  / /|_/ // // ,<  / __/    \  /
+ / /  / // // /| |/ /___    / /
+/_/  /_/___/_/ |_/_____/   /_/
+
+    _   __________  ____  _________   __
+   / | / / ____/ / / /\ \/ / ____/ | / /
+  /  |/ / / __/ / / /  \  / __/ /  |/ /
+ / /|  / /_/ / /_/ /   / / /___/ /|  /
+/_/ |_/\____/\____/   /_/_____/_/ |_/
+`
+  .split("\n")
+  .slice(1, -1);
+
+const seasonLine = `> SEASON ${season.number} / ${season.data.name.toUpperCase()}`;
+---
+
+<div
+  id="intro"
+  hidden
+  role="dialog"
+  aria-modal="true"
+  aria-label="Intro"
+  data-season-line={seasonLine}
+  class="fixed inset-0 z-50 flex flex-col items-center justify-center gap-8 bg-carbon px-(--page-x) transition-opacity duration-(--duration-slow) ease-out"
+>
+  <p class="sr-only">{site.name}. Loading season {season.number}, {season.data.name}.</p>
+  <div aria-hidden="true">
+    <pre
+      class="font-mono text-[clamp(0.5rem,2.6vw,1rem)] font-medium leading-[1.2] text-silver-50">{banner.map((line) => <span class="block opacity-0" data-intro-line>{line || " "}</span>)}</pre>
+    <div class="type-meta mt-6 min-h-12 space-y-2 text-silver-400" data-intro-log></div>
+  </div>
+  <button type="button" class="btn-ghost" data-intro-skip>Skip intro</button>
+</div>
+
+<script is:inline>
+  // Runs before first paint so a first-time visitor never sees the page flash under the intro.
+  (function () {
+    try {
+      var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!reduced && !localStorage.getItem("mn:intro-seen")) {
+        document.getElementById("intro").hidden = false;
+      }
+    } catch (e) {}
+  })();
+</script>
+
+<script>
+  const SEEN_KEY = "mn:intro-seen";
+
+  function playIntro() {
+    const intro = document.getElementById("intro");
+    if (!intro) return;
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let seen = true;
+    try {
+      seen = localStorage.getItem(SEEN_KEY) !== null;
+    } catch {}
+    if (reduced || seen) {
+      intro.hidden = true;
+      return;
+    }
+    intro.hidden = false;
+    try {
+      localStorage.setItem(SEEN_KEY, "1");
+    } catch {}
+
+    const shell = document.getElementById("shell");
+    const skip = intro.querySelector<HTMLButtonElement>("[data-intro-skip]");
+    const log = intro.querySelector<HTMLElement>("[data-intro-log]");
+    const lines = intro.querySelectorAll<HTMLElement>("[data-intro-line]");
+    let done = false;
+
+    shell?.setAttribute("inert", "");
+    skip?.focus({ preventScroll: true });
+
+    const wait = (ms: number) => new Promise<void>((resolve) => window.setTimeout(resolve, ms));
+
+    function finish() {
+      if (done) return;
+      done = true;
+      document.removeEventListener("keydown", onKeyDown);
+      shell?.removeAttribute("inert");
+      intro!.style.opacity = "0";
+      window.setTimeout(() => {
+        intro!.hidden = true;
+        intro!.style.opacity = "";
+      }, 280);
+    }
+
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape" || event.key === "Enter") {
+        event.preventDefault();
+        finish();
+      }
+    }
+
+    document.addEventListener("keydown", onKeyDown);
+    intro.addEventListener("click", finish, { once: true });
+
+    async function type(text: string): Promise<HTMLElement | null> {
+      if (!log) return null;
+      const row = document.createElement("p");
+      log.append(row);
+      for (let i = 1; i <= text.length && !done; i++) {
+        row.textContent = text.slice(0, i);
+        await wait(14);
+      }
+      return row;
+    }
+
+    (async () => {
+      for (const line of lines) {
+        if (done) return;
+        line.classList.remove("opacity-0");
+        await wait(55);
+      }
+      await type(intro.dataset.seasonLine ?? "");
+      const bar = await type("> LOADING [          ]");
+      for (let i = 1; i <= 10 && bar && !done; i++) {
+        bar.textContent = `> LOADING [${"#".repeat(i)}${" ".repeat(10 - i)}]`;
+        bar.style.whiteSpace = "pre";
+        await wait(70);
+      }
+      await type("> READY");
+      await wait(350);
+      finish();
+    })();
+  }
+
+  document.addEventListener("astro:page-load", playIntro);
+</script>

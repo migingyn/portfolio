@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* The vendored design skills are tooling, not site code: keep Tailwind from scanning them. */
+@source not "../../.claude";
+
 @import "@fontsource/grenze-gotisch/latin-900.css";
 @import "@fontsource/dela-gothic-one/latin-400.css";
 @import "@fontsource/zen-maru-gothic/latin-500.css";

@@ -6,3 +6,8 @@ dist/
 .env.*
 !.env.example
 .DS_Store
+
+# Working files the vendored design skills write while they run
+.taste-skill/
+.impeccable/
+shots/

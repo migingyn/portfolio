@@ -102,11 +102,10 @@ gets a row in the [Decision Log](#10-decision-log).
 2. **taste-skill** sets the build rules.
 3. **Impeccable** and **Emil Kowalski's skills** do the polish pass.
 
-The three skills are not installed in this repo. Each session reads them from their
-public repositories (`Leonxlnx/taste-skill`, `pbakaus/impeccable`, `emilkowalski/skill`)
-and applies them by hand. What each one decided is logged in D-042 to D-044. Their
-automated checkers have not been run here. When they disagree with each other or with
-the brief, the order is: owner's brief, then this file, then the skills.
+The three skills are vendored in `.claude/skills` (sources, commits, and licences are
+in `.claude/SKILLS.md`), so every Claude Code session loads them. What each one
+decided is logged in D-042 to D-044. When they disagree with each other or with the
+brief, the order is: owner's brief, then this file, then the skills.
 
 | Source | What it gives this system | Status |
 |---|---|---|
@@ -435,11 +434,11 @@ reverse a decision, add a new row and mark the old one superseded. Status is
 | D-044 | 2026-11-13 | One button style and one radius scale; nothing tilts toward the pointer; buttons are named verb plus object; a "Pause motion" control stops looping animation | taste-skill's house rules and checklist | taste-skill | Proposed |
 | D-045 | 2026-11-13 | Ambient motion is trimmed to the phone bob, charm swing, starburst spin, ticker, and two small blinks. Sparkles, stamp wobble, menu-tag nudge, and pointer tilt are removed | "One authored moment, not scattered effects" | Impeccable | Proposed |
 | D-046 | 2026-11-13 | Where the skills conflict with the brief (taste-skill wants nothing rotated or overlapping and no drawn objects; Impeccable caps display type at 96px), the brief wins: the cover keeps its rotations, the drawn phone, and the large masthead | The magazine-cover concept depends on them | Owner brief | Proposed |
+| D-047 | 2026-11-13 | taste-skill, Impeccable, and 16 of Emil Kowalski's skills are vendored into `.claude/skills` | Owner approved, so the workflow loads in every session | Owner | Accepted |
 
 ### Open questions
-1. **Installing the skills.** They are read from their repos each session. Vendoring them into `.claude/skills` would make them load automatically, at the cost of about 43MB and a taste-skill hook that runs its checker when a session ends. Say the word and I will.
-2. **Loading character.** It is an original figure in the spirit of a mad-scientist pose, not a copy of a specific show's scene.
-3. **Sony 2001 file.** Still missing (D-017).
-4. **Cover copy.** The headline, cover lines, and mood line are placeholders; replace anything that does not sound like you.
+1. **Loading character.** It is an original figure in the spirit of a mad-scientist pose, not a copy of a specific show's scene.
+2. **Sony 2001 file.** Still missing (D-017).
+3. **Cover copy.** The headline, cover lines, and mood line are placeholders; replace anything that does not sound like you.
 
 Resolved: dark canvas (D-002), site name and stack, wordmark (D-031), "less space techno" (D-029), Japanese copy (D-040), pills (D-041).

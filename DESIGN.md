@@ -69,9 +69,9 @@ The Verge, Apple, Nintendo 2001) now only inform the photograph's film treatment
 1. **taste-skill** is essential and sets the page's structure and checks. Its gate
    runs against the built page: `node .claude/skills/design-taste-frontend/scripts/gate.mjs dist/index.html --root dist`.
    In this container Chrome needs its sandbox off, so `CHROME_PATH` points at a small
-   wrapper in `.taste-skill/`. Last result: **GATE: OPEN 2** after three rounds (22
-   findings, then 10, then 2); both open findings were about the closing screen being
-   mostly empty, which was then filled without a further run.
+   wrapper in `.taste-skill/`. Last result: **GATE: PASS** (2026-11-13), with two
+   non-blocking warnings: the hero and the closing screen carry the same button, and
+   the closing screen has a lot of empty space.
 2. **Impeccable** sets direction and runs its detector over the source
    (`.claude/skills/impeccable/scripts/impeccable detect --json src`). Its files:
    `PRODUCT.md` and `.impeccable/surfaces/`.
@@ -320,6 +320,7 @@ reverse a decision, add a new row and mark the old one superseded. Status is
 | D-057 | 2026-11-13 | Motion: the photograph develops once on load (taste-skill's `picture-develops`), the hero's card and button fade up, links draw an underline, the button fills, the menu slides. Nothing loops, so the "Pause motion" control is removed. The ASCII loading screen stays | Owner kept the loading screen; taste-skill allows no loops on this kind of page | Owner, taste-skill | Proposed |
 | D-058 | 2026-11-13 | Page structure follows taste-skill: the header lies over a hero exactly one screen tall; one container with equal margins (64px desktop, 16px phone); hero content on the left line as a flat "live fact" card and one button; the page ends on a full-screen closing section (site index and the name set large). The split hero taste-skill dealt was declined because the brief asks for one full-screen visual | Owner: taste-skill is essential | taste-skill | Proposed |
 | D-059 | 2026-11-13 | The three reference sites could not be opened from this session (outside its allowed network domains), so D-054 is built from prior knowledge of them, not from a fresh look | Honesty about the source | Session limit | Proposed |
+| D-060 | 2026-11-13 | The closing screen sits on a 12-column grid: the site index takes five columns and the large name starts on the sixth, both top-aligned | The last finding in taste-skill's gate; with it the gate passes | taste-skill gate | Proposed |
 
 ### Open questions
 1. **Your photo.** Add it next to the season file and set `hero` and `heroAlt` there. The current image is a generated stand-in.

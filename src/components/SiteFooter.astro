@@ -95,10 +95,17 @@ const { year } = Astro.props;
     .closing {
       height: 100svh;
     }
+    /* A 12-column split: the index takes five columns, the name starts on the sixth. */
     .closing__cta {
-      grid-template-columns: 5fr 7fr;
-      align-items: end;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      align-items: start;
       gap: 24px;
+    }
+    .closing__index {
+      grid-column: 1 / span 5;
+    }
+    .closing__name {
+      grid-column: 6 / -1;
     }
   }
 </style>

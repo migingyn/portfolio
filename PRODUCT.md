@@ -33,10 +33,10 @@ opens the menu. A persistent Spotify player carries the season's playlist.
 
 ## Brand Commitments
 - Dark canvas.
-- The home page should look grainy, vintage, Y2K, and cool; not like a pop game.
-- Influenced by 2000s Japanese magazine and phone-ad design without imitating it: no Japanese copy.
-- No pill-shaped buttons or tags.
-- The ASCII art lives only on the loading screen, and the owner likes it.
+- "Y2K fashion cool": chromehearts.com is the main reference, with us.supreme.com/pages/shop and viviennewestwood.com. Not a game look.
+- No Japanese copy. No pill-shaped buttons or tags.
+- The ASCII art loading screen stays, and is the only place ASCII appears.
+- taste-skill is essential to the workflow; Impeccable and Emil Kowalski's skills polish.
 - DESIGN.md at the project root is the source of truth for visual decisions.
 
 ## Evidence on Hand

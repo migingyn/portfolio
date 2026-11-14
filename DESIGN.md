@@ -1,86 +1,55 @@
 ---
-version: 0.5
+version: 0.6
 name: Portfolio "Mikey Nguyen"
 status: In use. Milestone 1 (tokens, layout, menu, home) is built from this file. Tokens are mirrored in src/styles/tokens.css.
 description: >
-  A dark, grainy, vintage Y2K portfolio. The home page is one frame from a 2000s
-  point-and-shoot: a full-screen photograph, faded and bloomed under film grain, with a
-  brushed-silver flip phone floating over it and the site's facts burned in like a date
-  stamp. Influenced by 2000s Japanese magazine and phone-ad photography without
-  imitating it: no Japanese copy, no pop colours, no pills.
+  A fashion-house site for a person. Black page, a small gothic name laid over one
+  full-bleed photograph, tiny plain type, a side menu, and nothing else. Chrome Hearts
+  is the base reference, with Supreme and Vivienne Westwood behind it. The only
+  flourish is the first-visit ASCII loading screen.
 
 colors:
-  # Page stock (dark)
-  carbon: "#101114"          # page, scrims, device insets
-  carbon-2: "#1a1c22"        # quiet panels
-  carbon-3: "#272a33"        # device details, pressed surfaces
-  hairline: "#3a3e4a"        # rules and dotted dividers
-  # Neutrals
-  paper: "#ffffff"           # masthead, button hover
-  silver-50: "#f4f5f8"       # primary text on dark
-  silver-200: "#d9dde5"      # phone metal
-  silver-400: "#aab0bd"      # secondary text
-  silver-500: "#8a91a1"      # disabled text
-  silver-600: "#6f7686"      # phone metal shade, borders (not text)
-  ink: "#101114"             # text on accent fills
-  # Signals
-  lime: "#c8f31d"            # LCD, buttons, menu tag, current page
-  orange: "#ff7a00"          # date stamp, hover, loading-screen glyphs
-  red: "#e60012"             # the MN box stamp and the recording light
-  fringe: "#47c8e0"          # cyan half of the masthead's colour fringe (red is the other)
-  focus: "#2997ff"           # keyboard focus ring only
-  # Season roles. Components use these two names; the current season may override them (D-020).
-  accent: "{colors.lime}"
-  forward: "{colors.orange}"
+  black: "#0a0a0a"     # page, card, menu panel, button fill on photos
+  white: "#ffffff"     # text, the name, button outline and hover fill
+  grey: "#9a9a9a"      # secondary text (7.3:1 on black)
+  line: "#2e2e2e"      # hairlines: card edge, list rules, panel edge
+  red: "#e60012"       # the favicon's box mark only
+  focus: "#2997ff"     # keyboard focus ring only
+  accent: "#ff7a00"    # the season's one colour; the loading screen only. A season may override it (D-055)
 
 typography:
   families:
-    masthead: "'Grenze Gotisch', 'Arial Black', serif"              # the name only
-    shout: "'Dela Gothic One', 'Arial Black', Impact, sans-serif"   # titles
-    body: "'Zen Maru Gothic', 'Helvetica Neue', Arial, sans-serif"  # text, labels
-    pixel: "'DotGothic16', ui-monospace, monospace"                 # LCD, date stamp, timecode
-    ascii: "ui-monospace, 'SF Mono', Menlo, Consolas, monospace"    # loading screen only
+    wordmark: "'Grenze Gotisch', 'Old English Text MT', serif"            # the name only
+    sans: "'Arimo', 'Helvetica Neue', Helvetica, Arial, sans-serif"       # everything else
+    mono: "'Courier Prime', 'Courier New', Courier, monospace"            # tagline, clock, card, "soon", loading screen
   scale:
-    masthead: { family: masthead, size: "clamp(48px, min(14vw, 15vh), 128px)", weight: 900, lineHeight: 0.9 }
-    shout-xl: { family: shout, size: "clamp(56px, 11vw, 144px)", weight: 400, lineHeight: 1.0 }
-    shout-lg: { family: shout, size: "clamp(44px, 7vw, 88px)",   weight: 400, lineHeight: 1.05 }
-    shout-md: { family: shout, size: "48px", weight: 400, lineHeight: 1.0 }
-    shout-sm: { family: shout, size: "24px", weight: 400, lineHeight: 1.1 }
-    heading:  { family: body,  size: "24px", weight: 900, lineHeight: 1.2 }
-    body:     { family: body,  size: "17px", weight: 500, lineHeight: 1.6 }
-    body-sm:  { family: body,  size: "14px", weight: 500, lineHeight: 1.5 }
-    label:    { family: body,  size: "12px", weight: 900, lineHeight: 1.2, letterSpacing: "0.06em" }
-    pixel:    { family: pixel, size: "14px", weight: 400, lineHeight: 1.25 }
+    wordmark: { family: wordmark, size: "clamp(32px, 4.6vw, 56px)", weight: 900, lineHeight: 1.0 }
+    title:    { family: sans, size: "clamp(28px, 3.4vw, 44px)", weight: 700, lineHeight: 1.05, case: upper }
+    body:     { family: sans, size: "16px", weight: 400, lineHeight: 1.5 }
+    caps:     { family: sans, size: "12px", weight: 700, lineHeight: 1.3, letterSpacing: "0.14em", case: upper }
+    mono:     { family: mono, size: "13px", weight: 400, lineHeight: 1.4 }
 
 spacing:
   base: 4px
-  scale: [2, 4, 8, 12, 16, 24, 32, 48, 64, 96]
+  scale: [4, 8, 12, 16, 24, 32, 48, 64, 96]
 
 rounded:
-  none: 0px      # the default: buttons, tags, stamps, photos
-  xs: 2px        # inputs
-  full: 9999px   # true circles only (dial, recording light). Never a pill
-
-texture:
-  grain: "generated noise tile, overlay blend, 30% opacity, whole site"
-  dust: "specks and hairline scratches, screen blend, 30% opacity, home photo only"
-  bloom: "blurred copy of the photo, screen blend, 32% opacity, home photo only"
+  none: 0px      # everything
+  full: 9999px   # true circles only. Never a pill
 
 layout:
-  maxWidth: 1280px
-  gutter: 16px
-  pagePadding: { mobile: 16px, desktop: 48px }
+  container: "min(100% - 2 * margin, 1280px), centered; header, every section, and the closing share it"
+  margin: { phone: 16px, tablet: 32px, desktop: 64px }
   breakpoints: { sm: 480px, md: 768px, lg: 1024px, xl: 1280px }
+  sections: "the hero is exactly one screen; the closing section is one screen on desktop"
 
 motion:
-  fast: 120ms        # hover color
-  press: 160ms       # press feedback
-  base: 180ms        # small moves, exits
-  slow: 280ms        # panels entering
-  enter: 360ms       # burned-in text arriving, per piece
-  develop: 1400ms    # the photo developing
-  ease: "cubic-bezier(0.23, 1, 0.32, 1)"          # strong ease-out, the default
-  ease-in-out: "cubic-bezier(0.77, 0, 0.175, 1)"  # things moving on screen
+  fast: 120ms      # hover fill
+  press: 160ms     # press feedback
+  base: 180ms      # underline draw, exits
+  slow: 280ms      # menu entering
+  develop: 1600ms  # the photograph developing (taste-skill's picture-develops)
+  ease: "cubic-bezier(0.23, 1, 0.32, 1)"
 ---
 
 # DESIGN.md
@@ -91,257 +60,195 @@ gets a row in the [Decision Log](#10-decision-log).
 
 ## 0. Workflow and sources
 
-1. **awesome-design-md** supplied the first references (The Verge, Apple, Nintendo 2001).
-2. **taste-skill** sets the build rules.
-3. **Impeccable** and **Emil Kowalski's skills** do the direction and polish.
+**References, in order.** chromehearts.com is the base. us.supreme.com/pages/shop and
+viviennewestwood.com are the other two. The earlier references (the 2000s Japanese ads,
+The Verge, Apple, Nintendo 2001) now only inform the photograph's film treatment.
 
-The three skills are vendored in `.claude/skills` (sources, commits, and licences are
-in `.claude/SKILLS.md`). Impeccable's process files live beside this one: `PRODUCT.md`
-(who the site is for and what must stay true) and `.impeccable/surfaces/` (the brief
-and direction for each page). When a skill disagrees with the brief or this file, the
-order is: owner's brief, then this file, then the skills.
+**Skills.** All three are vendored in `.claude/skills` (see `.claude/SKILLS.md`).
 
-| Source | What it gives this system | Status |
-|---|---|---|
-| Owner references: 2000s Japanese phone and audio ads, street-fashion magazine scans, a film snapshot, distressed anime poster art | **The lead.** Photography first; film grain, dust, bloom, faded colour; a product floating over a photo; small burned-in copy | Supplied in chat |
-| The Verge DESIGN.md | Dark page, heavy display type, color instead of soft shadow in the interface | Read from awesome-design-md |
-| Apple DESIGN.md | Photography leads and the interface recedes; 17px body; one soft shadow reserved for the product | Read from awesome-design-md |
-| Nintendo.com (2001) DESIGN.md | Brushed metal with a lit top edge, now only on the phone | Read from awesome-design-md |
-| Sony (2001) DESIGN.md | Silver device gloss | **Not found** in awesome-design-md; my own reading (D-017) |
-| Chrome Hearts, Supreme | Site structure (name opens a side menu), gothic wordmark, red box stamp, plain lists | Interpreted, not extracted |
+1. **taste-skill** is essential and sets the page's structure and checks. Its gate
+   runs against the built page: `node .claude/skills/design-taste-frontend/scripts/gate.mjs dist/index.html --root dist`.
+   In this container Chrome needs its sandbox off, so `CHROME_PATH` points at a small
+   wrapper in `.taste-skill/`. Last result: **GATE: OPEN 2** after three rounds (22
+   findings, then 10, then 2); both open findings were about the closing screen being
+   mostly empty, which was then filled without a further run.
+2. **Impeccable** sets direction and runs its detector over the source
+   (`.claude/skills/impeccable/scripts/impeccable detect --json src`). Its files:
+   `PRODUCT.md` and `.impeccable/surfaces/`.
+3. **Emil Kowalski's skills** set the interaction details (section 7).
+
+When they disagree, the order is: owner's brief, then this file, then the skills.
 
 ## 1. Concept
 
-**The home page is one frame from a 2000s point-and-shoot.** A single photograph fills
-the screen, faded and slightly bloomed, under film grain that never sits still. A
-brushed-silver flip phone floats over it with what I am doing now on its screen. The
-rest of the site's facts are burned into the frame the way a camera burns in a date:
-small, plain, in the corners.
+**A fashion house's site, for a person.** What makes those sites cool is how little is
+on them: a black page, a logo, one large photograph, a few words in small type, and a
+menu that stays out of the way. This site does the same. The photograph changes with
+the season; everything else is black and white.
 
-**Influence, not imitation.** The look comes from how those ads and magazine pages
-were photographed and printed, not from their language. There is no Japanese copy.
-
-1. **The photograph leads.** The interface is a few lines of type and one object.
-2. **Texture is the era.** Grain everywhere, dust and bloom on the photo, a colour
-   fringe on the name. Nothing is crisp vector on flat black.
-3. **Cool, not cute.** No bright flat inks, outlines, bursts, bubbles, or stickers.
-   Colour is rationed: one accent on screens and controls, orange for the date stamp
-   and hover, red for a stamp and a recording light.
-4. **Rectangles, not pills.** Controls are flat rectangles; states are plain text.
-5. **Each season is a volume** with its own photo, accent colours, and mood line.
+1. **The photograph is the page.** One image, full-bleed, a whole screen tall.
+2. **Small, plain type.** Twelve-pixel caps, thirteen-pixel Courier. The only large
+   type is the name, once, on the closing screen.
+3. **Black and white.** Colour comes from the photograph.
+4. **No objects, overlays, or effects.** No drawn devices, stickers, bursts, readouts,
+   glows, or chunky display fonts. If it would look at home in a game menu, it is out.
+5. **Rectangles, not pills.** Hairline rectangles; states in plain words.
+6. **One flourish:** the first-visit ASCII loading screen.
 
 ## 2. Colors
 
-### Page stock
 | Token | Hex | Use |
 |---|---|---|
-| `carbon` | `#101114` | Page, the scrims over the photo, device insets |
-| `carbon-2` | `#1a1c22` | Quiet panels |
-| `carbon-3` | `#272a33` | Device details, pressed surfaces |
-| `hairline` | `#3a3e4a` | Rules, dotted dividers, panel edges |
+| `black` | `#0a0a0a` | Page, card, menu panel, the fill behind a button on a photo |
+| `white` | `#ffffff` | Text, the name, button outline and hover fill, selection |
+| `grey` | `#9a9a9a` | Secondary text: the tagline's neighbours, card labels, "soon" (7.3:1 on black) |
+| `line` | `#2e2e2e` | Hairlines: card edge, list rules, panel edge |
+| `red` | `#e60012` | The favicon's box mark. Nowhere on the page |
+| `focus` | `#2997ff` | 2px keyboard focus ring, 2px offset |
+| `accent` | `#ff7a00` | The season's colour, on the loading screen only |
 
-### Text
-`silver-50` primary (17.3:1 on carbon), `silver-400` secondary (8.7:1), `silver-500`
-disabled (6.0:1). `silver-600` is for borders and metal, not text. Text that sits on
-the photo always sits on a `carbon` scrim dark enough to keep those ratios.
-
-### Signals
-| Token | Hex | Job | Text on it |
-|---|---|---|---|
-| `lime` (`accent`) | `#c8f31d` | The LCD, buttons, the menu tag, the current page | `ink` (14.7:1) |
-| `orange` (`forward`) | `#ff7a00` | The date stamp, every hover, loading-screen glyphs | `ink` (7.2:1). Never white |
-| `red` | `#e60012` | The MN box stamp and the recording light. Nothing else | `paper` bold (4.8:1) |
-| `fringe` | `#47c8e0` | The cyan half of the masthead's colour fringe | n/a |
-| `focus` | `#2997ff` | 2px keyboard focus ring, 2px offset | n/a |
-
-Browser surfaces follow the palette: text selection and the caret are `accent`,
-scrollbars are `silver-600` on `carbon`.
+The header sits on the photograph over a scrim: `black` at 78% fading to clear across
+the top 30% of the hero. Text selection is white on black; scrollbars are `grey` on `black`.
 
 ### Seasons
-Components never reference `lime` or `orange` directly. They use two role tokens,
-`accent` and `forward`. Each season file in `src/content/seasons` may override those
-two, and supplies the home photo (`hero`). A season color must reach 4.5:1 against
-`carbon`, and the build fails if it does not.
-
-### Gradients
-No named gradients. The phone builds its metal from the silver tokens; the photo's
-scrims are `carbon` fading to clear.
+Each season file in `src/content/seasons` supplies the home photograph (`hero`,
+`heroAlt`), a mood line, and may override `accent`. A season colour must reach 4.5:1
+against `black`, and the build fails if it does not.
 
 ## 3. Typography
 
 | Family | Job |
 |---|---|
-| **Grenze Gotisch 900** | The masthead "Mikey Nguyen" and nothing else. Skewed 7 degrees, `paper`, with a faint red and cyan fringe and a soft bloom |
-| **Dela Gothic One** | Titles: section lines, menu links, page titles |
-| **Zen Maru Gothic** (500, 700, 900) | Body and labels |
-| **DotGothic16** | The phone LCD, the date stamp, the timecode |
-| System monospace | The loading screen's ASCII art only |
+| **Grenze Gotisch 900** | The name, and nothing else. Upright, flat white, no outline, shadow, or skew |
+| **Arimo** (400, 700) | Everything else in the interface |
+| **Courier Prime** | The tagline, the clock, the card's text, "soon", and the loading screen |
 
 All are free and self-hosted, Latin subsets only.
 
-### Scale
-| Token | Font | Size | Weight | Use |
-|---|---|---|---|---|
-| `masthead` | Grenze Gotisch | clamp(48px, min(14vw, 15vh), 128px) | 900 | The name |
-| `shout-xl` | Dela Gothic One | clamp(56px, 11vw, 144px) | 400 | Section openers |
-| `shout-lg` | Dela Gothic One | clamp(44px, 7vw, 88px) | 400 | Page and project titles |
-| `shout-md` | Dela Gothic One | 48px | 400 | Menu links |
-| `shout-sm` | Dela Gothic One | 24px | 400 | Home section lines, panel titles |
-| `heading` | Zen Maru Gothic | 24px | 900 | The mood line, headings inside pages |
-| `body` | Zen Maru Gothic | 17px / 1.6 | 500 | Paragraphs, max 65 characters per line |
-| `body-sm` | Zen Maru Gothic | 14px / 1.5 | 500 | Captions |
-| `label` | Zen Maru Gothic | 12px, +0.06em | 900 | Buttons, issue line, footer, states. Sentence case |
-| `pixel` | DotGothic16 | 14px (date stamp 22px) | 400 | LCD, date stamp, timecode |
+| Token | Font | Size | Use |
+|---|---|---|---|
+| `wordmark` | Grenze Gotisch 900 | clamp(32px, 4.6vw, 56px); up to 152px on the closing screen | The name |
+| `title` | Arimo 700, uppercase | clamp(28px, 3.4vw, 44px) | Section and page titles |
+| `body` | Arimo 400 | 16px / 1.5 | Paragraphs, max 65 characters per line |
+| `caps` | Arimo 700, uppercase, +0.14em | 12px | Menu, links, buttons, card title, copyright |
+| `mono` | Courier Prime 400 | 13px / 1.4 | Tagline, clock, card text, "soon" |
 
-### Rules
-- **No kicker above a title,** and no numbering unless the order means something.
-- **Buttons say a verb and an object:** "Close menu", "Skip intro", "Pause motion".
-- Only the masthead and the date stamp carry a text shadow (fringe and bloom; a faint burn).
-- Body is 17px. Weights in use: 400, 500, 700, 900.
+Rules: no kicker above a title; no numbering unless order matters; buttons say a verb
+and what you get ("See the code on GitHub", "Close menu", "Skip intro"); the home
+page's `h1` is the tagline, which names the trade and the place.
 
 ## 4. Spacing and layout
 
-**Base unit 4px.** Scale: 2, 4, 8, 12, 16, 24, 32, 48, 64, 96.
+**Base unit 4px.** Scale: 4, 8, 12, 16, 24, 32, 48, 64, 96.
 
-**Grid.** 12 columns, 16px gutter, max width 1280px, page padding 48px desktop and 16px
-mobile, equal on both sides.
+**One container** (`.wrap`) for the header, every section, and the closing: centered,
+1280px at most, with equal margins of 64px on desktops, 32px on tablets, 16px on
+phones. Text and controls start on its left line. Only a section's photograph runs
+full-bleed, as a background layer.
 
-**Home.** The photo covers the viewport and stays fixed. Name and tagline at top
-center. The phone floats right of centre on desktop (58% across, 46% down) and sits
-centred under the name on phones. Burned-in text keeps to the corners: recording mark
-top left, issue and mood bottom left, section lines and date stamp bottom right.
+**Page shell.** `header.nav` (laid over the top of the first section), `main` of
+sections, `footer.closing`. The hero is exactly one screen. The closing section is one
+screen on desktops and grows with its content on phones.
 
 **Breakpoints.** 480 / 768 / 1024 / 1280. Touch targets are 44px minimum.
 
-**Radius.** 0 by default. 2px for inputs. `full` only for true circles. **No pill
-shapes, anywhere.** The phone uses its own proportional radii.
+**Radius.** 0 everywhere. No pill shapes.
 
 ## 5. Depth and texture
 
-| Layer | Treatment | Where |
-|---|---|---|
-| Photo | `saturate(0.82) contrast(0.92) sepia(0.14) brightness(0.94)`: lifted blacks, less colour, a warm cast | Home photo |
-| Bloom | A tiny copy of the photo, blurred 28px, screen blend, 32% | Home photo |
-| Scrims | `carbon` 72% at the top and 86% at the bottom fading to clear, plus a corner vignette | Home photo |
-| Dust | Specks and hairline scratches, screen blend, 30% | Home photo |
-| Grain | A generated noise tile, overlay blend, 30%, re-seated about nine times a second | Whole site |
-| Cast shadow | Soft and offset, under the phone only | Phone |
+The interface is flat: no shadows, glows, gradients, or blurs on anything.
 
-The interface itself stays flat: no shadows on buttons, panels, or text other than
-the two noted in section 3. No block shadows, no glows around boxes.
+The photograph gets a film treatment, applied as layers over it so any photo picks it
+up: `saturate(0.8) contrast(0.94) sepia(0.12)` (faded colour, a warm cast), the top
+scrim, and still film grain (a generated noise tile, overlay blend, 38%). Nothing
+else on the site is textured.
 
 ## 6. Components
 
-### Masthead
-The name in `masthead`, centered at the top of every page, with the tagline under it
-in `body` bold. It is the menu button: a small flat `accent` rectangle reading "Menu"
-sits on its top right corner, rotated 6 degrees. The name carries a 1px red and cyan
-fringe and a soft white bloom. Hover (mouse only) pulls the fringe apart and swings
-the tag; press closes the fringe and dips the name. On the home page it is the `h1`.
+### Header
+Laid over the top of the page. Three columns on the container: "Menu" in `caps` on the
+left, the name centered with the tagline under it in `mono`, and the date and time in
+San Diego in `mono` on the right (hidden on phones). The name and "Menu" both open the
+menu. The name dims to 60% on hover and dips on press.
 
 ### Menu panel
-Slides in from the left over an 80% `carbon` backdrop (280ms in, 180ms out); from the
-keyboard it opens and closes at once. `carbon`, 1px `hairline` right edge, 480px wide
-on desktop and full screen below 768px. Top: "Menu" in `shout-sm` and the "Close
-menu" button. Links stack in `shout-md` with a dotted `hairline` between them and
-slide in 40ms apart. Hover slides a link 10px right and turns it `forward`. The
-current page is `accent`. Sections not built yet are `silver-500` with a plain "Soon"
-and cannot be focused. Modal dialog: focus is trapped, Escape or a backdrop click
-closes it, and focus returns to the masthead.
+Slides in from the left over a 70% black backdrop (280ms in, 180ms out); from the
+keyboard it opens and closes at once. `black`, 1px `line` right edge, 360px wide on
+desktop and full screen below 768px. "Menu" in `grey` `caps`, "Close menu" as a link.
+Links are `caps`, 44px rows, with a `line` rule under each, arriving 35ms apart. The
+current page has a small white square. Sections not built yet are `grey` with "soon"
+in `mono` and cannot be focused. Modal dialog: focus is trapped, Escape or a backdrop
+click closes it, and focus returns to the button that opened it.
 
-### Home photo
-One photograph per season (`hero` in the season file, with `heroAlt`), full-screen and
-fixed, under the treatment in section 5. Until a season has its own photo, a generated
-stand-in is used (`src/assets/hero-standin.jpg`); it is not the owner's work.
+### Hero (home)
+One screen. The season's photograph, full-bleed, under the film treatment; it develops
+once on load. On the container's left line at the bottom: a flat card (black, 1px
+`line`, 16px padding, 320px wide) with the volume and season in `caps`, the mood line
+and what I am building and filming in `mono`; and under it the page's one button.
 
-### Flip phone (Now)
-Drawn in CSS to read as a product shot: brushed metal built from `silver-50` to
-`silver-600`, a lit top edge and shaded lower edge, a hinge, a keypad, an antenna, and
-a soft cast shadow. No outlines, no coloured keys. The LCD is `accent` with a
-brighter centre, darker edges, and a faint pixel grid; in `ink` `pixel` text it shows
-NOW, what I am building and filming, and the volume. Tilted 7 degrees; it drifts
-8px, slowly.
-
-### Burned-in text
-Small type set straight onto the photo, in the corners:
-- **Recording mark.** A red light and "REC" with a timecode counting from page load, in `pixel`.
-- **Issue and mood.** "Vol.01 / Autumn 2026" and dates in `label`; the mood line in `heading`.
-- **Section lines.** Projects, Resume, Blog in `shout-sm`, right-aligned, each with one
-  `label` line under it. A line is a link once its page exists; until then it says "Coming soon".
-- **Date stamp.** Live local time as `'YY MM DD HH:MM:SS` in `pixel` at 22px, `forward`, with a faint burn.
-
-### Loading screen
-The only place ASCII art appears. On a first visit, a full-screen `carbon` overlay
-plays an original lab-coated character snapping into a dramatic pose while impact
-lines burst out and the season's glyphs blow past in `forward`. A `pixel` "NOW
-LOADING" bar fills in `accent`, and the "Skip intro" button sits bottom right. About
-3 seconds, then the overlay lifts and the photo develops. Never plays under reduced
-motion. Add `?intro` to the URL to replay it.
+### Closing (site index)
+The last screen. Left: "Site index" in `title`, the sections as a plain `caps` list
+with `line` rules (links once built, `grey` with "soon" until then), and the same
+button. Right: the name set large in `wordmark`. Bottom: the copyright line in `caps`
+`grey`.
 
 ### Button
-One style. A flat `accent` rectangle, 0 radius, `ink` `label` text, 44px minimum
-height, no border and no shadow. Hover (mouse only): fill turns `paper`. Press: scales
-to 0.97 in 160ms. Focus: the 2px `focus` ring.
+One style. A 1px white rectangle, 0 radius, `caps` text, 44px tall, 18px side padding.
+On a photograph its fill is `black`. Hover (mouse only): fills white with black text.
+Press: scales to 0.97 in 160ms. Focus: the 2px `focus` ring.
 
-### Text link
-`silver-50`. On hover a 2px underline draws in from the left and the text turns
-`forward`. External links carry a small drawn arrow.
+### Link
+White `caps`. On hover a 1px underline draws in from the left. 44px minimum target.
 
-### States
-"Soon" and "Coming soon" are plain `label` text. No badges, no outlined tags.
-
-### Icons
-Drawn, never typed: inline SVG or CSS shapes. No unicode symbols or emoji as icons.
-
-### Footer
-Left: the red MN box stamp and "(c) year, name, city" in `label`. Right: the "Pause
-motion" control and small `label` links.
+### Loading screen
+The one flourish, and the only place ASCII art appears. On a first visit a full-screen
+black overlay plays an original lab-coated character snapping into a dramatic pose in
+Courier characters, with impact lines and the season's glyphs blowing past in
+`accent`. A "NOW LOADING" bar fills, and a "Skip intro" button sits bottom right.
+About 3 seconds, then it lifts. Never plays under reduced motion. Add `?intro` to the
+URL to replay it.
 
 ### Still to be built
-Project tile, index row (drop list), spec sheet, inputs, the persistent player.
-Photography everywhere gets the section 5 treatment and stays sharp-cornered.
+Projects (a plain grid of square thumbnails with no captions, after Supreme), project
+pages, experience (a plain list), resume, blog, seasons archive, links, the player.
 
 ## 7. Motion
 
-**One authored moment, a few quiet loops, quick answers to input.**
+| What | Timing |
+|---|---|
+| The photograph develops once on load: pale and grey, then its darks, then its colour, settling from a slight zoom | 1600ms |
+| The hero's card and button fade up 12px | 520ms each, 60ms apart |
+| Link underline draws; button fills; name dims | 120 to 180ms |
+| Button and name press | 160ms |
+| Menu in, out | 280ms, 180ms |
+| Loading screen lifts | 480ms |
 
-| Kind | What | Timing |
-|---|---|---|
-| The moment | Loading screen lifts; the photo develops from blown-out, soft, and grey to exposed; the burned-in text arrives piece by piece | 1400ms develop; 360ms per piece, 60ms apart; `ease` |
-| Ambient loops | Grain flicker, phone drift, recording light, timecode and date stamp ticking, LCD signal bar | 0.9s to 6s |
-| Response | Hover color and underline, masthead fringe, button press (0.97), menu-link slide | 120 to 180ms, `ease` |
-| Panels | Menu in 280ms, out 180ms; loading curtain 480ms | `ease` |
-
-- Hover effects apply only on devices with a mouse.
-- Exits are faster than entrances.
+- Nothing loops, nothing follows the pointer, and nothing moves because the page scrolled.
+- Hover effects apply only on devices with a mouse. Exits are faster than entrances.
 - Nothing animates in response to a keyboard action.
-- Nothing follows the pointer, and nothing moves because the page scrolled.
-- The footer's "Pause motion" control stops every loop and remembers the choice.
-- Never `transition: all`.
-- `prefers-reduced-motion`: loops, the develop, entrances, and the loading screen are all off; color changes stay.
+- `prefers-reduced-motion`: the develop, the fade-up, and the loading screen are off.
 
 ## 8. Accessibility
 
-- Text contrast is 4.5:1 or better; text on the photo sits on a scrim that guarantees it.
+- Text contrast is 4.5:1 or better (white 19.8:1 and grey 7.3:1 on black); the header keeps it on any photo by way of the scrim.
 - Every interactive element is 44px minimum and shows the `focus` ring on keyboard focus.
-- Looping motion can be paused.
-- The photo has alt text. Decorative parts (grain, dust, phone keys, recording mark) are hidden from assistive tech; the Now readout and the time are real text.
-- Meaning is never carried by color alone.
+- The skip link is the first stop for the Tab key.
+- The photograph has alt text. The large name on the closing screen is decorative and hidden from assistive tech.
 
 ## 9. Do and don't
 
 **Do**
-- Let the photograph carry the page and keep the interface to the corners.
-- Put every photo through the same faded, grainy treatment.
-- Keep controls rectangular and flat, and say states in words.
-- Answer every press and hover within 180ms.
+- Start from Chrome Hearts: black, a logo, one image, a few small words.
+- Let the photograph be the only colour and the only texture.
+- Keep type small and plain; set the name large once.
+- Keep everything on the container's left line.
 
 **Don't**
-- Use bright flat inks, cartoon outlines, starbursts, speech bubbles, stickers, or tickers.
-- Use pill buttons, pill tags, badges, kicker labels, or thick one-sided coloured borders.
+- Draw objects, devices, readouts, overlays, stickers, bursts, or bubbles.
+- Use chunky display fonts, pixel fonts, bright accent colours, glows, or outlines.
+- Use pills, badges, kickers, or thick coloured borders.
 - Use Japanese copy, or images, logos, and characters that belong to someone else.
-- Use wide techno caps, tracked monospace labels, or model numbers.
-- Put ASCII art anywhere but the loading screen.
+- Add anything that loops.
 - Add a color, font, or texture without a Decision Log entry.
 
 ## 10. Decision Log
@@ -373,7 +280,7 @@ reverse a decision, add a new row and mark the old one superseded. Status is
 | D-017 | 2026-11-13 | Sony 2001 layer is provisional (silver bodies, model numbers, spec callouts, colorways) | Reference file not available in awesome-design-md or reachable this session | See section 0 | Proposed |
 | D-018 | 2026-11-13 | The site name is set as a blackletter wordmark, and blackletter is used for nothing else. Face: Manufacturing Consent | Owner asked for a Chrome Hearts style wordmark. Most legible of three Old English faces tried | Owner, Chrome Hearts | Accepted; face superseded by D-031 |
 | D-019 | 2026-11-13 | Navigation is the wordmark opening a left slide-in panel with stacked section links. The command bar and ticker strip specs are parked | Owner brief: Chrome Hearts site structure | Owner | Accepted |
-| D-020 | 2026-11-13 | Seasons override two role tokens only, `accent` (lime role) and `forward` (orange role). `red`, `focus`, and the dark base never change. Season colors must reach 4.5:1 on `carbon` or the build fails | Owner brief: seasons change accents only. Mapping "accents" to these two roles is my reading | Owner, section 8 | Accepted (role mapping is Proposed) |
+| D-020 | 2026-11-13 | Seasons override two role tokens only, `accent` (lime role) and `forward` (orange role). `red`, `focus`, and the dark base never change. Season colors must reach 4.5:1 on `carbon` or the build fails | Owner brief: seasons change accents only. Mapping "accents" to these two roles is my reading | Owner, section 8 | Accepted; reduced to one role, `accent`, by D-055 |
 | D-021 | 2026-11-13 | Home hero is a monochrome silver ASCII field: season kanji as a character mask plus drifting glyphs per season style, 12fps, still under reduced motion. Uses the mono face for mixed symbols and the body face to shape the kanji | No photography yet; keeps the one-accent-per-viewport rule; ties to the ASCII intro. An exception to "mono is uppercase labels only" | Owner brief (ASCII styles), section 1 rule 3 | Superseded by D-033 |
 | D-022 | 2026-11-13 | Menu links are title-case `shout-md` with number and Japanese sublabel above. On phones narrower than 370px the size eases below the 44px floor (13vw) | Uppercase "EXPERIENCE" does not fit a phone at 44px; title case does down to 370px | Section 6 (old command bar sheet) | Superseded by D-040 and D-042 (no sublabels, no numbers); the small-phone size rule stands |
 | D-023 | 2026-11-13 | Sections that are not built yet stay in the menu at 40% opacity with a SOON tag | Shows the full structure without dead links | Section 6 (disabled = 40%) | Proposed |
@@ -384,8 +291,8 @@ reverse a decision, add a new row and mark the old one superseded. Status is
 | D-028 | 2026-11-13 | Home footer is two corner groups: red MN box stamp and hallmark left, `label` links right | Owner brief (small corner links) plus the footer's stamp and hallmark | Owner, section 6 Footer | Proposed |
 | D-029 | 2026-11-13 | Direction changes from "carbon binder with silver hardware" to "an issue of a 2000s Japanese magazine": pop inks, stickers, Japanese copy up front. The dark page stock stays | Owner: less space techno, more Japanese Y2K magazine and ad; it should pop | Owner | Accepted |
 | D-030 | 2026-11-13 | The home page is a magazine cover: masthead, issue line, cover star, headline, cover lines, stickers, price barcode, ticker | Gives the home page a concept and gives every section a place on it | Owner direction, my design | Superseded by D-048 |
-| D-031 | 2026-11-13 | Wordmark is Grenze Gotisch 900, skewed 7 degrees, paper with a hard orange offset, with the katakana reading above it. Replaces Manufacturing Consent | Owner: the old one looked like a diploma. Heavy, slanted, and offset reads as a streetwear logo | Owner | Accepted; katakana reading removed by D-040; the face is Proposed |
-| D-032 | 2026-11-13 | Fonts: drop Michroma, IBM Plex Mono, Zen Kaku Gothic New, Manufacturing Consent. Add Zen Maru Gothic (body and labels) and Yusei Magic (handwriting). Monospace only on the loading screen, using the system face | Wide techno caps and tracked mono labels were the "space techno" look; rounded gothic is the face of era Japanese ads | Owner, moodboard 5 | Proposed |
+| D-031 | 2026-11-13 | Wordmark is Grenze Gotisch 900, skewed 7 degrees, paper with a hard orange offset, with the katakana reading above it. Replaces Manufacturing Consent | Owner: the old one looked like a diploma. Heavy, slanted, and offset reads as a streetwear logo | Owner | Accepted; the skew, offset, and large size are superseded by D-056 |
+| D-032 | 2026-11-13 | Fonts: drop Michroma, IBM Plex Mono, Zen Kaku Gothic New, Manufacturing Consent. Add Zen Maru Gothic (body and labels) and Yusei Magic (handwriting). Monospace only on the loading screen, using the system face | Wide techno caps and tracked mono labels were the "space techno" look; rounded gothic is the face of era Japanese ads | Owner, moodboard 5 | Superseded by D-056 |
 | D-033 | 2026-11-13 | ASCII art appears only on the loading screen: an original lab-coated character snapping into a dramatic pose, with impact lines and season glyphs blowing past | Owner. The character is original and is not traced from any show | Owner | Accepted (the drawing itself is Proposed) |
 | D-034 | 2026-11-13 | The cover star is a flip phone drawn in CSS; its LCD is the Now readout (building, filming, local time) | Moodboard 1 and 3 are phone ads; makes the Now info the centerpiece | Moodboard | Proposed; restyled by D-049 |
 | D-035 | 2026-11-13 | New ink `magenta #ff3d9a`. Signals are no longer limited to one per viewport. Orange is the headline and hover color, not only "forward" | Rationing color made the page quiet; a magazine cover is not quiet | Owner | Superseded by D-050 |
@@ -397,21 +304,27 @@ reverse a decision, add a new row and mark the old one superseded. Status is
 | D-041 | 2026-11-13 | No pill shapes. Buttons, tags, and stamps are sharp rectangles; states are plain text. The `pill` radius is removed and `full` is for true circles only | Owner: pill buttons and tabs read as generated UI | Owner | Accepted |
 | D-042 | 2026-11-13 | No kicker labels above titles, no numbering that is not a sequence, no hard block shadows on boxes (outline and offset stay on the masthead and cover headline type only), drawn icons instead of typed symbols, and selection, caret, and scrollbar follow the palette | Impeccable's craft floor | Impeccable | Proposed |
 | D-043 | 2026-11-13 | Hover effects on mouse devices only; press feedback at 0.97 in 160ms; exits faster than entrances; the menu opens and closes at once from the keyboard; entrances start from 0.94 scale with a strong ease-out and no bounce | Emil Kowalski's design engineering skill | Emil's skill | Proposed |
-| D-044 | 2026-11-13 | One button style and one radius scale; nothing tilts toward the pointer; buttons are named verb plus object; a "Pause motion" control stops looping animation | taste-skill's house rules and checklist | taste-skill | Proposed |
+| D-044 | 2026-11-13 | One button style and one radius scale; nothing tilts toward the pointer; buttons are named verb plus object; a "Pause motion" control stops looping animation | taste-skill's house rules and checklist | taste-skill | Proposed; the "Pause motion" control is removed by D-057 because nothing loops |
 | D-045 | 2026-11-13 | Ambient motion is trimmed to the phone bob, charm swing, starburst spin, ticker, and two small blinks. Sparkles, stamp wobble, menu-tag nudge, and pointer tilt are removed | "One authored moment, not scattered effects" | Impeccable | Superseded by D-051 |
-| D-046 | 2026-11-13 | Where the skills conflict with the brief (taste-skill wants nothing rotated or overlapping and no drawn objects; Impeccable caps display type at 96px), the brief wins: the cover keeps its rotations, the drawn phone, and the large masthead | The magazine-cover concept depends on them | Owner brief | Proposed |
+| D-046 | 2026-11-13 | Where the skills conflict with the brief (taste-skill wants nothing rotated or overlapping and no drawn objects; Impeccable caps display type at 96px), the brief wins: the cover keeps its rotations, the drawn phone, and the large masthead | The magazine-cover concept depends on them | Owner brief | Superseded by D-058 |
 | D-047 | 2026-11-13 | taste-skill, Impeccable, and 16 of Emil Kowalski's skills are vendored into `.claude/skills` | Owner approved, so the workflow loads in every session | Owner | Accepted |
-| D-048 | 2026-11-13 | The home page is one frame from a Y2K point-and-shoot: a full-screen photograph, faded and bloomed, under moving film grain and dust, with the site's facts burned in like a date stamp. The magazine-cover layout (starburst, speech bubble, barcode, ticker, cover headline) is retired | Owner: grainy vintage Y2K, cool, not a pop game. References: film snapshots, scanned magazine pages, distressed poster art | Owner | Accepted (direction); the composition is Proposed |
-| D-049 | 2026-11-13 | The flip phone stays but as a product shot: brushed silver built from the silver tokens, soft edges, a cast shadow, a backlit LCD; no outlines, no coloured keys, no charm | Owner: the phone is fine, the pop styling is not | Owner | Accepted (direction); the drawing is Proposed |
-| D-050 | 2026-11-13 | Palette cut to dark stock, silver neutrals, paper, and three signals (`accent`, `forward`, `red`), plus `fringe` for the masthead's colour fringe. Sky, ice, pink, magenta, indigo, and both named gradients are removed. Texture is now allowed: film grain site-wide, dust and bloom on the home photo | Follows D-048: flat pop inks were the "pop game" look | Owner direction | Proposed |
-| D-051 | 2026-11-13 | Motion: the photo "develops" once as the loading screen lifts (the authored moment); grain flickers; the phone drifts; a recording light blinks; timecode and date stamp tick. The masthead's colour fringe widens on hover | Fits a camera frame; keeps one moment plus quiet loops | Impeccable, Emil's skill | Proposed |
+| D-048 | 2026-11-13 | The home page is one frame from a Y2K point-and-shoot: a full-screen photograph, faded and bloomed, under moving film grain and dust, with the site's facts burned in like a date stamp. The magazine-cover layout (starburst, speech bubble, barcode, ticker, cover headline) is retired | Owner: grainy vintage Y2K, cool, not a pop game. References: film snapshots, scanned magazine pages, distressed poster art | Owner | Superseded by D-054 |
+| D-049 | 2026-11-13 | The flip phone stays but as a product shot: brushed silver built from the silver tokens, soft edges, a cast shadow, a backlit LCD; no outlines, no coloured keys, no charm | Owner: the phone is fine, the pop styling is not | Owner | Superseded by D-054 |
+| D-050 | 2026-11-13 | Palette cut to dark stock, silver neutrals, paper, and three signals (`accent`, `forward`, `red`), plus `fringe` for the masthead's colour fringe. Sky, ice, pink, magenta, indigo, and both named gradients are removed. Texture is now allowed: film grain site-wide, dust and bloom on the home photo | Follows D-048: flat pop inks were the "pop game" look | Owner direction | Superseded by D-055 |
+| D-051 | 2026-11-13 | Motion: the photo "develops" once as the loading screen lifts (the authored moment); grain flickers; the phone drifts; a recording light blinks; timecode and date stamp tick. The masthead's colour fringe widens on hover | Fits a camera frame; keeps one moment plus quiet loops | Impeccable, Emil's skill | Superseded by D-057 |
 | D-052 | 2026-11-13 | The home photo is a slot per season (`hero` in the season file). Until the owner supplies one, a generated stand-in is used and must not be presented as his work | Owner will add a photo or film still | Owner | Accepted |
 | D-053 | 2026-11-13 | The menu panel loses its thick accent edge for a 1px hairline | Impeccable's detector flags a thick one-sided coloured border as a generated-UI tell | Impeccable detector | Proposed |
+| D-054 | 2026-11-13 | The site is styled as a fashion house's site. Chrome Hearts is the base: black, a small gothic name over one full-bleed photograph, tiny type, a side menu. Supreme (Courier date line, plain lists) and Vivienne Westwood (editorial full-bleed image) sit behind it. The flip phone, camcorder overlay, date stamp, and big display type are removed | Owner: stop defaulting to a game look; "Y2K fashion cool"; use those three sites as the main references | Owner | Accepted (direction); my reading of the sites is Proposed |
+| D-055 | 2026-11-13 | Palette is black, white, one grey, one hairline, red (favicon only), the focus blue, and one season colour `accent` (default orange) that appears only on the loading screen | The references are black and white; colour comes from the photograph | D-054 | Proposed |
+| D-056 | 2026-11-13 | Type: Grenze Gotisch 900, upright and flat, for the name; Arimo for everything else; Courier Prime for the tagline, the clock, and the card. Dela Gothic One, Zen Maru Gothic, and DotGothic16 are removed | The references set everything in a plain Helvetica-like sans and Courier, small | D-054 | Proposed |
+| D-057 | 2026-11-13 | Motion: the photograph develops once on load (taste-skill's `picture-develops`), the hero's card and button fade up, links draw an underline, the button fills, the menu slides. Nothing loops, so the "Pause motion" control is removed. The ASCII loading screen stays | Owner kept the loading screen; taste-skill allows no loops on this kind of page | Owner, taste-skill | Proposed |
+| D-058 | 2026-11-13 | Page structure follows taste-skill: the header lies over a hero exactly one screen tall; one container with equal margins (64px desktop, 16px phone); hero content on the left line as a flat "live fact" card and one button; the page ends on a full-screen closing section (site index and the name set large). The split hero taste-skill dealt was declined because the brief asks for one full-screen visual | Owner: taste-skill is essential | taste-skill | Proposed |
+| D-059 | 2026-11-13 | The three reference sites could not be opened from this session (outside its allowed network domains), so D-054 is built from prior knowledge of them, not from a fresh look | Honesty about the source | Session limit | Proposed |
 
 ### Open questions
-1. **Your photo.** Add it next to the season file and set `hero` and `heroAlt` there. Portrait-safe framing helps: the middle of the frame stays visible on phones.
-2. **Loading character.** It is an original figure in the spirit of a mad-scientist pose, not a copy of a specific show's scene.
-3. **Sony 2001 file.** Still missing (D-017).
-4. **Copy.** The mood line, section lines, and the "filming" line are placeholders.
+1. **Your photo.** Add it next to the season file and set `hero` and `heroAlt` there. The current image is a generated stand-in.
+2. **The home button.** It points at GitHub until the projects page exists.
+3. **Loading character.** It is an original figure in the spirit of a mad-scientist pose, not a copy of a specific show's scene.
+4. **Reference check.** If the session's network settings allow chromehearts.com, us.supreme.com, and viviennewestwood.com, I can compare against the live sites (D-059).
 
-Resolved: dark canvas (D-002), site name and stack, wordmark (D-031), "less space techno" (D-029), Japanese copy (D-040), pills (D-041), skills installed (D-047), "not a pop game" (D-048, D-049).
+Resolved: dark canvas (D-002), site name and stack, Japanese copy (D-040), pills (D-041), skills installed (D-047), "not a game" (D-054).

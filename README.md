@@ -24,12 +24,14 @@ npm run build
 
 | What | Where |
 |---|---|
-| Name, tagline, menu links, cover lines, "Now" copy, footer links, current season | `src/site.config.ts` |
+| Name, tagline, menu links, the home button, "Now" copy, current season | `src/site.config.ts` |
 | Seasons (one markdown file each) | `src/content/seasons/` |
 | Design tokens as CSS variables and Tailwind theme | `src/styles/tokens.css` |
 | Page shell (head, fonts, menu, footer) | `src/layouts/BaseLayout.astro` |
-| Masthead and slide-in menu | `src/components/SiteMenu.tsx` |
-| Home page pieces (photo treatment, flip phone, Now screen) | `src/components/home/` |
+| Header and slide-in menu | `src/components/SiteHeader.astro`, `src/components/MenuPanel.tsx` |
+| Home page | `src/pages/index.astro` |
+| Closing screen (site index) | `src/components/SiteFooter.astro` |
+| taste-skill's photo-develop moment (copied from the kit, do not edit) | `public/assets/moments/` |
 | First-visit loading screen (add `?intro` to the URL to replay it) | `src/components/LoadingScreen.astro`, `src/scripts/ascii-pose.ts` |
 
 To start a new season, add a file to `src/content/seasons/` and set `currentSeason`

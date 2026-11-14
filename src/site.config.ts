@@ -3,21 +3,14 @@
 export interface NavItem {
   label: string;
   href: string;
-  /** false = page not built yet; shown as "Soon" and not clickable. */
+  /** false = page not built yet; shown as "soon" and not clickable. */
   ready: boolean;
-}
-
-export interface HomeLine {
-  title: string;
-  /** One short line of copy. */
-  copy: string;
-  /** Must match a nav item; the line becomes a link once that page is ready. */
-  href: string;
 }
 
 export const site = {
   name: "Mikey Nguyen",
-  tagline: "Backend engineer and creative builder.",
+  /** Under the name on every page; on the home page it is the h1. */
+  tagline: "Backend engineer and creative builder, San Diego",
   description: "Portfolio of Mikey Nguyen, backend engineer and creative builder in San Diego.",
 
   /** The one setting that picks the current season: a file name in src/content/seasons. */
@@ -36,19 +29,18 @@ export const site = {
     { label: "Links", href: "/links", ready: false },
   ] satisfies NavItem[],
 
-  /** Section lines on the home page. */
-  homeLines: [
-    { title: "Projects", copy: "Everything I have built.", href: "/projects" },
-    { title: "Resume", copy: "One page, with a download.", href: "/resume" },
-    { title: "Blog", copy: "Notes on what I am working through.", href: "/blog" },
-  ] satisfies HomeLine[],
+  /**
+   * The home page's one button. It points at GitHub until the projects page
+   * exists; then change it to { label: "See the projects", href: "/projects" }.
+   */
+  primaryAction: { label: "See the code on GitHub", href: "https://github.com/migingyn" },
 
-  /** "Now" readout on the home page. PLACEHOLDER copy: replace with your own. */
+  /** "Now" card on the home page. Leave a line empty to hide it. */
   now: {
     building: "This site, one season at a time.",
-    filming: "Placeholder: edit in site.config.ts",
+    filming: "",
   },
 
-  /** Small links in the bottom corner of every page. */
+  /** Small links in the footer. */
   footerLinks: [{ label: "GitHub", href: "https://github.com/migingyn" }],
 };

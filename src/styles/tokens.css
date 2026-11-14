@@ -11,44 +11,25 @@
   --breakpoint-*: initial;
   --ease-*: initial;
 
-  /* Page stock (dark, flat) */
-  --color-carbon: #101114;
-  --color-carbon-2: #1a1c22;
-  --color-carbon-3: #272a33;
-  --color-hairline: #3a3e4a;
-
-  /* Neutrals */
-  --color-paper: #ffffff;
-  --color-silver-50: #f4f5f8;
-  --color-silver-200: #d9dde5;
-  --color-silver-400: #aab0bd;
-  --color-silver-500: #8a91a1;
-  --color-silver-600: #6f7686;
-  --color-ink: #101114;
-
-  /* Signals */
-  --color-lime: #c8f31d;
-  --color-orange: #ff7a00;
+  /* Black, white, two greys, one red. */
+  --color-black: #0a0a0a;
+  --color-white: #ffffff;
+  --color-grey: #9a9a9a;
+  --color-line: #2e2e2e;
   --color-red: #e60012;
-  --color-fringe: #47c8e0;
   --color-focus: #2997ff;
 
-  /* Season roles. Components use these two; the current season may override
-     them on <html> (see src/lib/seasons.ts). Everything else never changes. */
-  --color-accent: var(--color-lime);
-  --color-forward: var(--color-orange);
+  /* The season's one colour. The current season may override it on <html>
+     (see src/lib/seasons.ts). */
+  --color-accent: #ff7a00;
 
   /* Type families */
-  --font-masthead: "Grenze Gotisch", "Arial Black", serif;
-  --font-shout: "Dela Gothic One", "Arial Black", Impact, sans-serif;
-  --font-body: "Zen Maru Gothic", "Helvetica Neue", Arial, sans-serif;
-  --font-pixel: "DotGothic16", ui-monospace, monospace;
-  --font-ascii: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --font-wordmark: "Grenze Gotisch", "Old English Text MT", serif;
+  --font-sans: "Arimo", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: "Courier Prime", "Courier New", Courier, monospace;
 
-  /* Radius */
-  /* No pill shapes anywhere: controls and tags are rectangles. `full` is for true circles only. */
+  /* No rounding except true circles. */
   --radius-none: 0px;
-  --radius-xs: 2px;
   --radius-full: 9999px;
 
   /* Layout */
@@ -56,95 +37,65 @@
   --breakpoint-md: 48rem; /* 768 */
   --breakpoint-lg: 64rem; /* 1024 */
   --breakpoint-xl: 80rem; /* 1280 */
-  --container-page: 80rem;
 
   /* Motion */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 :root {
   --duration-fast: 120ms;
-  --duration-base: 180ms;
   --duration-press: 160ms;
+  --duration-base: 180ms;
   --duration-slow: 280ms;
-  --duration-enter: 360ms;
-  --duration-develop: 1400ms;
-  /* Page padding: 16px mobile, 48px desktop. */
+  --duration-develop: 1600ms;
+  /* Page margin: 16px on phones, 32px on tablets, 64px on desktops. */
   --page-x: 16px;
 }
 
 @media (min-width: 48rem) {
   :root {
-    --page-x: 48px;
+    --page-x: 32px;
   }
 }
 
-/* Type scale (DESIGN.md section 3). Sizes in rem so browser font scaling works. */
-@utility type-masthead {
-  font-family: var(--font-masthead);
-  font-size: clamp(3rem, min(14vw, 15vh), 8rem);
-  font-weight: 900;
-  line-height: 0.9;
-}
-@utility type-shout-xl {
-  font-family: var(--font-shout);
-  font-size: clamp(3.5rem, 11vw, 9rem);
-  font-weight: 400;
-  line-height: 1;
-}
-@utility type-shout-lg {
-  font-family: var(--font-shout);
-  font-size: clamp(2.75rem, 7vw, 5.5rem);
-  font-weight: 400;
-  line-height: 1.05;
-}
-@utility type-shout-md {
-  font-family: var(--font-shout);
-  font-size: 3rem;
-  font-weight: 400;
-  line-height: 1;
-}
-@utility type-shout-sm {
-  font-family: var(--font-shout);
-  font-size: 1.5rem;
-  font-weight: 400;
-  line-height: 1.1;
-}
-@utility type-heading {
-  font-family: var(--font-body);
-  font-size: 1.5rem;
-  font-weight: 900;
-  line-height: 1.2;
-}
-@utility type-body {
-  font-family: var(--font-body);
-  font-size: 1.0625rem;
-  font-weight: 500;
-  line-height: 1.6;
-}
-@utility type-body-sm {
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  font-weight: 500;
-  line-height: 1.5;
-}
-@utility type-label {
-  font-family: var(--font-body);
-  font-size: 0.75rem;
-  font-weight: 900;
-  line-height: 1.2;
-  letter-spacing: 0.06em;
-}
-@utility type-pixel {
-  font-family: var(--font-pixel);
-  font-size: 0.875rem;
-  font-weight: 400;
-  line-height: 1.25;
+@media (min-width: 64rem) {
+  :root {
+    --page-x: 64px;
+  }
 }
 
-/* Halftone: 1px dots on a 4px grid at 6% white. Quiet texture for panels. */
-@utility halftone {
-  background-image: radial-gradient(rgb(255 255 255 / 0.06) 0.5px, transparent 0.6px);
-  background-size: 4px 4px;
+/* Type scale (DESIGN.md section 3). */
+@utility type-wordmark {
+  font-family: var(--font-wordmark);
+  font-size: clamp(2rem, 4.6vw, 3.5rem);
+  font-weight: 900;
+  line-height: 1;
+}
+@utility type-title {
+  font-family: var(--font-sans);
+  font-size: clamp(1.75rem, 3.4vw, 2.75rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+@utility type-body {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+@utility type-caps {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+@utility type-mono {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.4;
 }

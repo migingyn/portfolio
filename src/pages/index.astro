@@ -1,228 +1,138 @@
 ---
+import { Image } from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import LoadingScreen from "../components/LoadingScreen.astro";
-import HeroPhoto from "../components/home/HeroPhoto.astro";
-import Keitai from "../components/home/Keitai.astro";
-import NowScreen from "../components/home/NowScreen.astro";
 import standIn from "../assets/hero-standin.jpg";
 import { site } from "../site.config";
-import { formatSeasonDate, getCurrentSeason } from "../lib/seasons";
+import { getCurrentSeason } from "../lib/seasons";
 
 const season = await getCurrentSeason();
-const { name, mood, start, end, hero, heroAlt } = season.data;
+const { name, mood, hero, heroAlt } = season.data;
 
 // Until the season has its own photo, a generated stand-in fills the frame.
 const photo = hero ?? standIn;
 const photoAlt = hero ? (heroAlt ?? "") : "Out-of-focus street at dusk with palm trees and power lines.";
-
-const isReady = (href: string) => site.nav.some((item) => item.href === href && item.ready);
+const now = [
+  { label: "Building", text: site.now.building },
+  { label: "Filming", text: site.now.filming },
+].filter((row) => row.text);
 ---
 
 <BaseLayout isHome>
   <LoadingScreen slot="overlay" season={season} />
-  <HeroPhoto slot="backdrop" src={photo} alt={photoAlt} />
 
-  <section aria-labelledby="issue-name" class="frame">
-    <p class="rec type-pixel enter" style="--i:6" aria-hidden="true">
-      <i></i>REC <span data-timecode>00:00:00</span>
-    </p>
-
-    <div class="phone enter" style="--i:5">
-      <Keitai>
-        <NowScreen footer={`VOL.${season.number} ${name.toUpperCase()}`} />
-      </Keitai>
-    </div>
-
-    <div class="burn">
-      <div class="left">
-        <p class="type-label enter" style="--i:7">
-          <span id="issue-name">Vol.{season.number} / {name}</span>
-          <span class="dates">
-            <time datetime={start.toISOString().slice(0, 10)}>{formatSeasonDate(start)}</time>
-            {" to "}
-            <time datetime={end.toISOString().slice(0, 10)}>{formatSeasonDate(end)}</time>
-          </span>
-        </p>
-        <p class="mood type-heading enter" style="--i:8">{mood}</p>
+  <!-- One screen: the season's photograph, full-bleed, developing once on load. -->
+  <section class="hero hero--photo" data-enter data-moment="picture-develops" aria-label={`Volume ${season.number}, ${name}`}>
+    <Image
+      src={photo}
+      alt={photoAlt}
+      widths={[640, 1024, 1600, 2400]}
+      sizes="(max-width: 48rem) 260vw, 100vw"
+      loading="eager"
+      fetchpriority="high"
+      class="hero__bg"
+    />
+    <div class="wrap">
+      <div class="hero-text">
+      <div class="now">
+        <p class="type-caps">Vol.{season.number} {name}</p>
+        <p class="type-mono mood">{mood}</p>
+        {
+          now.length > 0 && (
+            <dl class="type-mono">
+              {now.map((row) => (
+                <div>
+                  <dt>{row.label}</dt>
+                  <dd>{row.text}</dd>
+                </div>
+              ))}
+            </dl>
+          )
+        }
       </div>
-
-      <div class="right">
-        <ul class="lines">
-          {
-            site.homeLines.map((line, i) => {
-              const ready = isReady(line.href);
-              return (
-                <li class="enter" style={`--i:${8 + i}`}>
-                  {ready ? (
-                    <a href={line.href} class="title type-shout-sm link-draw">{line.title}</a>
-                  ) : (
-                    <span class="title type-shout-sm">{line.title}</span>
-                  )}
-                  <span class="copy type-label">{ready ? line.copy : "Coming soon"}</span>
-                </li>
-              );
-            })
-          }
-        </ul>
-        <p class="stamp type-pixel enter" style="--i:11">
-          <span class="sr-only">{site.city} time:</span>
-          <time data-clock data-time-zone={site.timeZone}>'-- -- -- --:--:--</time>
-        </p>
+      <a href={site.primaryAction.href} class="btn" rel="me noopener">{site.primaryAction.label}</a>
       </div>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .frame {
-    --keitai-w: clamp(150px, 23svh, 236px);
+  .hero {
     position: relative;
     display: flex;
-    flex: 1;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 24px;
-    padding: 20px var(--page-x) 12px;
-    color: var(--color-silver-50);
+    height: 100svh;
+    min-height: 34rem;
+    align-items: flex-end;
+    background: var(--color-black);
   }
-  .phone {
-    align-self: center;
-    padding-block: 8px 20px;
+  .hero :global(.hero__bg) {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  /* Film treatment over the photograph: faded colour and a warm cast, a darker
+     top so the header holds, and still grain. Any photo set on a season gets it. */
+  .hero::before,
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .hero::before {
+    backdrop-filter: saturate(0.8) contrast(0.94) sepia(0.12);
+    background: linear-gradient(180deg, rgb(10 10 10 / 0.78) 0%, rgb(10 10 10 / 0) 30%);
+  }
+  .hero::after {
+    opacity: 0.38;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
-  /* Camcorder-style mark: a red light and a running timecode. */
-  .rec {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--color-silver-50);
+  .hero .wrap {
+    position: relative;
+    z-index: 1;
   }
-  .rec i {
-    width: 10px;
-    height: 10px;
-    border-radius: var(--radius-full);
-    background: var(--color-red);
-  }
-
-  .burn {
+  /* Everything in the hero starts on the container's left line. */
+  .hero-text {
     display: grid;
-    gap: 32px;
-  }
-  .left {
-    display: grid;
+    justify-items: start;
     gap: 12px;
-    max-width: 24rem;
+    padding-bottom: 32px;
   }
-  .dates {
-    display: block;
-    color: var(--color-silver-400);
-  }
-  .mood {
-    text-wrap: balance;
-  }
-  .right {
-    display: grid;
-    gap: 20px;
-    justify-items: end;
-    text-align: right;
-  }
-  .lines {
+
+  /* A flat card with what is happening now, set into the photo's lower left. */
+  .now {
     display: grid;
     gap: 10px;
+    width: min(100%, 20rem);
+    padding: 16px;
+    border: 1px solid var(--color-line);
+    background: var(--color-black);
   }
-  .lines li {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+  .mood,
+  .now dt {
+    color: var(--color-grey);
   }
-  .lines a {
-    display: inline-flex;
-    min-height: 44px;
-    align-items: center;
+  .now dl div {
+    display: grid;
+    grid-template-columns: 5.5rem 1fr;
   }
-  .copy {
-    color: var(--color-silver-400);
+  .hero .btn {
+    background: var(--color-black);
   }
-
-  /* Date stamp: the live local time, burned into the frame. */
-  .stamp {
-    color: var(--color-forward);
-    font-size: 1.375rem;
-    letter-spacing: 0.06em;
-    text-shadow: 0 0 6px color-mix(in srgb, var(--color-forward) 55%, transparent);
-    white-space: nowrap;
-  }
-
-  @media (min-width: 64rem) {
-    .frame {
-      --keitai-w: clamp(170px, 27svh, 250px);
-    }
-    /* The phone floats over the photo, right of centre; the text keeps the corners. */
-    .phone {
-      position: absolute;
-      left: 58%;
-      top: 46%;
-      translate: -50% -50%;
-      padding: 0;
-    }
-    .burn {
-      grid-template-columns: 1fr auto;
-      align-items: end;
-      margin-top: auto;
+  @media (hover: hover) and (pointer: fine) {
+    .hero .btn:hover {
+      background: var(--color-white);
     }
   }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .rec i {
-      animation: rec 1.2s steps(1) infinite;
-    }
-  }
-  @keyframes rec {
-    50% {
-      opacity: 0.15;
+  @media (max-width: 47.99rem) {
+    .hero .btn,
+    .now {
+      width: 100%;
     }
   }
 </style>
-
-<script>
-  // The date stamp shows live local time; the timecode counts from page load.
-  let timer = 0;
-  const pad = (n: number) => String(n).padStart(2, "0");
-
-  function start() {
-    window.clearInterval(timer);
-    const clock = document.querySelector<HTMLTimeElement>("time[data-clock]");
-    const timecode = document.querySelector<HTMLElement>("[data-timecode]");
-    if (!clock && !timecode) return;
-
-    const parts = new Intl.DateTimeFormat("en-US", {
-      timeZone: clock?.dataset.timeZone,
-      year: "2-digit",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hourCycle: "h23",
-    });
-    const began = Date.now();
-
-    const tick = () => {
-      const now = new Date();
-      if (clock) {
-        const p = Object.fromEntries(parts.formatToParts(now).map((part) => [part.type, part.value]));
-        clock.textContent = `'${p.year} ${p.month} ${p.day} ${p.hour}:${p.minute}:${p.second}`;
-        clock.dateTime = now.toISOString();
-      }
-      if (timecode) {
-        const s = Math.floor((Date.now() - began) / 1000);
-        timecode.textContent = `${pad(Math.floor(s / 3600))}:${pad(Math.floor(s / 60) % 60)}:${pad(s % 60)}`;
-      }
-    };
-    tick();
-    timer = window.setInterval(tick, 1000);
-  }
-
-  document.addEventListener("astro:page-load", start);
-  document.addEventListener("astro:before-swap", () => window.clearInterval(timer));
-</script>

@@ -119,10 +119,10 @@ export function mountAsciiPose(canvas: HTMLCanvasElement, options: AsciiPoseOpti
 
   const tokens = getComputedStyle(document.documentElement);
   const color = (name: string) => tokens.getPropertyValue(name).trim();
-  const palette = [color("--color-silver-600"), color("--color-silver-400"), color("--color-paper")];
+  // Three greys for the figure, dark to light.
+  const palette = ["#6f6f6f", color("--color-grey"), color("--color-white")];
   const accent = color("--color-accent");
-  const forward = color("--color-forward");
-  const family = color("--font-ascii") || "monospace";
+  const family = color("--font-mono") || "monospace";
   const preset = PARTICLES[options.style] ?? PARTICLES.leaves;
   const duration = options.duration ?? 3;
 
@@ -366,7 +366,7 @@ export function mountAsciiPose(canvas: HTMLCanvasElement, options: AsciiPoseOpti
     });
 
     // Season glyphs blow past in front of everything.
-    ctx!.fillStyle = forward;
+    ctx!.fillStyle = accent;
     for (const p of particles) {
       const c = Math.round(p.x);
       const r = Math.round(p.y);
@@ -380,7 +380,7 @@ export function mountAsciiPose(canvas: HTMLCanvasElement, options: AsciiPoseOpti
       lastLaugh = t;
       laughs.push({ x: originX + (head.x + rand(6, 20)) * unit, y: groundY - (head.y + rand(2, 10)) * unit, born: t });
     }
-    ctx!.fillStyle = accent;
+    ctx!.fillStyle = palette[2]!;
     ctx!.font = `bold ${Math.round(fontPx * 1.6)}px ${family}`;
     laughs = laughs.filter((l) => t - l.born < 0.9);
     for (const l of laughs) {

@@ -16,11 +16,8 @@ const seasons = defineCollection({
     heroAlt: z.string().optional(),
     start: z.coerce.date(),
     end: z.coerce.date(),
-    /** Overrides DESIGN.md's two accent roles only. The dark base never changes. */
-    palette: z.object({
-      accent: hex,
-      forward: hex.optional(),
-    }),
+      /** Overrides DESIGN.md's one accent colour. Black and white never change. */
+      palette: z.object({ accent: hex }),
     /** What blows past the character on the ASCII loading screen. */
     ascii: z.enum(["leaves", "snow", "rain", "petals"]),
     mood: z.string(),

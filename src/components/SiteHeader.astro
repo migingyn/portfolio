@@ -1,0 +1,120 @@
+---
+/**
+ * Site header, laid over the top of the page. The name and the word "Menu" both
+ * open the menu panel (MenuPanel listens for clicks on [data-menu-open]).
+ */
+import MenuPanel from "./MenuPanel";
+import { site } from "../site.config";
+
+interface Props {
+  /** Home renders the line under the name as the page's h1. */
+  isHome: boolean;
+}
+const { isHome } = Astro.props;
+const Line = isHome ? "h1" : "p";
+---
+
+<header class="nav">
+  <div class="wrap nav__bar">
+    <a class="skip-link type-caps" href="#main">Skip to content</a>
+    <button type="button" class="link type-caps nav__menu" data-menu-open aria-haspopup="dialog" aria-expanded="false">
+      <span>Menu</span>
+    </button>
+    <div class="nav__name">
+      <button type="button" class="wordmark type-wordmark" data-menu-open aria-haspopup="dialog" aria-expanded="false">
+        {site.name}<span class="sr-only">, open menu</span>
+      </button>
+      <Line class="type-mono nav__line">{site.tagline}</Line>
+    </div>
+    <p class="type-mono nav__clock"><time data-clock data-time-zone={site.timeZone}></time></p>
+  </div>
+  <MenuPanel client:load items={site.nav} currentPath={Astro.url.pathname} />
+</header>
+
+<style>
+  .nav {
+    position: absolute;
+    inset: 0 0 auto;
+    z-index: 20;
+  }
+  .nav__bar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: start;
+    gap: 12px;
+    padding-top: 12px;
+  }
+  .nav__menu {
+    justify-self: start;
+  }
+  .nav__name {
+    display: grid;
+    justify-items: center;
+    text-align: center;
+  }
+  .nav__line {
+    text-wrap: balance;
+  }
+  .nav__clock {
+    display: flex;
+    min-height: 44px;
+    align-items: center;
+    justify-self: end;
+    text-align: right;
+  }
+  .nav__bar {
+    position: relative;
+  }
+  .skip-link {
+    position: absolute;
+    left: 0;
+    top: 8px;
+    z-index: 5;
+    padding: 12px 16px;
+    background: var(--color-white);
+    color: var(--color-black);
+  }
+  .skip-link:not(:focus) {
+    clip-path: inset(50%);
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    padding: 0;
+  }
+  @media (max-width: 47.99rem) {
+    .nav__clock {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  // Date and time in the site's home time zone, beside the name.
+  let timer = 0;
+
+  function startClock() {
+    window.clearInterval(timer);
+    const clock = document.querySelector<HTMLTimeElement>("time[data-clock]");
+    if (!clock) return;
+    const format = new Intl.DateTimeFormat("en-US", {
+      timeZone: clock.dataset.timeZone,
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+    const tick = () => {
+      const now = new Date();
+      const p = Object.fromEntries(format.formatToParts(now).map((part) => [part.type, part.value]));
+      clock.textContent = `${p.month}/${p.day}/${p.year} ${p.hour}:${p.minute}${(p.dayPeriod ?? "").toLowerCase()}`;
+      clock.dateTime = now.toISOString();
+    };
+    tick();
+    timer = window.setInterval(tick, 15000);
+  }
+
+  document.addEventListener("astro:page-load", startClock);
+  document.addEventListener("astro:before-swap", () => window.clearInterval(timer));
+</script>

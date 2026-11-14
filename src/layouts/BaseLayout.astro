@@ -1,9 +1,9 @@
 ---
 import "../styles/global.css";
 import { ClientRouter } from "astro:transitions";
-import mastheadFont from "@fontsource/grenze-gotisch/files/grenze-gotisch-latin-900-normal.woff2?url";
-import bodyFont from "@fontsource/zen-maru-gothic/files/zen-maru-gothic-latin-500-normal.woff2?url";
-import SiteMenu from "../components/SiteMenu";
+import wordmarkFont from "@fontsource/grenze-gotisch/files/grenze-gotisch-latin-900-normal.woff2?url";
+import sansFont from "@fontsource/arimo/files/arimo-latin-700-normal.woff2?url";
+import SiteHeader from "../components/SiteHeader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
 import { site } from "../site.config";
 import { getCurrentSeason, seasonStyle } from "../lib/seasons";
@@ -11,64 +11,52 @@ import { getCurrentSeason, seasonStyle } from "../lib/seasons";
 interface Props {
   title?: string;
   description?: string;
-  /** Home renders the wordmark as the page's h1. */
+  /** Home renders the line under the name as the page's h1. */
   isHome?: boolean;
 }
 
 const { title, description = site.description, isHome = false } = Astro.props;
 const season = await getCurrentSeason();
-const pageTitle = title ? `${title} / ${site.name}` : `${site.name} / ${site.tagline}`;
+const pageTitle = title ? `${title} / ${site.name}` : `${site.name}, backend engineer and creative builder`;
 const year = new Date().getFullYear();
+const shareImage = new URL("/share.jpg", Astro.site ?? Astro.url).href;
 ---
 
 <!doctype html>
-<html lang="en" style={seasonStyle(season)}>
+<html lang="en" data-type="service" style={seasonStyle(season)}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#101114" />
+    <meta name="page-type" content="service" />
+    <meta name="site-kind" content="other" />
+    <meta name="theme-color" content="#0a0a0a" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:image" content={shareImage} />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preload" as="font" type="font/woff2" href={mastheadFont} crossorigin />
-    <link rel="preload" as="font" type="font/woff2" href={bodyFont} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={wordmarkFont} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={sansFont} crossorigin />
+    <!-- Hero entrance and the photo-develop moment (taste-skill's motion contract). -->
     <script is:inline>
-      // Restore the "Pause motion" choice before first paint.
-      try {
-        if (localStorage.getItem("mn:motion") === "paused") document.documentElement.dataset.motion = "paused";
-      } catch (e) {}
+      document.documentElement.classList.add("m-enter", "mo-js");
+      setTimeout(function () { document.documentElement.classList.add("m-enter-done"); }, 700);
+      setTimeout(function () { document.documentElement.classList.add("mo-safe"); }, 2500);
     </script>
+    <link rel="modulepreload" href="/assets/moments/moments.js" />
+    <link rel="modulepreload" href="/assets/moments/lib.js" />
     <ClientRouter />
   </head>
   <body>
-    <a
-      href="#main"
-      class="type-label sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-paper focus:px-4 focus:py-3 focus:text-ink"
-    >
-      Skip to content
-    </a>
     <slot name="overlay" />
-    <div class="grain" aria-hidden="true"></div>
-    <div id="shell" class="relative isolate flex min-h-svh flex-col">
-      <slot name="backdrop" />
-      <SiteMenu
-        client:load
-        name={site.name}
-        tagline={site.tagline}
-        items={site.nav}
-        currentPath={Astro.url.pathname}
-        isHome={isHome}
-        hallmark={`${season.data.name} / ${site.city}`}
-      />
-      <div id="page" class="flex flex-1 flex-col">
-        <main id="main" class="flex flex-1 flex-col">
-          <slot />
-        </main>
-        <SiteFooter year={year} />
-      </div>
-    </div>
+    <SiteHeader isHome={isHome} />
+    <main id="main">
+      <slot />
+    </main>
+    <SiteFooter year={year} />
+    <script is:inline type="module" src="/assets/moments/moments.js"></script>
   </body>
 </html>

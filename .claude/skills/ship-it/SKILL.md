@@ -55,7 +55,11 @@ sh .claude/skills/impeccable/scripts/impeccable detect --json src
 - **No attribution, ever.** No `Co-Authored-By`, no "Generated with", no session
   links, no model or tool names, no emoji signatures. Not in the subject, the body,
   or a trailer.
-- Do not change the git author settings unless the owner asks.
+- **Commits are authored as the owner**, never as Claude or any tool. A cloud session
+  starts with its own author name, so before the first commit set the repository's
+  local `user.name` and `user.email` to the ones on the repository's first commit
+  (`git log --reverse --format='%an <%ae>' | head -1`), and check the result with
+  `git log -1 --format='%an'` after committing.
 
 ## 4. Push
 

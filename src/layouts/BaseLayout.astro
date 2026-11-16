@@ -187,8 +187,6 @@ const { spotifyPlaylistId, tracks } = season.data;
         } catch {}
         document.querySelector('meta[name="theme-color"]')?.setAttribute("content", CANVAS[theme]);
         labelToggle();
-        // The ASCII character is drawn, not styled: it follows the fade frame by frame.
-        window.dispatchEvent(new CustomEvent("theme:change", { detail: { length } }));
         window.clearTimeout(fadeTimer);
         fadeTimer = window.setTimeout(() => delete root.dataset.themeChange, length + 50);
       }
@@ -267,8 +265,8 @@ const { spotifyPlaylistId, tracks } = season.data;
     display: flex;
     min-height: max(100svh, 32rem);
     align-items: center;
-    /* Clear the logo above and the corner character below when a list runs long. */
-    padding-block: calc(var(--margin) + 72px) calc(var(--margin) + 104px);
+    /* Clear the logo above and the now-playing line below when a list runs long. */
+    padding-block: calc(var(--margin) + 72px);
   }
   .layer {
     position: absolute;

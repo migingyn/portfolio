@@ -18,9 +18,6 @@ const normalize = (path: string) => (path.length > 1 ? path.replace(/\/$/, "") :
 const mod = (n: number, by: number) => ((n % by) + by) % by;
 const OPENERS = "[data-dial-open]";
 
-/** Tell the corner character the dial moved (or closed), so it can turn toward it. */
-const announce = (name: "dial:move" | "dial:close") => window.dispatchEvent(new CustomEvent(name));
-
 /**
  * Dial navigation (DESIGN.md section 5). The sections sit around a ring; the one
  * at the top is selected. It turns with drag, scroll wheel, arrow keys, and touch
@@ -56,7 +53,6 @@ export default function Dial({ items, currentPath }: Props) {
   const stepBy = useCallback(
     (direction: 1 | -1) => {
       setTurn((value) => Math.round(value / step) * step - direction * step);
-      announce("dial:move");
     },
     [step],
   );
@@ -100,7 +96,6 @@ export default function Dial({ items, currentPath }: Props) {
       document.removeEventListener("keydown", onKeyDown);
       outside.forEach((el) => el.removeAttribute("inert"));
       root.style.overflow = previousOverflow;
-      announce("dial:close");
       opener?.focus();
     };
   }, [open]);
@@ -171,7 +166,6 @@ export default function Dial({ items, currentPath }: Props) {
     }
     if (state.moved) {
       setTurn((value) => value + delta);
-      announce("dial:move");
     }
   };
 

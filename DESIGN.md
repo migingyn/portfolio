@@ -1,7 +1,7 @@
 ---
-version: 1.1
+version: 1.2
 name: Portfolio "Mikey Nguyen"
-status: Active. v1.1 brings this file in line with the built site (penguin logo, season outfits, light theme, autumn colour). How each rule got here is in DECISIONS.md.
+status: Active. v1.2 drops the corner character; the ASCII character now lives on the loading screen only. How each rule got here is in DECISIONS.md.
 description: >
   A quiet, dark, media-led portfolio. Generous empty space, small type, and my own
   footage doing the talking. Three signature moments make it memorable. A small ASCII
@@ -18,7 +18,7 @@ references:
 colors:
   dark:                  # the default theme
     canvas: "#0c0c0c"    # page background, menu, loading screen
-    text: "#f2f0ea"      # primary text, ASCII character
+    text: "#f2f0ea"      # primary text, the ASCII character on the loading screen
     muted: "#8a8a85"     # secondary text, labels, inactive dial items, the theme switch
     line: "#2a2a2a"      # hairlines only
     focus: "#2997ff"     # keyboard focus ring only
@@ -70,13 +70,13 @@ in effect live in this file. History goes in DECISIONS.md.
 
 ## 1. Concept
 
-The site is quiet, and my footage and three signature moments carry it. It is a
+The site is quiet, and my footage and its signature moments carry it. It is a
 software engineer's portfolio first: a recruiter, founder, or builder should know who
 I am and where to click within a few seconds.
 
 1. **Empty space is the design.** Few elements, small type, lots of room.
 2. **Media does the talking.** Each section has a full-frame muted video loop from my own footage.
-3. **Three signature moments.** The ASCII loading screen, the dial, and the corner character. Nothing else draws attention to itself.
+3. **Three signature moments.** The ASCII loading screen, the dial, and the video loops. Nothing else draws attention to itself.
 4. **One font family, almost no colour.** The season accent appears only in tiny places.
 
 ## 2. Colour
@@ -84,7 +84,7 @@ I am and where to click within a few seconds.
 | Token | Dark | Light | Use |
 |---|---|---|---|
 | `canvas` | `#0c0c0c` | `#f2f0ea` | Page, menu, loading screen |
-| `text` | `#f2f0ea` | `#0c0c0c` | Text, ASCII character |
+| `text` | `#f2f0ea` | `#0c0c0c` | Text, the ASCII character on the loading screen |
 | `muted` | `#8a8a85` | `#5c5c58` | Secondary text, labels, inactive dial items, the theme switch |
 | `line` | `#2a2a2a` | `#d4d1c9` | Hairlines only |
 | `accent` | season | season | The dial's current position, link hover underline, the penguin's outfit, the now-playing dot |
@@ -119,7 +119,7 @@ No kickers above titles. No numbering unless order matters.
 
 - Each section is its own page and at least one full screen, with its video full-bleed behind it. It grows when a list needs the room.
 - Text sits small along the left edge of the screen. Never centred in a box.
-- The four corners are fixed on every page: logo top left, season and theme switch top right, ASCII character bottom left, now playing bottom right.
+- Three corners are fixed on every page: logo top left, season and theme switch top right, now playing bottom right. The bottom left stays empty.
 - Margins are 64px desktop, 32px tablet, 16px phone.
 - Breakpoints are 480, 768, 1024, 1280. Touch targets are 44px minimum.
 - No cards, boxes, panels, pills, gradients, glows, or drop shadows.
@@ -167,17 +167,9 @@ After anaiis.world. A black screen with nothing on it but my ASCII character.
 - Small and centred, about 120px tall, in `text`.
 - The character changes in place, cycling through its pose frames like a symbol morphing, and ends on its final pose.
 - No loading bar, impact lines, text, or background effects.
-- About 2 seconds, then the black fades straight into the home section.
+- About 2 seconds, then the black and the character fade out together, straight into the page. The character does not stay on the page afterwards.
 - First visit only, which is always dark. Skippable with a click or any key. Add `?intro` to the URL to replay it.
 - Under `prefers-reduced-motion` the intro is skipped.
-
-### Corner character
-After the intro, the ASCII character moves into the bottom-left corner at 90px and
-stays on every page.
-
-- It turns toward the dial when the dial moves.
-- It snaps a short pose when the section changes.
-- Under `prefers-reduced-motion` it stays still.
 
 ### Now playing
 A single small line in the bottom-right corner with an `accent` dot, the song, and the
@@ -201,17 +193,16 @@ projects"; the resume and GitHub are links beside it.
 
 | What | Timing |
 |---|---|
-| Loading screen | About 2s, first visit only |
+| Loading screen | About 2s, first visit only, then a 240ms fade into the page |
 | Dial rotation | 400ms |
 | Section change | The page crossfades over 240ms |
 | Link underline, button fill, theme icon swap | 150ms |
-| Corner character reactions | Short, under 400ms |
 | Theme change | The icon swaps at once, the page holds 300ms, then every colour fades over 1200ms |
 
 - Exits are faster than entrances. Hover effects apply only on devices with a mouse.
 - Nothing follows the pointer except the dial when it is being dragged.
 - The theme change is the one slow motion on the site, on purpose. Nothing else runs longer than the dial.
-- `prefers-reduced-motion` turns off the intro, video loops, and character motion. The theme change drops its hold and fades in 240ms.
+- `prefers-reduced-motion` turns off the intro and video loops. The theme change drops its hold and fades in 240ms.
 
 ## 7. Accessibility
 
@@ -227,7 +218,7 @@ projects"; the resume and GitHub are links beside it.
 **Do**
 - Leave space empty.
 - Let my footage carry each section.
-- Keep the three signature moments and nothing else loud.
+- Keep the signature moments and nothing else loud.
 - Give each season one colour and, if I like, one outfit.
 
 **Don't**

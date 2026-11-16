@@ -2,10 +2,9 @@
  * The ASCII character: an original lab-coated figure drawn from a small 2D rig,
  * rasterized to an offscreen canvas and converted to characters by brightness.
  *
- * It appears twice (DESIGN.md section 5): on the loading screen, where it cycles
- * through its pose frames and ends on its final pose, and afterwards as the
- * small corner character, which turns toward the dial and snaps a pose when the
- * section changes. It only draws when its pose changes; at rest it costs nothing.
+ * It appears once (DESIGN.md section 5): on the loading screen, where it cycles
+ * through its pose frames and ends on its final pose. It draws only when its pose
+ * changes.
  */
 
 type Vec = { x: number; y: number };
@@ -47,9 +46,6 @@ const LAUGH: Pose = {
   hip: { x: 0, y: 45.6 }, lean: -14.5, head: -23,
   handL: { x: -41, y: 88 },
 };
-/** Turned toward something on the viewer's right or left. */
-const LOOK_RIGHT: Pose = { ...IDLE, lean: 6, head: 14, handR: { x: 15, y: 50 }, sweep: 0.2 };
-const LOOK_LEFT: Pose = { ...IDLE, lean: -6, head: -14, handL: { x: -15, y: 50 }, sweep: -0.2 };
 
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
@@ -94,24 +90,14 @@ const FONT_PX = 5;
 export interface Character {
   /** Play the loading-screen frames once, ending on the final pose. */
   intro(onDone: () => void): void;
-  /** A short pose, then back to rest. Used when the section changes. */
-  snap(): void;
-  /** Turn toward the viewer's right (1), left (-1), or back to rest (0). */
-  look(direction: -1 | 0 | 1): void;
-  /** Stand at rest. */
-  rest(): void;
-  /** Redraw in the page's current text colour. Used while the theme fades. */
-  tint(): void;
   destroy(): void;
 }
 
 export function mountCharacter(canvas: HTMLCanvasElement): Character {
   const ctx = canvas.getContext("2d")!;
   const style = getComputedStyle(document.documentElement);
-  const readInk = () => style.getPropertyValue("--color-text").trim() || "#f2f0ea";
-  let ink = readInk();
+  const ink = style.getPropertyValue("--color-text").trim() || "#f2f0ea";
   const family = style.getPropertyValue("--font-ascii").trim() || "monospace";
-  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   const size = canvas.clientWidth || 120;
   const dpr = Math.min(window.devicePixelRatio || 1, 3);
@@ -136,7 +122,6 @@ export function mountCharacter(canvas: HTMLCanvasElement): Character {
   off.height = rows * SS;
   const octx = off.getContext("2d", { willReadFrequently: true })!;
 
-  let current: Pose = IDLE;
   let timers: number[] = [];
   const clear = () => {
     timers.forEach((t) => window.clearTimeout(t));
@@ -261,7 +246,6 @@ export function mountCharacter(canvas: HTMLCanvasElement): Character {
   }
 
   function draw(pose: Pose) {
-    current = pose;
     rasterize(pose);
     const { data } = octx.getImageData(0, 0, off.width, off.height);
     ctx.clearRect(0, 0, size, size);
@@ -278,14 +262,6 @@ export function mountCharacter(canvas: HTMLCanvasElement): Character {
     }
   }
 
-  /** Move to a pose in a few quick held frames, the way the loading screen does. */
-  function go(target: Pose, steps = 3, frameMs = 55) {
-    clear();
-    if (reduced.matches) return;
-    const from = current;
-    for (let i = 1; i <= steps; i++) later(i * frameMs, () => draw(mix(from, target, i / steps)));
-  }
-
   draw(IDLE);
 
   return {
@@ -293,25 +269,6 @@ export function mountCharacter(canvas: HTMLCanvasElement): Character {
       clear();
       INTRO.forEach((pose, i) => later(i * INTRO_FRAME_MS, () => draw(pose)));
       later(INTRO.length * INTRO_FRAME_MS + 180, onDone);
-    },
-    snap() {
-      if (reduced.matches) return;
-      go(STRIKE, 2, 50);
-      later(300, () => go(IDLE, 2, 50));
-    },
-    look(direction) {
-      go(direction > 0 ? LOOK_RIGHT : direction < 0 ? LOOK_LEFT : IDLE, 2, 50);
-    },
-    rest() {
-      clear();
-      draw(IDLE);
-    },
-    tint() {
-      const next = readInk();
-      if (next === ink) return;
-      ink = next;
-      ctx.fillStyle = ink;
-      draw(current);
     },
     destroy: clear,
   };

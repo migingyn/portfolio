@@ -36,7 +36,7 @@ npm run build
 | Light theme colours and the timing of the dark/light fade | `src/styles/tokens.css` (`[data-theme="light"]`, `--duration-theme`, `--delay-theme`) |
 | Page shell: header, section, video layer | `src/layouts/BaseLayout.astro` |
 | Dial navigation | `src/components/Dial.tsx` |
-| ASCII character: loading screen and corner character | `src/components/Character.astro`, `src/scripts/ascii-character.ts` |
+| Loading screen and its ASCII character | `src/components/Character.astro`, `src/scripts/ascii-character.ts` |
 | Now playing | `src/components/NowPlaying.tsx` |
 | Pages | `src/pages/` |
 | Section modules (one per section, each fed by a data file) | `src/components/sections/` |

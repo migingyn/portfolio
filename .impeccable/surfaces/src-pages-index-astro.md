@@ -30,11 +30,10 @@ reads a name, a trade, and a place, then goes to the projects or opens the dial.
 
 FIRST VIEWPORT: Full-screen video (placeholder until footage arrives). Logo top left.
 Season name top right. Along the left edge at mid height: the name large, the tagline,
-one outlined button, two links. The ASCII character small in the bottom-left corner.
+one outlined button, two links. The bottom-left corner is empty.
 
 FORM: Pinned by the owner's DESIGN.md v1.0 (references: kapital.jp, lafour.com,
 anygivenmoment.co, anaiis.world). seed: none (pinned)
 
 MOTION: Loading screen about two seconds, then a fade. The dial turns in 400ms.
-Sections crossfade in 240ms. The character turns toward the dial and snaps a pose on
-section change.
+Sections crossfade in 240ms. The ASCII character appears on the loading screen only.

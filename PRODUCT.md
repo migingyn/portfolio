@@ -32,11 +32,11 @@ opens the menu. A persistent Spotify player carries the season's playlist.
 - Built so far: design tokens, layout, menu, home page, first-visit loading screen.
 
 ## Brand Commitments
-- DESIGN.md v1.0 (written by the owner) is the source of truth: quiet, dark, media-led, with three signature moments (ASCII loading screen, dial navigation, corner character).
+- DESIGN.md (written by the owner) is the source of truth: quiet, dark, media-led, with three signature moments (ASCII loading screen, dial navigation, video loops).
 - The owner's own footage only. No stock or generated photos or video; placeholders until clips arrive.
 - One font family (Hagrid, Inter until the licensed files are added). Almost no colour.
 - No cards, boxes, pills, rounded corners, gradients, glows, or shadows. No other brand's logos, marks, or characters.
-- The ASCII character stays.
+- The ASCII character stays, on the loading screen only.
 - taste-skill is essential to the workflow; Impeccable and Emil Kowalski's skills polish.
 
 ## Evidence on Hand

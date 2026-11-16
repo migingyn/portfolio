@@ -82,9 +82,8 @@
   --margin: 16px;
 }
 
-/* Light theme. Not in DESIGN.md, which is dark only: the owner asked for the switch
-   (see DECISIONS.md). `canvas` and `text` trade places; the rest keep their roles
-   and their contrast. */
+/* Light theme (DESIGN.md `colors.light`): the visitor's choice only. `canvas` and
+   `text` trade places; the rest keep their roles and their contrast. */
 :root[data-theme="light"] {
   --color-canvas: #f2f0ea;
   --color-text: #0c0c0c;

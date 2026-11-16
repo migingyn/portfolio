@@ -1,7 +1,13 @@
-# Vendored design skills
+# Project skills
+
+One skill is this project's own: `skills/ship-it`, the owner's rules for committing
+and pushing (checks first, no Claude attribution, no force push without asking, no
+pull request unless asked). Use it for every commit and push.
+
+## Vendored design skills
 
 These are third-party agent skills copied into this repo so every Claude Code session
-loads them. They are the project's design workflow (see DESIGN.md section 0):
+loads them. They are the project's design workflow:
 taste-skill sets the build rules, Impeccable and Emil Kowalski's skills do the polish.
 They are tooling only and are not part of the built site.
 
@@ -17,7 +23,7 @@ because this project has no use for them: `animate-expo`, `ask-sonner`, `write-s
 Things to know:
 
 - **Priority.** When a skill disagrees with the owner's brief or with DESIGN.md, the
-  brief wins, then DESIGN.md, then the skill (DESIGN.md D-046).
+  brief wins, then DESIGN.md, then the skill.
 - **taste-skill runs a checker when a session ends** (a Stop hook declared in its
   SKILL.md). It needs Node 22+ and Chrome, and writes its state to `.taste-skill/`.
 - **Impeccable downloads its engine binary on first use** into `~/.impeccable/bin/`.

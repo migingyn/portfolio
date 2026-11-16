@@ -74,4 +74,10 @@ taste-skill's gate checks the built home page:
 node .claude/skills/design-taste-frontend/scripts/gate.mjs dist/index.html --root dist
 ```
 
+## Shipping
+
+Commits and pushes follow `.claude/skills/ship-it`: build and checks first, plain
+commit messages with no AI attribution, no force push or history rewrite without
+asking, no pull request unless asked.
+
 No secrets live in this repo. API keys go in Vercel environment variables.

@@ -74,6 +74,40 @@ taste-skill's gate checks the built home page:
 node .claude/skills/design-taste-frontend/scripts/gate.mjs dist/index.html --root dist
 ```
 
+## Tests and CI/CD
+
+The Playwright tests in `tests/e2e` run against the built site in a desktop and a
+phone-sized browser. They cover every page (loads, heading, no sideways scroll, an
+accessibility scan in both themes), the home links, the loading screen, the dial,
+and the theme switch.
+
+```bash
+npm test
+```
+
+That builds first. To run the tests against a build you already have:
+
+```bash
+npm run test:e2e
+```
+
+`.github/workflows/ci.yml` runs the same build and tests on every push. If a test
+fails, the run keeps a report you can download from its page on GitHub.
+
+**Deploying.** There are two ways; pick one.
+
+- *Vercel's own GitHub connection* (the default if you imported the repo in Vercel):
+  Vercel deploys every push to `main` by itself. It does not wait for the tests.
+- *Deploy from CI, only after the tests pass:* the workflow's `deploy` job does this.
+  It is off until you switch it on:
+  1. In Vercel, create a token (Account Settings, Tokens).
+  2. In the GitHub repository, under Settings, Secrets and variables, Actions, add
+     the secrets `VERCEL_TOKEN`, `VERCEL_ORG_ID` and `VERCEL_PROJECT_ID` (the two IDs
+     are in `.vercel/project.json` after running `npx vercel link` once).
+  3. On the Variables tab of the same page, add `VERCEL_DEPLOY` with the value `true`.
+  4. In the Vercel project, under Settings, Git, turn off automatic deployments, so
+     the site is not deployed twice.
+
 ## Shipping
 
 Commits and pushes follow `.claude/skills/ship-it`: build and checks first, plain

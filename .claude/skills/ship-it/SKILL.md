@@ -29,8 +29,14 @@ Run what the change touches. For anything that changes a page, run all of it.
 
 ```bash
 npm run build
-npx astro check
 ```
+
+```bash
+npm run test:e2e -- --trace off
+```
+
+The build type-checks first. The Playwright tests need the build, and CI runs the
+same two steps on every push, so a failure here is a failure there.
 
 ```bash
 node .claude/skills/design-taste-frontend/scripts/gate.mjs dist/index.html --root dist

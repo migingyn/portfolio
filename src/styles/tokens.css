@@ -15,7 +15,7 @@
   --color-text: #f2f0ea;
   --color-muted: #8a8a85;
   --color-line: #2a2a2a;
-  /* Season colour. The current season overrides it on <html> (src/lib/seasons.ts). */
+  /* Season colour: this is the default; the current season replaces it (see :root below). */
   --color-accent: #c6ff1a;
   --color-focus: #2997ff;
 
@@ -35,13 +35,71 @@
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
 }
 
+/* The colours are registered so a theme change can fade them (see global.css). */
+@property --color-canvas {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #0c0c0c;
+}
+@property --color-text {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #f2f0ea;
+}
+@property --color-muted {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #8a8a85;
+}
+@property --color-line {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #2a2a2a;
+}
+@property --color-accent {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #c6ff1a;
+}
+@property --color-focus {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #2997ff;
+}
+
 :root {
+  /* The current season sets --season-accent on <html> (src/lib/seasons.ts). */
+  --color-accent: var(--season-accent, #c6ff1a);
+
   --duration-fast: 150ms;
   --duration-base: 240ms;
   --duration-dial: 400ms;
   --duration-loader: 2000ms;
+  /* Dark to light and back: a short hold, then a slow fade. */
+  --duration-theme: 1200ms;
+  --delay-theme: 300ms;
   /* Margins: 16px phone, 32px tablet, 64px desktop. */
   --margin: 16px;
+}
+
+/* Light theme. Not in DESIGN.md, which is dark only: the owner asked for the switch
+   (see DECISIONS.md). `canvas` and `text` trade places; the rest keep their roles
+   and their contrast. */
+:root[data-theme="light"] {
+  --color-canvas: #f2f0ea;
+  --color-text: #0c0c0c;
+  --color-muted: #5c5c58;
+  --color-line: #d4d1c9;
+  --color-accent: var(--season-accent-light, #5f7a10);
+  --color-focus: #0071e3;
+}
+
+/* Reduced motion keeps the fade (no movement in it) but drops the hold and the length. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-theme: 240ms;
+    --delay-theme: 0ms;
+  }
 }
 
 @media (min-width: 48rem) {

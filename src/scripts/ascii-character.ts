@@ -100,13 +100,16 @@ export interface Character {
   look(direction: -1 | 0 | 1): void;
   /** Stand at rest. */
   rest(): void;
+  /** Redraw in the page's current text colour. Used while the theme fades. */
+  tint(): void;
   destroy(): void;
 }
 
 export function mountCharacter(canvas: HTMLCanvasElement): Character {
   const ctx = canvas.getContext("2d")!;
   const style = getComputedStyle(document.documentElement);
-  const ink = style.getPropertyValue("--color-text").trim() || "#f2f0ea";
+  const readInk = () => style.getPropertyValue("--color-text").trim() || "#f2f0ea";
+  let ink = readInk();
   const family = style.getPropertyValue("--font-ascii").trim() || "monospace";
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
 
@@ -302,6 +305,13 @@ export function mountCharacter(canvas: HTMLCanvasElement): Character {
     rest() {
       clear();
       draw(IDLE);
+    },
+    tint() {
+      const next = readInk();
+      if (next === ink) return;
+      ink = next;
+      ctx.fillStyle = ink;
+      draw(current);
     },
     destroy: clear,
   };

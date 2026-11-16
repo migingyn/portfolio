@@ -43,6 +43,26 @@ const { spotifyPlaylistId, tracks } = season.data;
     <link rel="preload" as="font" type="font/woff2" href={textFont} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={displayFont} crossorigin />
     <script is:inline>
+      // The theme, before anything paints: dark unless the visitor chose light.
+      (function () {
+        var root = document.documentElement;
+        var CANVAS = { dark: "#0c0c0c", light: "#f2f0ea" };
+        var theme = "dark";
+        try {
+          if (localStorage.getItem("mn:theme") === "light") theme = "light";
+        } catch (e) {}
+        root.dataset.theme = theme;
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.content = CANVAS[theme];
+        // A page change brings a fresh <html>: carry the theme (and a fade under way) over.
+        document.addEventListener("astro:before-swap", function (event) {
+          var next = event.newDocument.documentElement;
+          next.dataset.theme = root.dataset.theme || "dark";
+          if (root.hasAttribute("data-theme-change")) next.setAttribute("data-theme-change", "");
+          var nextMeta = event.newDocument.querySelector('meta[name="theme-color"]');
+          if (nextMeta) nextMeta.content = CANVAS[next.dataset.theme];
+        });
+      })();
       // First visit (or ?intro): show the loading screen before anything paints.
       (function () {
         try {
@@ -64,6 +84,15 @@ const { spotifyPlaylistId, tracks } = season.data;
           <Em />
         </button>
         <p class="type-small season">{[season.data.name, season.data.mood].filter(Boolean).join(" / ")}</p>
+        <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch to light mode">
+          <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4.25"></circle>
+            <path d="M12 2.75v2M12 19.25v2M2.75 12h2M19.250 12h2M5.460 5.460l1.410 1.410M17.130 17.130l1.410 1.410M5.460 18.540l1.410-1.410M17.130 6.870l1.410-1.410"></path>
+          </svg>
+          <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20 14.500A8.750 8.750 0 1 1 9.500 4a7.500 7.500 0 0 0 10.500 10.500Z"></path>
+          </svg>
+        </button>
         <Character />
       </div>
     </header>
@@ -131,6 +160,44 @@ const { spotifyPlaylistId, tracks } = season.data;
       }
 
       document.addEventListener("astro:page-load", startVideo);
+
+      // Theme switch. The icon changes at once; the colours hold, then fade slowly (global.css).
+      const root = document.documentElement;
+      const CANVAS = { dark: "#0c0c0c", light: "#f2f0ea" } as const;
+      let fadeTimer = 0;
+
+      // A CSS time in milliseconds, whether the build wrote it as "1200ms" or "1.2s".
+      const ms = (name: string) => {
+        const value = getComputedStyle(root).getPropertyValue(name).trim();
+        return (parseFloat(value) || 0) * (value.endsWith("ms") ? 1 : 1000);
+      };
+      const currentTheme = () => (root.dataset.theme === "light" ? "light" : "dark");
+
+      function labelToggle() {
+        const next = currentTheme() === "light" ? "dark" : "light";
+        document.querySelector("[data-theme-toggle]")?.setAttribute("aria-label", `Switch to ${next} mode`);
+      }
+
+      function setTheme(theme: "dark" | "light") {
+        const length = ms("--delay-theme") + ms("--duration-theme");
+        root.dataset.themeChange = "";
+        root.dataset.theme = theme;
+        try {
+          localStorage.setItem("mn:theme", theme);
+        } catch {}
+        document.querySelector('meta[name="theme-color"]')?.setAttribute("content", CANVAS[theme]);
+        labelToggle();
+        // The ASCII character is drawn, not styled: it follows the fade frame by frame.
+        window.dispatchEvent(new CustomEvent("theme:change", { detail: { length } }));
+        window.clearTimeout(fadeTimer);
+        fadeTimer = window.setTimeout(() => delete root.dataset.themeChange, length + 50);
+      }
+
+      document.addEventListener("click", (event) => {
+        if (!(event.target as Element).closest("[data-theme-toggle]")) return;
+        setTheme(currentTheme() === "light" ? "dark" : "light");
+      });
+      document.addEventListener("astro:page-load", labelToggle);
     </script>
   </body>
 </html>
@@ -185,7 +252,8 @@ const { spotifyPlaylistId, tracks } = season.data;
   /* The season, small, in the top-right corner. */
   .season {
     position: fixed;
-    right: var(--margin);
+    /* Left of the theme switch. */
+    right: calc(var(--margin) + 44px);
     top: var(--margin);
     z-index: 30;
     max-width: 16rem;
@@ -214,16 +282,20 @@ const { spotifyPlaylistId, tracks } = season.data;
   img.layer {
     object-fit: fill;
   }
-  /* A soft dark scrim at the edges, so small text over footage keeps its contrast. */
+  /* A soft scrim of the canvas colour at the edges, so small text over footage keeps its
+     contrast in either theme. */
   .has-video::before {
+    --scrim-strong: color-mix(in srgb, var(--color-canvas) 82%, transparent);
+    --scrim: color-mix(in srgb, var(--color-canvas) 70%, transparent);
+    --scrim-none: color-mix(in srgb, var(--color-canvas) 0%, transparent);
     content: "";
     position: absolute;
     inset: 0;
     z-index: 1;
     background:
-      linear-gradient(90deg, rgb(12 12 12 / 0.82), rgb(12 12 12 / 0) 55%),
-      linear-gradient(0deg, rgb(12 12 12 / 0.7), rgb(12 12 12 / 0) 30%),
-      linear-gradient(180deg, rgb(12 12 12 / 0.7), rgb(12 12 12 / 0) 25%);
+      linear-gradient(90deg, var(--scrim-strong), var(--scrim-none) 55%),
+      linear-gradient(0deg, var(--scrim), var(--scrim-none) 30%),
+      linear-gradient(180deg, var(--scrim), var(--scrim-none) 25%);
     pointer-events: none;
   }
   .section .wrap {

@@ -24,6 +24,13 @@ this file holds how they got there. New visual elements need a line here.
 | 2026-11-16 | Section content is a plain list: rows divided by `line` hairlines, each with a `small` title or link, a `body` line, and `muted` `small` details. No cards or boxes | DESIGN.md: small type, hairlines only, no cards |
 | 2026-11-16 | A section grows past one screen when its list needs the room; its video stays behind the full height | Real project and post lists will not always fit one screen |
 | 2026-11-16 | Seasons rows show the season's colour as an 8px square beside its name | The season accent is the one thing that changes between seasons |
+| 2026-11-16 | Autumn 2026's accent is a burnt orange-brown, `#c46a28` (5.1:1 on the dark canvas, 3.4:1 on the light one). The favicon's eye matches | Owner: autumn is more fall orangey brown. Replaces the lime default for this season |
+| 2026-11-16 | A light theme, off by default. The site opens dark; a visitor's choice is remembered on their device. `canvas` and `text` trade places (`#f2f0ea` / `#0c0c0c`), `muted` is `#5c5c58`, `line` is `#d4d1c9`, `focus` is `#0071e3`. Not yet in DESIGN.md, which is dark only | Owner asked for dark and light mode buttons. Values are the existing two neutrals swapped, with `muted` and `focus` darkened to keep 4.5:1 and 3:1 on the light canvas |
+| 2026-11-16 | The theme switch is one 20px line icon in `muted`, top right beside the season: a sun in the dark, a moon in the light, no box around it, 44px target | Owner's two reference icons. DESIGN.md: no boxes or pills; text and controls sit small in a corner |
+| 2026-11-16 | Changing theme: the icon swaps at once (150ms), the page holds for 300ms, then every colour fades over 1200ms. Under reduced motion there is no hold and the fade is 240ms | Owner: a delayed slow change. The instant icon confirms the click during the hold. Longer than every other motion on the site on purpose; it is rare and asked for |
+| 2026-11-16 | On the light canvas a season accent must reach 3:1; if the season's colour does not, the build darkens it until it does | The accent only colours small marks. Keeps pale accents (the lime default) visible in the light theme without a second colour per season |
+| 2026-11-16 | The video placeholder has no ground of its own, only the two hairlines, and the edge scrim over footage takes the canvas colour | So both follow the theme |
+| 2026-11-16 | The loading screen takes the canvas colour: black on a first visit (which is always dark), light only when replayed with `?intro` after choosing the light theme | DESIGN.md's black screen holds for every first visit |
 
 
 ## History (before v1.0)

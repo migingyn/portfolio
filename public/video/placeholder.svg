@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-  <!-- Stands in for a section's video until its clip is added: two crossing hairlines on the canvas colour. -->
-  <rect width="100" height="100" fill="#0c0c0c"/>
-  <path d="M0 0 100 100M100 0 0 100" fill="none" stroke="#2a2a2a" stroke-width="1" vector-effect="non-scaling-stroke"/>
+  <!-- Stands in for a section's video until its clip is added: two crossing hairlines, nothing
+       behind them, so the page's canvas shows through in either theme. -->
+  <path d="M0 0 100 100M100 0 0 100" fill="none" stroke="#8a8a85" stroke-opacity="0.25" stroke-width="1" vector-effect="non-scaling-stroke"/>
 </svg>

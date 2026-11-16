@@ -6,9 +6,12 @@ export type Season = CollectionEntry<"seasons"> & {
   number: string;
 };
 
-/** Mirrors `canvas` in src/styles/tokens.css. Used only for the contrast check. */
+/** Mirror `canvas` in src/styles/tokens.css, dark and light. Used only for contrast. */
 const CARBON = "#0c0c0c";
+const BONE = "#f2f0ea";
 const MIN_CONTRAST = 4.5;
+/** The accent only ever colours small marks, so on the light canvas 3:1 is the bar. */
+const MIN_MARK_CONTRAST = 3;
 
 function luminance(hex: string): number {
   const [r, g, b] = [1, 3, 5].map((i) => {
@@ -57,7 +60,30 @@ export async function getCurrentSeason(): Promise<Season> {
   return current;
 }
 
-/** Inline style for <html>: overrides the one accent variable and nothing else. */
+/**
+ * The accent as used on the light canvas: the season's own colour when it shows up
+ * there, otherwise the same colour darkened step by step until it does.
+ */
+export function accentOnLight(accent: string): string {
+  const mixed = (t: number) =>
+    "#" +
+    [1, 3, 5]
+      .map((i) => {
+        const from = parseInt(accent.slice(i, i + 2), 16);
+        const to = parseInt(CARBON.slice(i, i + 2), 16);
+        return Math.round(from + (to - from) * t)
+          .toString(16)
+          .padStart(2, "0");
+      })
+      .join("");
+  for (let t = 0; t < 1; t += 0.05) {
+    if (contrast(mixed(t), BONE) >= MIN_MARK_CONTRAST) return mixed(t);
+  }
+  return CARBON;
+}
+
+/** Inline style for <html>: sets the season accent (for both themes) and nothing else. */
 export function seasonStyle(season: Season): string {
-  return `--color-accent:${season.data.accent}`;
+  const { accent } = season.data;
+  return `--season-accent:${accent};--season-accent-light:${accentOnLight(accent)}`;
 }

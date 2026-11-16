@@ -32,6 +32,7 @@ npm run build
 | Hagrid font files (licensed, not in the repo) | `public/fonts/`, switched on in `src/styles/fonts.css` |
 | The logo, Em | `src/assets/em.svg` |
 | Design tokens as CSS variables and Tailwind theme | `src/styles/tokens.css` |
+| Light theme colours and the timing of the dark/light fade | `src/styles/tokens.css` (`[data-theme="light"]`, `--duration-theme`, `--delay-theme`) |
 | Page shell: header, section, video layer | `src/layouts/BaseLayout.astro` |
 | Dial navigation | `src/components/Dial.tsx` |
 | ASCII character: loading screen and corner character | `src/components/Character.astro`, `src/scripts/ascii-character.ts` |

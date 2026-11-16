@@ -2,8 +2,8 @@
 name: Autumn 2026
 start: 2026-09-22
 end: 2026-12-20
-# The season colour. This is the DESIGN.md default until you pick one.
-accent: "#c6ff1a"
+# The season colour: a burnt orange-brown, the colour of fallen leaves.
+accent: "#c46a28"
 # Home's video for this season: a file name in public/video without the extension.
 video:
 # One line of mood, shown small on the home section. Empty until you write it.

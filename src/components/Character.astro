@@ -116,6 +116,15 @@
     window.clearTimeout(lookTimer);
     lookTimer = window.setTimeout(() => character?.look(0), 700);
   });
+  // A theme change fades the text colour; the character is redrawn in it each frame.
+  window.addEventListener("theme:change", (event) => {
+    const until = performance.now() + (event as CustomEvent<{ length: number }>).detail.length + 100;
+    const frame = () => {
+      character?.tint();
+      if (performance.now() < until) requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+  });
   window.addEventListener("dial:close", () => {
     window.clearTimeout(lookTimer);
     character?.look(0);

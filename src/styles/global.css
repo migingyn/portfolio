@@ -9,6 +9,9 @@
 @layer base {
   html {
     color-scheme: dark;
+    &[data-theme="light"] {
+      color-scheme: light;
+    }
     background-color: var(--color-canvas);
     color: var(--color-text);
     caret-color: var(--color-accent);
@@ -105,6 +108,23 @@
   animation-timing-function: var(--ease-out);
 }
 
+/* Theme change (dark to light and back). The six colours fade on <html> after a short
+   hold, and everything that reads them follows. On only while a change is under way,
+   so nothing fades on page load. */
+html[data-theme-change] {
+  transition:
+    --color-canvas var(--duration-theme) ease var(--delay-theme),
+    --color-text var(--duration-theme) ease var(--delay-theme),
+    --color-muted var(--duration-theme) ease var(--delay-theme),
+    --color-line var(--duration-theme) ease var(--delay-theme),
+    --color-accent var(--duration-theme) ease var(--delay-theme),
+    --color-focus var(--duration-theme) ease var(--delay-theme);
+}
+/* An element's own colour transition would chase the fading value and trail behind it. */
+html[data-theme-change] body :not(.theme-toggle, .theme-toggle *) {
+  transition-duration: 0s !important;
+}
+
 /* Dial navigation. The ring's turn is one registered angle, so it eases and every
    item can read it to stay upright. */
 @property --turn {
@@ -118,7 +138,7 @@
   z-index: 40;
   display: grid;
   place-items: center;
-  background: rgb(12 12 12 / 0.96);
+  background: color-mix(in srgb, var(--color-canvas) 96%, transparent);
   touch-action: none;
 }
 .dial__ring {
@@ -268,4 +288,52 @@
   text-decoration: underline;
   text-decoration-color: var(--color-accent);
   text-underline-offset: 3px;
+}
+
+/* Theme switch: a sun in the dark, a moon in the light, top right. No box around it. */
+.theme-toggle {
+  position: fixed;
+  /* The icon's right edge sits on the page margin; the 44px target reaches inward. */
+  right: var(--margin);
+  top: calc(var(--margin) - 14px);
+  z-index: 30;
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center end;
+  color: var(--color-muted);
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    scale var(--duration-fast) var(--ease-out);
+}
+.theme-toggle:active {
+  scale: 0.94;
+}
+@media (hover: hover) and (pointer: fine) {
+  .theme-toggle:hover {
+    color: var(--color-text);
+  }
+}
+/* The icon answers the click at once; the page follows after its hold. */
+.theme-toggle svg {
+  grid-area: 1 / 1;
+  width: 20px;
+  height: 20px;
+  transition:
+    opacity var(--duration-fast) var(--ease-out),
+    scale var(--duration-fast) var(--ease-out);
+}
+.theme-toggle .moon,
+[data-theme="light"] .theme-toggle .sun {
+  opacity: 0;
+  scale: 0.9;
+}
+[data-theme="light"] .theme-toggle .moon {
+  opacity: 1;
+  scale: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle svg {
+    scale: 1 !important;
+  }
 }

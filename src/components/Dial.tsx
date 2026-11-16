@@ -29,7 +29,12 @@ const announce = (name: "dial:move" | "dial:close") => window.dispatchEvent(new 
 export default function Dial({ items, currentPath }: Props) {
   const count = items.length;
   const step = 360 / count;
-  const currentIndex = Math.max(0, items.findIndex((item) => normalize(item.href) === normalize(currentPath)));
+  // A page inside a section (a project write-up, a post) counts as that section.
+  const here = normalize(currentPath);
+  const currentIndex = Math.max(
+    0,
+    items.findIndex((item) => (item.href === "/" ? here === "/" : here === item.href || here.startsWith(`${item.href}/`))),
+  );
 
   const [open, setOpen] = useState(false);
   /** The ring's rotation in degrees. Cumulative, so it always turns the short way. */

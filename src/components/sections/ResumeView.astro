@@ -1,0 +1,39 @@
+---
+/**
+ * Resume: shows public/resume.pdf with a download button once that file exists.
+ * Until then it says where the file goes.
+ */
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+import PlaceholderNote from "./PlaceholderNote.astro";
+
+const hasResume = existsSync(join(process.cwd(), "public", "resume.pdf"));
+---
+
+{
+  hasResume ? (
+    <>
+      <a href="/resume.pdf" download class="btn">
+        Download the resume
+      </a>
+      <object data="/resume.pdf#view=FitH" type="application/pdf" class="resume" aria-label="Resume">
+        <p class="type-body">
+          Your browser cannot show the PDF here.
+        </p>
+      </object>
+    </>
+  ) : (
+    <p class="type-small row__meta">
+      The resume PDF goes at public/resume.pdf
+      <PlaceholderNote />
+    </p>
+  )
+}
+
+<style>
+  .resume {
+    width: min(100%, 44rem);
+    height: 70svh;
+    border: 1px solid var(--color-line);
+  }
+</style>

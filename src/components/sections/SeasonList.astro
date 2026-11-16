@@ -1,0 +1,44 @@
+---
+/** Seasons: every file in src/content/seasons, newest first, with its colour. */
+import { getSeasons } from "../../lib/seasons";
+import { formatDate } from "../../lib/dates";
+import { site } from "../../site.config";
+
+const seasons = (await getSeasons()).reverse();
+---
+
+<ol class="rows">
+  {
+    seasons.map((season) => (
+      <li class="row">
+        <h2 class="type-small season">
+          <i style={`background:${season.data.accent}`} aria-hidden="true" />
+          {season.data.name}
+          {season.id === site.currentSeason && <span class="now">Now</span>}
+        </h2>
+        {season.data.mood && <p class="type-body">{season.data.mood}</p>}
+        <p class="type-small row__meta">
+          <time datetime={season.data.start.toISOString().slice(0, 10)}>{formatDate(season.data.start)}</time>
+          {" to "}
+          <time datetime={season.data.end.toISOString().slice(0, 10)}>{formatDate(season.data.end)}</time>
+        </p>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .season {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  /* The season's colour, as a small square. */
+  .season i {
+    width: 8px;
+    height: 8px;
+  }
+  .now {
+    color: var(--color-muted);
+  }
+</style>

@@ -5,8 +5,15 @@ export interface Section {
   id: string;
   label: string;
   href: string;
-  /** One honest line shown on the section's page until its content is built. */
-  blurb: string;
+  /** One plain line under the section's title. */
+  intro: string;
+}
+
+export interface SiteLink {
+  label: string;
+  /** Leave out while the link is still a placeholder. */
+  href?: string;
+  placeholder?: boolean;
 }
 
 export const site = {
@@ -20,14 +27,21 @@ export const site = {
 
   /** The sections on the dial, in order. */
   sections: [
-    { id: "home", label: "Home", href: "/", blurb: "" },
-    { id: "projects", label: "Projects", href: "/projects", blurb: "Write-ups of what I have built are on the way." },
-    { id: "experience", label: "Experience", href: "/experience", blurb: "Where I have worked and what I did there is on the way." },
-    { id: "resume", label: "Resume", href: "/resume", blurb: "A one-page resume with a download is on the way." },
-    { id: "blog", label: "Blog", href: "/blog", blurb: "Notes on what I am working through are on the way." },
-    { id: "seasons", label: "Seasons", href: "/seasons", blurb: "An archive of past seasons is on the way." },
-    { id: "links", label: "Links", href: "/links", blurb: "Where else to find me is on the way." },
+    { id: "home", label: "Home", href: "/", intro: "" },
+    { id: "projects", label: "Projects", href: "/projects", intro: "Things I have built, with a short write-up of each." },
+    { id: "experience", label: "Experience", href: "/experience", intro: "Where I have worked and what I did there." },
+    { id: "resume", label: "Resume", href: "/resume", intro: "One page, with a download." },
+    { id: "blog", label: "Blog", href: "/blog", intro: "Notes on what I am working through." },
+    { id: "seasons", label: "Seasons", href: "/seasons", intro: "The site changes with the season. These are the ones so far." },
+    { id: "links", label: "Links", href: "/links", intro: "Where else to find me." },
   ] satisfies Section[],
+
+  /** The Links section. Entries marked placeholder show as such until they get an href. */
+  links: [
+    { label: "GitHub", href: "https://github.com/migingyn" },
+    { label: "LinkedIn", placeholder: true },
+    { label: "Email", placeholder: true },
+  ] satisfies SiteLink[],
 
   /** Small links on the home section, for someone who has ten seconds. */
   homeLinks: [

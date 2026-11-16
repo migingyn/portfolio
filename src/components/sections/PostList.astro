@@ -1,0 +1,25 @@
+---
+/** Blog: one row per file in src/content/blog, newest first. */
+import { getCollection } from "astro:content";
+import PlaceholderNote from "./PlaceholderNote.astro";
+import { formatDate } from "../../lib/dates";
+
+const posts = (await getCollection("blog")).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<ul class="rows">
+  {
+    posts.map((post) => (
+      <li class="row">
+        <a href={`/blog/${post.id}`} class="link">
+          <span>{post.data.title}</span>
+        </a>
+        <p class="type-body">{post.data.summary}</p>
+        <p class="type-small row__meta">
+          <time datetime={post.data.date.toISOString().slice(0, 10)}>{formatDate(post.data.date)}</time>
+          {post.data.placeholder && <PlaceholderNote />}
+        </p>
+      </li>
+    ))
+  }
+</ul>

@@ -1,0 +1,30 @@
+---
+/** One project's write-up, from its markdown file. */
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PlaceholderNote from "../../components/sections/PlaceholderNote.astro";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+  return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
+}
+
+const { project } = Astro.props;
+const { title, summary, year, stack, repo, url, placeholder } = project.data;
+const { Content } = await render(project);
+---
+
+<BaseLayout section="projects" title={title} description={summary}>
+  <h1 class="type-title">{title}</h1>
+  <p class="type-body text-muted">{summary}</p>
+  <p class="type-small row__meta">
+    {[year, ...stack].join(" / ")}
+    {placeholder && <PlaceholderNote />}
+  </p>
+  <div class="prose"><Content /></div>
+  <ul class="flex flex-wrap items-center gap-x-6">
+    {url && <li><a href={url} class="link" rel="noopener"><span>See it live</span></a></li>}
+    {repo && <li><a href={repo} class="link" rel="noopener"><span>See the code</span></a></li>}
+    <li><a href="/projects" class="link"><span>See all projects</span></a></li>
+  </ul>
+</BaseLayout>

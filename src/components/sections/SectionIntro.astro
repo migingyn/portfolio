@@ -1,0 +1,13 @@
+---
+/** A section's title and the one plain line under it. */
+import { site } from "../../site.config";
+
+interface Props {
+  /** A section id from site.config.ts. */
+  id: string;
+}
+const section = site.sections.find((s) => s.id === Astro.props.id)!;
+---
+
+<h1 class="type-title">{section.label}</h1>
+{section.intro && <p class="type-body text-muted">{section.intro}</p>}

@@ -36,7 +36,22 @@ npm run build
 | Dial navigation | `src/components/Dial.tsx` |
 | ASCII character: loading screen and corner character | `src/components/Character.astro`, `src/scripts/ascii-character.ts` |
 | Now playing | `src/components/NowPlaying.tsx` |
-| Home, and the other sections (one-screen stubs for now) | `src/pages/index.astro`, `src/pages/[section].astro` |
+| Pages | `src/pages/` |
+| Section modules (one per section, each fed by a data file) | `src/components/sections/` |
+
+## Replacing the placeholders
+
+Every section is filled from a data file. Stand-in entries carry `placeholder: true`
+and show a small "Placeholder" mark; replace the entry and drop that line.
+
+| Section | Edit |
+|---|---|
+| Projects | `src/content/projects/*.md` (one file per project; the file name is its URL) |
+| Experience | `src/data/experience.ts` |
+| Resume | add `public/resume.pdf` |
+| Blog | `src/content/blog/*.mdx` (one file per post) |
+| Seasons | `src/content/seasons/*.md` |
+| Links | `links` in `src/site.config.ts` |
 
 The loading screen plays on a first visit only. Add `?intro` to the URL to replay it.
 

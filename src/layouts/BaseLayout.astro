@@ -198,9 +198,10 @@ const { spotifyPlaylistId, tracks } = season.data;
   .section {
     position: relative;
     display: flex;
-    height: 100svh;
-    min-height: 32rem;
+    min-height: max(100svh, 32rem);
     align-items: center;
+    /* Clear the logo above and the corner character below when a list runs long. */
+    padding-block: calc(var(--margin) + 72px) calc(var(--margin) + 104px);
   }
   .layer {
     position: absolute;

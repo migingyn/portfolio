@@ -13,7 +13,7 @@ this file holds how they got there. New visual elements need a line here.
 | 2026-11-16 | Until a section has footage, its video slot shows a flat `canvas` ground with two crossing hairlines (`public/video/placeholder.svg`) | DESIGN.md: placeholders until the owner's clips arrive; no stock or generated media |
 | 2026-11-16 | The dial opens centred over the page on a dark scrim, with a small "Close" link at the bottom centre in addition to Escape and a click outside | DESIGN.md leaves the dial's position open; touch and screen-reader users need a visible way out |
 | 2026-11-16 | Each section is its own page; moving between them crossfades over 240ms | DESIGN.md: one full screen per section, video crossfade on section change |
-| 2026-11-16 | Sections other than Home are one-screen stubs (title and one honest line) until their content is built | The dial and the section change need real pages to move between |
+| 2026-11-16 | Sections other than Home are built as modules fed by data files and filled with stand-in entries. Every stand-in carries a small "Placeholder" mark in `text` colour, which disappears when its data drops `placeholder: true` | Owner: put modular placeholders for now |
 | 2026-11-16 | The generated stand-in photo, the photo-develop effect, the Now card, the header clock, the closing site index, and the Grenze Gotisch, Arimo, and Courier Prime fonts are removed | Not in DESIGN.md v1.0 |
 | 2026-11-16 | On Home, "See the projects" is the one button; the resume and GitHub are plain links beside it | A recruiter with ten seconds needs one obvious next step. Uses DESIGN.md's single button style |
 | 2026-11-16 | The season's name (and its mood line, once written) sits small and `muted` in the top-right corner of every page | DESIGN.md: text sits small in a corner; seasons set a mood line |
@@ -21,6 +21,9 @@ this file holds how they got there. New visual elements need a line here.
 | 2026-11-16 | The corner character rests at 90px tall; on the loading screen it is 120px | DESIGN.md: about 120px on the loading screen, small in the corner |
 | 2026-11-16 | Now playing shows the first track of the season's list, and appears only once a season has a playlist ID and tracks | There is no live Spotify data to read; the first track stands for the season |
 | 2026-11-16 | Page structure follows taste-skill's container rules (one `.wrap`, `header.nav`, full-bleed media as a background layer). Its gate passes with two waivers: no kit "moment" is dealt, and the video placeholder is empty | The owner's DESIGN.md names its own three moments and forbids stand-in media |
+| 2026-11-16 | Section content is a plain list: rows divided by `line` hairlines, each with a `small` title or link, a `body` line, and `muted` `small` details. No cards or boxes | DESIGN.md: small type, hairlines only, no cards |
+| 2026-11-16 | A section grows past one screen when its list needs the room; its video stays behind the full height | Real project and post lists will not always fit one screen |
+| 2026-11-16 | Seasons rows show the season's colour as an 8px square beside its name | The season accent is the one thing that changes between seasons |
 
 
 ## History (before v1.0)

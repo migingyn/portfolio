@@ -1,0 +1,24 @@
+---
+/** Links: one row per entry in site.config.ts. */
+import PlaceholderNote from "./PlaceholderNote.astro";
+import { site } from "../../site.config";
+---
+
+<ul class="rows">
+  {
+    site.links.map((link) => (
+      <li class="row">
+        {link.href ? (
+          <a href={link.href} class="link" rel="me noopener">
+            <span>{link.label}</span>
+          </a>
+        ) : (
+          <p class="type-small row__meta">
+            {link.label}
+            {link.placeholder && <PlaceholderNote />}
+          </p>
+        )}
+      </li>
+    ))
+  }
+</ul>

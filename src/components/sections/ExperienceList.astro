@@ -1,0 +1,22 @@
+---
+/** Experience: one row per entry in src/data/experience.ts, newest first. */
+import PlaceholderNote from "./PlaceholderNote.astro";
+import { experience } from "../../data/experience";
+---
+
+<ol class="rows">
+  {
+    experience.map((job) => (
+      <li class="row">
+        <h2 class="type-small">
+          {job.role}, {job.company}
+        </h2>
+        <p class="type-body">{job.summary}</p>
+        <p class="type-small row__meta">
+          {job.dates}
+          {job.placeholder && <PlaceholderNote />}
+        </p>
+      </li>
+    ))
+  }
+</ol>

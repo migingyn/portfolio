@@ -1,0 +1,26 @@
+---
+/** One post, from its MDX file. */
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PlaceholderNote from "../../components/sections/PlaceholderNote.astro";
+import { formatDate } from "../../lib/dates";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { title, summary, date, placeholder } = post.data;
+const { Content } = await render(post);
+---
+
+<BaseLayout section="blog" title={title} description={summary}>
+  <h1 class="type-title">{title}</h1>
+  <p class="type-small row__meta">
+    <time datetime={date.toISOString().slice(0, 10)}>{formatDate(date)}</time>
+    {placeholder && <PlaceholderNote />}
+  </p>
+  <div class="prose"><Content /></div>
+  <a href="/blog" class="link"><span>See all posts</span></a>
+</BaseLayout>

@@ -1,9 +1,11 @@
 # portfolio
 
-Personal site of Mikey Nguyen. Astro, React islands, Tailwind CSS, Motion, MDX, deployed on Vercel.
+Personal site of Mikey Nguyen, backend engineer and creative builder. Astro, React
+islands, Tailwind CSS, Motion, MDX, deployed on Vercel.
 
-**[DESIGN.md](./DESIGN.md) is the source of truth for every visual decision.** Change a
-token there first, add a row to its Decision Log, then mirror it in
+**[DESIGN.md](./DESIGN.md) is the source of truth for how the site looks and moves.**
+It holds only the rules in effect. [DECISIONS.md](./DECISIONS.md) holds the history,
+and every new visual element gets a line there. Tokens are mirrored in
 `src/styles/tokens.css`.
 
 ## Commands
@@ -24,21 +26,30 @@ npm run build
 
 | What | Where |
 |---|---|
-| Name, tagline, menu links, the home button, "Now" copy, current season | `src/site.config.ts` |
-| Seasons (one markdown file each) | `src/content/seasons/` |
+| Name, tagline, the dial's sections, the home links, current season | `src/site.config.ts` |
+| Seasons: accent colour, home video, mood line, playlist and track notes | `src/content/seasons/` |
+| Section videos and posters (your footage) | `public/video/` (see its README) |
+| Hagrid font files (licensed, not in the repo) | `public/fonts/`, switched on in `src/styles/fonts.css` |
+| The logo, Em | `src/assets/em.svg` |
 | Design tokens as CSS variables and Tailwind theme | `src/styles/tokens.css` |
-| Page shell (head, fonts, menu, footer) | `src/layouts/BaseLayout.astro` |
-| Header and slide-in menu | `src/components/SiteHeader.astro`, `src/components/MenuPanel.tsx` |
-| Home page | `src/pages/index.astro` |
-| Closing screen (site index) | `src/components/SiteFooter.astro` |
-| taste-skill's photo-develop moment (copied from the kit, do not edit) | `public/assets/moments/` |
-| First-visit loading screen (add `?intro` to the URL to replay it) | `src/components/LoadingScreen.astro`, `src/scripts/ascii-pose.ts` |
+| Page shell: header, section, video layer | `src/layouts/BaseLayout.astro` |
+| Dial navigation | `src/components/Dial.tsx` |
+| ASCII character: loading screen and corner character | `src/components/Character.astro`, `src/scripts/ascii-character.ts` |
+| Now playing | `src/components/NowPlaying.tsx` |
+| Home, and the other sections (one-screen stubs for now) | `src/pages/index.astro`, `src/pages/[section].astro` |
+
+The loading screen plays on a first visit only. Add `?intro` to the URL to replay it.
 
 To start a new season, add a file to `src/content/seasons/` and set `currentSeason`
 in `src/site.config.ts` to its file name.
 
-**Home page photo.** Put your photo next to the season file (for example
-`src/content/seasons/autumn-2026.jpg`) and set `hero` and `heroAlt` in that file. Until
-then the page shows a generated stand-in, `src/assets/hero-standin.jpg`.
+## Design workflow
+
+The design skills are vendored in `.claude/skills` (see `.claude/SKILLS.md`).
+taste-skill's gate checks the built home page:
+
+```bash
+node .claude/skills/design-taste-frontend/scripts/gate.mjs dist/index.html --root dist
+```
 
 No secrets live in this repo. API keys go in Vercel environment variables.

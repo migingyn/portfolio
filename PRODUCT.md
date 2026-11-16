@@ -5,9 +5,9 @@
 web
 
 ## Users
-One site for everyone who looks Mikey up: recruiters and hiring managers scanning for
-projects, experience, and a resume; founders and investors looking for what he has
-shipped; and other builders and friends. (Confirmed by the owner, 2026-11-13.)
+Mainly read as a software engineer's portfolio. First, recruiters and hiring managers
+scanning for projects, experience, and a resume. Then founders and other builders
+looking at what he has shipped and how he thinks. (Owner, 2026-11-16.)
 
 ## Product Purpose
 The personal portfolio of Mikey Nguyen, a backend engineer and creative builder in San
@@ -32,17 +32,15 @@ opens the menu. A persistent Spotify player carries the season's playlist.
 - Built so far: design tokens, layout, menu, home page, first-visit loading screen.
 
 ## Brand Commitments
-- Dark canvas.
-- "Y2K fashion cool": chromehearts.com is the main reference, with us.supreme.com/pages/shop and viviennewestwood.com. Not a game look.
-- No Japanese copy. No pill-shaped buttons or tags.
-- The ASCII art loading screen stays, and is the only place ASCII appears.
+- DESIGN.md v1.0 (written by the owner) is the source of truth: quiet, dark, media-led, with three signature moments (ASCII loading screen, dial navigation, corner character).
+- The owner's own footage only. No stock or generated photos or video; placeholders until clips arrive.
+- One font family (Hagrid, Inter until the licensed files are added). Almost no colour.
+- No cards, boxes, pills, rounded corners, gradients, glows, or shadows. No other brand's logos, marks, or characters.
+- The ASCII character stays.
 - taste-skill is essential to the workflow; Impeccable and Emil Kowalski's skills polish.
-- DESIGN.md at the project root is the source of truth for visual decisions.
 
 ## Evidence on Hand
-- The owner's five reference ads (in chat, not in the repo).
-- The owner will supply a home page photo or film still. Until then the home page uses a generated stand-in, `src/assets/hero-standin.jpg`, which must not be presented as his work.
-- Not yet supplied: project write-ups, resume PDF, playlist and track notes, social links, the "filming" line. Do not invent these.
+- Not yet supplied, and not to be invented: section footage (5 to 10 clips), the licensed Hagrid files, a final logo, project write-ups, experience, resume PDF, the season's mood line, playlist and track notes, social links.
 
 ## Accessibility & Inclusion
 Keyboard access throughout, visible focus, 4.5:1 text contrast, 44px touch targets,

@@ -3,33 +3,29 @@
 /* The vendored design skills are tooling, not site code: keep Tailwind from scanning them. */
 @source not "../../.claude";
 
-@import "@fontsource/grenze-gotisch/latin-900.css";
-@import "@fontsource/arimo/latin-400.css";
-@import "@fontsource/arimo/latin-700.css";
-@import "@fontsource/courier-prime/latin-400.css";
-
+@import "./fonts.css";
 @import "./tokens.css";
 
 @layer base {
   html {
     color-scheme: dark;
-    background-color: var(--color-black);
-    color: var(--color-white);
+    background-color: var(--color-canvas);
+    color: var(--color-text);
     caret-color: var(--color-accent);
-    scrollbar-color: var(--color-grey) var(--color-black);
+    scrollbar-color: var(--color-muted) var(--color-canvas);
     -webkit-text-size-adjust: 100%;
   }
 
   body {
-    font-family: var(--font-sans);
-    font-size: 1rem;
-    line-height: 1.5;
+    font-family: var(--font-text);
+    font-size: 0.9375rem;
+    line-height: 1.55;
     -webkit-font-smoothing: antialiased;
   }
 
   ::selection {
-    background-color: var(--color-white);
-    color: var(--color-black);
+    background-color: var(--color-text);
+    color: var(--color-canvas);
   }
 
   :focus-visible {
@@ -42,49 +38,26 @@
   }
 }
 
-/* The one button (DESIGN.md section 6): a hairline rectangle that fills on hover. */
-@utility btn {
-  display: inline-flex;
-  min-height: 44px;
-  align-items: center;
-  justify-content: center;
-  padding: 0 18px;
-  border: 1px solid var(--color-white);
-  color: var(--color-white);
-  font-family: var(--font-sans);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  transition:
-    background-color var(--duration-fast) var(--ease-out),
-    color var(--duration-fast) var(--ease-out),
-    scale var(--duration-press) var(--ease-out);
-  &:active {
-    scale: 0.97;
-  }
-  @media (hover: hover) and (pointer: fine) {
-    &:hover {
-      background-color: var(--color-white);
-      color: var(--color-black);
-    }
-  }
-}
-
-/* The one link look: an underline draws in from the left on hover. */
+/* Link (DESIGN.md section 5): small type; a 1px accent underline draws in from the left. */
 @utility link {
   display: inline-flex;
   min-width: 44px;
   min-height: 44px;
   align-items: center;
-  color: var(--color-white);
+  color: var(--color-text);
+  font-family: var(--font-text);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   & > span {
-    padding-bottom: 2px;
-    background-image: linear-gradient(currentColor, currentColor);
+    padding-bottom: 3px;
+    background-image: linear-gradient(var(--color-accent), var(--color-accent));
     background-repeat: no-repeat;
     background-position: 0 100%;
     background-size: 0 1px;
-    transition: background-size var(--duration-base) var(--ease-out);
+    transition: background-size var(--duration-fast) var(--ease-out);
   }
   &:active > span {
     background-size: 100% 1px;
@@ -96,46 +69,163 @@
   }
 }
 
-/* One container for the header, every section and the footer: equal margins. */
-.wrap {
-  width: min(100% - 2 * var(--page-x), 80rem);
-  margin-inline: auto;
-}
-
-/* Hero entrance, once on load: what sits in the hero's row fades up, 60ms apart.
-   The photograph itself is never hidden; its develop is the kit's moment. */
-@media (prefers-reduced-motion: no-preference) {
-  html.m-enter [data-enter] .hero-text > * {
-    animation: rise 520ms var(--ease-out) both;
-  }
-  html.m-enter [data-enter] .hero-text > :nth-child(2) {
-    animation-delay: 60ms;
-  }
-  html[data-loading] [data-enter] .hero-text > * {
-    animation-play-state: paused;
-  }
-}
-@keyframes rise {
-  from {
-    opacity: 0;
-    translate: 0 12px;
-  }
-}
-
-/* The name is a button that opens the menu. Flat white blackletter; it dims on hover. */
-.wordmark {
+/* Button: the one style. A 1px outline, square, small type, 44px tall. */
+@utility btn {
+  display: inline-flex;
   min-height: 44px;
-  color: var(--color-white);
-  white-space: nowrap;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  border: 1px solid var(--color-text);
+  color: var(--color-text);
+  font-family: var(--font-text);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   transition:
-    opacity var(--duration-fast) var(--ease-out),
-    scale var(--duration-press) var(--ease-out);
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    scale var(--duration-fast) var(--ease-out);
+  &:active {
+    scale: 0.97;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: var(--color-text);
+      color: var(--color-canvas);
+    }
+  }
 }
-.wordmark:active {
-  scale: 0.98;
+
+/* Section change: the page crossfades over 240ms; nothing slides. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--duration-base);
+  animation-timing-function: var(--ease-out);
+}
+
+/* Dial navigation. The ring's turn is one registered angle, so it eases and every
+   item can read it to stay upright. */
+@property --turn {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0deg;
+}
+.dial {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  background: rgb(12 12 12 / 0.96);
+  touch-action: none;
+}
+.dial__ring {
+  --radius: min(36vmin, 15rem);
+  position: relative;
+  width: calc(var(--radius) * 2);
+  aspect-ratio: 1;
+  cursor: grab;
+  user-select: none;
+  transition: --turn var(--duration-dial) var(--ease-out);
+}
+.dial__ring.is-dragging {
+  cursor: grabbing;
+  transition: none;
+}
+.dial__circle {
+  position: absolute;
+  inset: 2.25rem;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-full);
+}
+/* The accent mark sits above whichever section is at the top. */
+.dial__mark {
+  position: absolute;
+  left: 50%;
+  top: -2.25rem;
+  width: 6px;
+  height: 6px;
+  translate: -50% 0;
+  background: var(--color-accent);
+}
+.dial__item {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: rotate(calc(var(--at) + var(--turn))) translateY(calc(var(--radius) * -1))
+    rotate(calc((var(--at) + var(--turn)) * -1));
+}
+.dial__link {
+  display: flex;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  translate: -50% -50%;
+  color: var(--color-muted);
+  font-family: var(--font-text);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: color var(--duration-fast) var(--ease-out);
+}
+.dial__link.is-selected {
+  color: var(--color-text);
 }
 @media (hover: hover) and (pointer: fine) {
-  .wordmark:hover {
-    opacity: 0.6;
+  .dial__link:hover {
+    color: var(--color-text);
   }
+}
+.dial__close {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--margin) - 12px);
+  translate: -50% 0;
+}
+
+/* Now playing: one small line, bottom right. */
+.now-playing {
+  position: fixed;
+  right: var(--margin);
+  bottom: calc(var(--margin) - 12px);
+  z-index: 30;
+  display: grid;
+  justify-items: end;
+  gap: 8px;
+  max-width: min(22rem, calc(100vw - 2 * var(--margin)));
+}
+.now-playing__line {
+  gap: 10px;
+}
+.now-playing__dot {
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  background: var(--color-accent);
+}
+.now-playing__list {
+  display: grid;
+  gap: 16px;
+  width: 100%;
+  max-height: 60svh;
+  overflow-y: auto;
+  padding: 16px;
+  background: var(--color-canvas);
+}
+.now-playing__list[hidden] {
+  display: none;
+}
+.now-playing__list ol {
+  display: grid;
+  gap: 12px;
+}
+.now-playing__list iframe {
+  width: 100%;
+  border: 0;
 }

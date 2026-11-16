@@ -6,8 +6,8 @@ export type Season = CollectionEntry<"seasons"> & {
   number: string;
 };
 
-/** Mirrors `black` in src/styles/tokens.css. Used only for the contrast check. */
-const CARBON = "#0a0a0a";
+/** Mirrors `canvas` in src/styles/tokens.css. Used only for the contrast check. */
+const CARBON = "#0c0c0c";
 const MIN_CONTRAST = 4.5;
 
 function luminance(hex: string): number {
@@ -23,13 +23,13 @@ function contrast(a: string, b: string): number {
   return (hi + 0.05) / (lo + 0.05);
 }
 
-/** The season colour is used for text on black, so fail the build rather than ship an unreadable season. */
+/** DESIGN.md: a season accent must reach 4.5:1 on `canvas` or the build fails. */
 function assertReadable(id: string, role: string, color: string) {
   const ratio = contrast(color, CARBON);
   if (ratio < MIN_CONTRAST) {
     throw new Error(
-      `Season "${id}": palette.${role} ${color} has ${ratio.toFixed(2)}:1 contrast against the ` +
-        `dark canvas; DESIGN.md section 8 needs at least ${MIN_CONTRAST}:1.`,
+      `Season "${id}": ${role} ${color} has ${ratio.toFixed(2)}:1 contrast against the ` +
+        `canvas; DESIGN.md needs at least ${MIN_CONTRAST}:1.`,
     );
   }
 }
@@ -40,7 +40,7 @@ export async function getSeasons(): Promise<Season[]> {
   return entries
     .sort((a, b) => a.data.start.getTime() - b.data.start.getTime())
     .map((entry, i) => {
-      assertReadable(entry.id, "accent", entry.data.palette.accent);
+      assertReadable(entry.id, "accent", entry.data.accent);
       return { ...entry, number: String(i + 1).padStart(2, "0") };
     });
 }
@@ -59,10 +59,5 @@ export async function getCurrentSeason(): Promise<Season> {
 
 /** Inline style for <html>: overrides the one accent variable and nothing else. */
 export function seasonStyle(season: Season): string {
-  return `--color-accent:${season.data.palette.accent}`;
-}
-
-/** "2026.09.22" */
-export function formatSeasonDate(date: Date): string {
-  return date.toISOString().slice(0, 10).replaceAll("-", ".");
+  return `--color-accent:${season.data.accent}`;
 }

@@ -1,62 +1,241 @@
 ---
 import "../styles/global.css";
 import { ClientRouter } from "astro:transitions";
-import wordmarkFont from "@fontsource/grenze-gotisch/files/grenze-gotisch-latin-900-normal.woff2?url";
-import sansFont from "@fontsource/arimo/files/arimo-latin-700-normal.woff2?url";
-import SiteHeader from "../components/SiteHeader.astro";
-import SiteFooter from "../components/SiteFooter.astro";
+import textFont from "@fontsource/inter/files/inter-latin-500-normal.woff2?url";
+import displayFont from "@fontsource/inter/files/inter-latin-700-normal.woff2?url";
+import Em from "../assets/em.svg";
+import Character from "../components/Character.astro";
+import Dial from "../components/Dial";
+import NowPlaying from "../components/NowPlaying";
 import { site } from "../site.config";
 import { getCurrentSeason, seasonStyle } from "../lib/seasons";
+import { sectionVideo } from "../lib/video";
 
 interface Props {
+  /** The section this page is: sets its video and its place on the dial. */
+  section: string;
   title?: string;
   description?: string;
-  /** Home renders the line under the name as the page's h1. */
-  isHome?: boolean;
 }
 
-const { title, description = site.description, isHome = false } = Astro.props;
+const { section, title, description = site.description } = Astro.props;
 const season = await getCurrentSeason();
 const pageTitle = title ? `${title} / ${site.name}` : `${site.name}, backend engineer and creative builder`;
-const year = new Date().getFullYear();
-const shareImage = new URL("/share.jpg", Astro.site ?? Astro.url).href;
+// Home's clip can change with the season.
+const video = sectionVideo(section === "home" ? (season.data.video ?? "home") : section);
+const { spotifyPlaylistId, tracks } = season.data;
 ---
 
 <!doctype html>
-<html lang="en" data-type="service" style={seasonStyle(season)}>
+<html lang="en" data-type="software" style={seasonStyle(season)}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    <meta name="page-type" content="service" />
-    <meta name="site-kind" content="other" />
-    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="page-type" content="software" />
+    <meta name="site-kind" content="software" />
+    <meta name="theme-color" content="#0c0c0c" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content={shareImage} />
-    <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preload" as="font" type="font/woff2" href={wordmarkFont} crossorigin />
-    <link rel="preload" as="font" type="font/woff2" href={sansFont} crossorigin />
-    <!-- Hero entrance and the photo-develop moment (taste-skill's motion contract). -->
+    <link rel="preload" as="font" type="font/woff2" href={textFont} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={displayFont} crossorigin />
     <script is:inline>
-      document.documentElement.classList.add("m-enter", "mo-js");
-      setTimeout(function () { document.documentElement.classList.add("m-enter-done"); }, 700);
-      setTimeout(function () { document.documentElement.classList.add("mo-safe"); }, 2500);
+      // First visit (or ?intro): show the loading screen before anything paints.
+      (function () {
+        try {
+          var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+          var replay = new URLSearchParams(location.search).has("intro");
+          if (!reduced && (replay || !localStorage.getItem("mn:intro-seen"))) {
+            document.documentElement.dataset.intro = "playing";
+          }
+        } catch (e) {}
+      })();
     </script>
-    <link rel="modulepreload" href="/assets/moments/moments.js" />
-    <link rel="modulepreload" href="/assets/moments/lib.js" />
     <ClientRouter />
   </head>
   <body>
-    <slot name="overlay" />
-    <SiteHeader isHome={isHome} />
+    <header class="nav">
+      <div class="wrap">
+        <a class="skip link" href="#main"><span>Skip to content</span></a>
+        <button type="button" class="logo" data-dial-open aria-haspopup="dialog" aria-expanded="false" aria-label="Open navigation">
+          <Em />
+        </button>
+        <p class="type-small season">{[season.data.name, season.data.mood].filter(Boolean).join(" / ")}</p>
+        <Character />
+      </div>
+    </header>
+
     <main id="main">
-      <slot />
+      <!-- One full screen: the section's muted loop behind, small text along the left edge. -->
+      <section class:list={["section", { "has-video": video.src }]}>
+        {
+          video.src ? (
+            <video class="layer" muted loop playsinline preload="metadata" poster={video.poster} aria-hidden="true" data-section-video>
+              <source src={video.src} type="video/mp4" />
+            </video>
+          ) : (
+            <img class="layer" src="/video/placeholder.svg" alt="" aria-hidden="true" />
+          )
+        }
+        <div class="wrap">
+          <div class="hero-text">
+            <slot />
+            {
+              video.src && (
+                <button type="button" class="link pause" data-video-toggle aria-pressed="false" hidden>
+                  <span>Pause video</span>
+                </button>
+              )
+            }
+          </div>
+        </div>
+      </section>
     </main>
-    <SiteFooter year={year} />
-    <script is:inline type="module" src="/assets/moments/moments.js"></script>
+
+    {
+      spotifyPlaylistId && tracks.length > 0 && (
+        <NowPlaying
+          client:idle
+          transition:persist="now-playing"
+          seasonName={season.data.name}
+          playlistId={spotifyPlaylistId}
+          tracks={tracks}
+        />
+      )
+    }
+    <Dial client:load items={site.sections.map(({ label, href }) => ({ label, href }))} currentPath={Astro.url.pathname} />
+
+    <script>
+      // Section loops play unless the visitor prefers reduced motion; then the poster stands.
+      // A loop that never stops gets an off switch.
+      function startVideo() {
+        const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const video = document.querySelector<HTMLVideoElement>("video[data-section-video]");
+        const toggle = document.querySelector<HTMLButtonElement>("[data-video-toggle]");
+        if (!video || reduced) return;
+
+        video.play().catch(() => {});
+        if (!toggle) return;
+        const label = toggle.querySelector("span")!;
+        toggle.hidden = false;
+        toggle.onclick = () => {
+          const paused = !video.paused;
+          if (paused) video.pause();
+          else video.play().catch(() => {});
+          toggle.setAttribute("aria-pressed", String(paused));
+          label.textContent = paused ? "Play video" : "Pause video";
+        };
+      }
+
+      document.addEventListener("astro:page-load", startVideo);
+    </script>
   </body>
 </html>
+
+<style>
+  /* One container for the header and every section: equal margins, nothing else. */
+  .wrap {
+    width: calc(100% - 2 * var(--margin));
+    margin-inline: auto;
+  }
+
+  .skip {
+    position: fixed;
+    left: var(--margin);
+    top: 8px;
+    z-index: 70;
+    padding: 0 16px;
+    background: var(--color-text);
+    color: var(--color-canvas);
+  }
+  .skip:not(:focus) {
+    clip-path: inset(50%);
+    width: 1px;
+    min-width: 0;
+    height: 1px;
+    min-height: 0;
+    overflow: hidden;
+    padding: 0;
+  }
+
+  /* Em, the logo, sits in the top-left corner and opens the dial. */
+  .logo {
+    position: fixed;
+    left: var(--margin);
+    top: calc(var(--margin) - 8px);
+    z-index: 50;
+    display: grid;
+    width: 56px;
+    height: 48px;
+    place-items: center start;
+    color: var(--color-text);
+    transition: scale var(--duration-fast) var(--ease-out);
+  }
+  .logo :global(svg) {
+    width: 44px;
+    height: 32px;
+  }
+  .logo:active {
+    scale: 0.94;
+  }
+
+  /* The season, small, in the top-right corner. */
+  .season {
+    position: fixed;
+    right: var(--margin);
+    top: var(--margin);
+    z-index: 30;
+    max-width: 16rem;
+    color: var(--color-muted);
+    text-align: right;
+  }
+
+  /* Each section is one full screen with its video behind it. Text sits small
+     along the left edge, never centred in a box. */
+  .section {
+    position: relative;
+    display: flex;
+    height: 100svh;
+    min-height: 32rem;
+    align-items: center;
+  }
+  .layer {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  img.layer {
+    object-fit: fill;
+  }
+  /* A soft dark scrim at the edges, so small text over footage keeps its contrast. */
+  .has-video::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+      linear-gradient(90deg, rgb(12 12 12 / 0.82), rgb(12 12 12 / 0) 55%),
+      linear-gradient(0deg, rgb(12 12 12 / 0.7), rgb(12 12 12 / 0) 30%),
+      linear-gradient(180deg, rgb(12 12 12 / 0.7), rgb(12 12 12 / 0) 25%);
+    pointer-events: none;
+  }
+  .section .wrap {
+    position: relative;
+    z-index: 2;
+  }
+  .hero-text {
+    display: grid;
+    justify-items: start;
+    gap: 16px;
+    max-width: 36rem;
+  }
+  .pause {
+    color: var(--color-muted);
+  }
+</style>

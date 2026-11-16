@@ -1,0 +1,34 @@
+/* Inter is the fallback until the licensed Hagrid files are added (DESIGN.md section 3). */
+@import "@fontsource/inter/latin-400.css";
+@import "@fontsource/inter/latin-500.css";
+@import "@fontsource/inter/latin-600.css";
+@import "@fontsource/inter/latin-700.css";
+
+/* To switch to Hagrid: put the licensed files in public/fonts, uncomment these
+   rules, and adjust the file names. Nothing else needs to change.
+
+@font-face {
+  font-family: "Hagrid";
+  src: url("/fonts/Hagrid-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Hagrid";
+  src: url("/fonts/Hagrid-Semibold.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Hagrid Text";
+  src: url("/fonts/HagridText-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Hagrid Text";
+  src: url("/fonts/HagridText-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-display: swap;
+}
+*/

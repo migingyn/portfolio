@@ -1,0 +1,123 @@
+---
+/**
+ * The ASCII character, twice (DESIGN.md section 5):
+ * - Loading screen: on a first visit, a black screen with the character small
+ *   and centred, cycling through its pose frames. About 2 seconds, skippable
+ *   with a click or any key, replayable with ?intro.
+ * - Corner character: afterwards it moves to the bottom-left corner and stays
+ *   on every page, turning toward the dial and snapping a pose on section change.
+ * It is one canvas throughout, kept across page changes.
+ */
+---
+
+<div class="intro" aria-hidden="true"></div>
+<canvas id="character" class="character" width="120" height="120" aria-hidden="true" transition:persist="character"
+></canvas>
+
+<style is:global>
+  .character {
+    position: fixed;
+    left: var(--margin);
+    bottom: var(--margin);
+    z-index: 45;
+    width: 120px;
+    height: 120px;
+    transform-origin: 0 100%;
+    scale: 0.75;
+    pointer-events: none;
+    transition:
+      translate 600ms var(--ease-out),
+      scale 600ms var(--ease-out);
+  }
+  .intro {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: none;
+    background: var(--color-canvas);
+    transition: opacity var(--duration-base) var(--ease-out);
+  }
+
+  /* Loading: black screen, the character centred at full size. */
+  html[data-intro] .intro {
+    display: block;
+  }
+  html[data-intro] .character {
+    z-index: 61;
+  }
+  html[data-intro="playing"] .character {
+    translate: calc(50vw - 60px - var(--margin)) calc(-50svh + 60px + var(--margin));
+    scale: 1;
+    transition: none;
+  }
+  /* Leaving: the black fades and the character walks to its corner. */
+  html[data-intro="leaving"] .intro {
+    opacity: 0;
+  }
+</style>
+
+<script>
+  import { mountCharacter, type Character } from "../scripts/ascii-character";
+
+  const SEEN_KEY = "mn:intro-seen";
+  type Host = HTMLCanvasElement & { character?: Character };
+
+  let character: Character | undefined;
+  let firstLoad = true;
+  let lookTimer = 0;
+
+  function playIntro() {
+    const root = document.documentElement;
+    const under = [...document.querySelectorAll<HTMLElement>("body > header, main")];
+    let done = false;
+
+    try {
+      localStorage.setItem(SEEN_KEY, "1");
+    } catch {}
+    under.forEach((el) => el.setAttribute("inert", ""));
+
+    const finish = () => {
+      if (done) return;
+      done = true;
+      document.removeEventListener("keydown", finish);
+      document.removeEventListener("pointerdown", finish);
+      under.forEach((el) => el.removeAttribute("inert"));
+      root.dataset.intro = "leaving";
+      window.setTimeout(() => {
+        delete root.dataset.intro;
+        character?.rest();
+      }, 620);
+    };
+
+    document.addEventListener("keydown", finish);
+    document.addEventListener("pointerdown", finish);
+    character?.intro(finish);
+  }
+
+  document.addEventListener("astro:page-load", () => {
+    const canvas = document.getElementById("character") as Host | null;
+    if (!canvas) return;
+    // The canvas is kept across pages, so the character is made once.
+    canvas.character ??= mountCharacter(canvas);
+    character = canvas.character;
+
+    if (firstLoad) {
+      firstLoad = false;
+      if (document.documentElement.dataset.intro === "playing") playIntro();
+    } else {
+      // A section change: a short pose.
+      character.snap();
+    }
+  });
+
+  // It turns toward the dial (which opens to its right) while the dial moves.
+  window.addEventListener("dial:move", () => {
+    character?.look(1);
+    window.clearTimeout(lookTimer);
+    lookTimer = window.setTimeout(() => character?.look(0), 700);
+  });
+  window.addEventListener("dial:close", () => {
+    window.clearTimeout(lookTimer);
+    character?.look(0);
+  });
+</script>

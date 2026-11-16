@@ -30,7 +30,8 @@ npm run build
 | Seasons: accent colour, home video, mood line, playlist and track notes | `src/content/seasons/` |
 | Section videos and posters (your footage) | `public/video/` (see its README) |
 | Hagrid font files (licensed, not in the repo) | `public/fonts/`, switched on in `src/styles/fonts.css` |
-| The logo, Em | `src/assets/em.svg` |
+| The logo (the penguin) | `src/assets/logo/penguin.svg` |
+| The penguin's outfits, one per file; a season picks one with `outfit:` | `src/assets/logo/outfits/` |
 | Design tokens as CSS variables and Tailwind theme | `src/styles/tokens.css` |
 | Light theme colours and the timing of the dark/light fade | `src/styles/tokens.css` (`[data-theme="light"]`, `--duration-theme`, `--delay-theme`) |
 | Page shell: header, section, video layer | `src/layouts/BaseLayout.astro` |
@@ -58,6 +59,11 @@ The loading screen plays on a first visit only. Add `?intro` to the URL to repla
 
 To start a new season, add a file to `src/content/seasons/` and set `currentSeason`
 in `src/site.config.ts` to its file name.
+
+To give the penguin a new outfit, draw it on top of `src/assets/logo/penguin.svg`
+(same 100 by 100 grid), save only the outfit as `src/assets/logo/outfits/<name>.svg`,
+and put `outfit: <name>` in the season file. Fill it with `var(--color-accent)` to
+take the season colour. The browser-tab icon follows.
 
 ## Design workflow
 

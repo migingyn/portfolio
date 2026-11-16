@@ -13,6 +13,8 @@ const seasons = defineCollection({
     end: z.coerce.date(),
     /** The season colour (DESIGN.md `accent`). Nothing else changes between seasons. */
     accent: hex,
+    /** What the logo wears this season: a file name in src/assets/logo/outfits without the extension. */
+    outfit: z.string().nullish(),
     /** Home's video for this season: a file name in public/video without the extension. Defaults to "home". */
     video: z.string().nullish(),
     mood: z.string().nullish(),

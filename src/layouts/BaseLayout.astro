@@ -3,11 +3,11 @@ import "../styles/global.css";
 import { ClientRouter } from "astro:transitions";
 import textFont from "@fontsource/inter/files/inter-latin-500-normal.woff2?url";
 import displayFont from "@fontsource/inter/files/inter-latin-700-normal.woff2?url";
-import Em from "../assets/em.svg";
 import Character from "../components/Character.astro";
 import Dial from "../components/Dial";
 import NowPlaying from "../components/NowPlaying";
 import { site } from "../site.config";
+import { logoMarkup } from "../lib/logo";
 import { getCurrentSeason, seasonStyle } from "../lib/seasons";
 import { sectionVideo } from "../lib/video";
 
@@ -81,7 +81,7 @@ const { spotifyPlaylistId, tracks } = season.data;
       <div class="wrap">
         <a class="skip link" href="#main"><span>Skip to content</span></a>
         <button type="button" class="logo" data-dial-open aria-haspopup="dialog" aria-expanded="false" aria-label="Open navigation">
-          <Em />
+          <Fragment set:html={logoMarkup(season.data.outfit)} />
         </button>
         <p class="type-small season">{[season.data.name, season.data.mood].filter(Boolean).join(" / ")}</p>
         <button type="button" class="theme-toggle" data-theme-toggle aria-label="Switch to light mode">
@@ -228,22 +228,21 @@ const { spotifyPlaylistId, tracks } = season.data;
     padding: 0;
   }
 
-  /* Em, the logo, sits in the top-left corner and opens the dial. */
+  /* The logo, a penguin in the season's outfit, sits in the top-left corner and opens the dial. */
   .logo {
     position: fixed;
     left: var(--margin);
     top: calc(var(--margin) - 8px);
     z-index: 50;
-    display: grid;
-    width: 56px;
+    display: block;
+    width: 48px;
     height: 48px;
-    place-items: center start;
-    color: var(--color-text);
     transition: scale var(--duration-fast) var(--ease-out);
   }
   .logo :global(svg) {
-    width: 44px;
-    height: 32px;
+    display: block;
+    width: 100%;
+    height: 100%;
   }
   .logo:active {
     scale: 0.94;

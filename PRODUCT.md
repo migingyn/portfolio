@@ -33,7 +33,7 @@ opens the menu. A persistent Spotify player carries the season's playlist.
 
 ## Brand Commitments
 - DESIGN.md (written by the owner) is the source of truth: quiet, dark, media-led, with three signature moments (ASCII loading screen, dial navigation, video loops).
-- The owner's own footage only. No stock or generated photos or video; placeholders until clips arrive.
+- The owner's own footage only. No stock or generated photos or video; the canvas stays bare until clips arrive.
 - One font family (Hagrid, Inter until the licensed files are added). Almost no colour.
 - No cards, boxes, pills, rounded corners, gradients, glows, or shadows. No other brand's logos, marks, or characters.
 - The ASCII character stays, on the loading screen only.

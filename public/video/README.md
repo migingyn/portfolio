@@ -12,5 +12,6 @@ One muted loop per section, from your own footage, 5 to 10 seconds each.
 | Seasons | `seasons.mp4` | `seasons.jpg` |
 | Links | `links.mp4` | `links.jpg` |
 
-Drop the files in this folder and rebuild. A section with no file shows a placeholder.
+Drop the files in this folder and rebuild. A section with no file is the plain page
+(Home shows the season's animated scene instead, until it has a clip).
 A season can point Home at a different clip with `video:` in its season file.

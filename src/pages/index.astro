@@ -1,9 +1,15 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import LeafPile from "../components/scenes/LeafPile.astro";
+import { getCurrentSeason } from "../lib/seasons";
 import { site } from "../site.config";
+
+// The season picks Home's scene (`scene:` in its file). It shows until Home has a video.
+const { scene } = (await getCurrentSeason()).data;
 ---
 
 <BaseLayout section="home">
+  {scene === "leaf-pile" && <LeafPile slot="scene" />}
   <h1 class="type-name">{site.name}</h1>
   <p class="type-body">{site.tagline}</p>
   <ul class="links">

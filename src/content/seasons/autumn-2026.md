@@ -7,6 +7,9 @@ accent: "#c46a28"
 # What the penguin wears this season: a file name in src/assets/logo/outfits without
 # the extension. It is drawn in the season colour. Leave empty for no outfit.
 outfit: scarf
+# The small animated scene on Home: leaf-pile is the penguin raking leaves under two
+# trees. It shows until Home has a video. Leave empty for a plain page.
+scene: leaf-pile
 # Home's video for this season: a file name in public/video without the extension.
 video:
 # One line of mood, shown small on the home section. Empty until you write it.

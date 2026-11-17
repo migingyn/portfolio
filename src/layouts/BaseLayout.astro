@@ -24,6 +24,8 @@ const pageTitle = title ? `${title} / ${site.name}` : `${site.name}, backend eng
 // Home's clip can change with the season.
 const video = sectionVideo(section === "home" ? (season.data.video ?? "home") : section);
 const { spotifyPlaylistId, tracks } = season.data;
+// A page can put a scene beside its text; a real clip takes its place.
+const hasScene = !video.src && Astro.slots.has("scene");
 ---
 
 <!doctype html>
@@ -98,27 +100,34 @@ const { spotifyPlaylistId, tracks } = season.data;
     </header>
 
     <main id="main">
-      <!-- One full screen: the section's muted loop behind, small text along the left edge. -->
-      <section class:list={["section", { "has-video": video.src }]}>
+      <!-- One full screen: the section's muted loop behind, small text along the left edge.
+           A section with no clip is the bare canvas. A page can add a "scene" beside its
+           text (Home's season scene); a real clip takes the scene's place. -->
+      <section class:list={["section", { "has-video": video.src, "has-scene": hasScene }]}>
         {
           video.src ? (
             <video class="layer" muted loop playsinline preload="metadata" poster={video.poster} aria-hidden="true" data-section-video>
               <source src={video.src} type="video/mp4" />
             </video>
-          ) : (
-            <img class="layer" src="/video/placeholder.svg" alt="" aria-hidden="true" />
-          )
+          ) : null
         }
+        {/* The placeholder for a section with no clip (two crossing hairlines), switched
+            off for now. To bring it back, put this line in place of the `null` above:
+            <img class="layer" src="/video/placeholder.svg" alt="" aria-hidden="true" />
+        */}
         <div class="wrap">
-          <div class="hero-text">
-            <slot />
-            {
-              video.src && (
-                <button type="button" class="link pause" data-video-toggle aria-pressed="false" hidden>
-                  <span>Pause video</span>
-                </button>
-              )
-            }
+          <div class:list={["hero-text", { "hero-split": hasScene }]}>
+            <div class="hero-copy">
+              <slot />
+              {
+                video.src && (
+                  <button type="button" class="link pause" data-video-toggle aria-pressed="false" hidden>
+                    <span>Pause video</span>
+                  </button>
+                )
+              }
+            </div>
+            {hasScene && <slot name="scene" />}
           </div>
         </div>
       </section>
@@ -268,6 +277,39 @@ const { spotifyPlaylistId, tracks } = season.data;
     /* Clear the logo above and the now-playing line below when a list runs long. */
     padding-block: calc(var(--margin) + 72px);
   }
+  /* A section with a scene is a split: the words and the scene share one grid that
+     fills the screen down to a ground hairline. The scene stands on that line, under
+     the words on narrow screens and in the right five of twelve columns on wide ones. */
+  .has-scene {
+    padding-bottom: calc(var(--margin) + 48px);
+  }
+  .has-scene .wrap {
+    display: flex;
+    align-self: stretch;
+  }
+  .hero-split {
+    display: grid;
+    flex: 1;
+    grid-template-rows: minmax(0, 1fr) auto;
+    row-gap: 24px;
+    border-bottom: 1px solid var(--color-line);
+  }
+  .hero-split .hero-copy {
+    align-self: center;
+  }
+  @media (min-width: 64rem) {
+    .hero-split {
+      grid-template-rows: none;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: 24px;
+    }
+    .hero-split .hero-copy {
+      grid-column: 1 / span 7;
+    }
+    .hero-split :global(.hero-visual) {
+      grid-column: 8 / span 5;
+    }
+  }
   .layer {
     position: absolute;
     inset: 0;
@@ -299,11 +341,12 @@ const { spotifyPlaylistId, tracks } = season.data;
     position: relative;
     z-index: 2;
   }
-  .hero-text {
+  .hero-copy {
     display: grid;
     justify-items: start;
     gap: 16px;
-    max-width: 36rem;
+    /* Wide enough for the name on one line at its largest size. */
+    max-width: 40rem;
   }
   .pause {
     color: var(--color-muted);

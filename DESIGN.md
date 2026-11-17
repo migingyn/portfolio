@@ -1,7 +1,7 @@
 ---
-version: 1.2
+version: 1.3
 name: Portfolio "Mikey Nguyen"
-status: Active. v1.2 drops the corner character; the ASCII character now lives on the loading screen only. How each rule got here is in DECISIONS.md.
+status: Active. v1.3 adds the home scene (the penguin and his leaf pile) and drops the placeholder lines from sections with no video. How each rule got here is in DECISIONS.md.
 description: >
   A quiet, dark, media-led portfolio. Generous empty space, small type, and my own
   footage doing the talking. Three signature moments make it memorable. A small ASCII
@@ -100,11 +100,12 @@ nothing else about the design changes.
 
 ### Seasons
 Each season file in `src/content/seasons` sets `accent`, the penguin's `outfit`, the
-home video, a mood line, and the playlist. Nothing else changes between seasons.
+home `scene`, the home video, a mood line, and the playlist. Nothing else changes
+between seasons.
 
 - A season accent must reach 4.5:1 on the dark `canvas` or the build fails.
 - On the light `canvas` it must reach 3:1. If it does not, the build darkens it until it does.
-- Autumn 2026 is a burnt orange-brown, `#c46a28`, and the penguin wears a plaid scarf.
+- Autumn 2026 is a burnt orange-brown, `#c46a28`. The penguin wears a plaid scarf, and Home's scene is the leaf pile.
 
 ## 3. Typography
 
@@ -156,10 +157,27 @@ The current section sits at the top in `text` with an `accent` mark. Others are 
 ### Section video
 Each section plays a full-frame muted loop from my footage, after lafour.com.
 
-- One file per section at `public/video/<section>.mp4`, plus a poster image. Until I add a clip, the slot shows two crossing hairlines on the bare `canvas`.
+- One file per section at `public/video/<section>.mp4`, plus a poster image. Until I add a clip, the section is the bare `canvas`, with nothing drawn in the video's place.
 - Muted, looped, `playsinline`. Never plays sound.
 - A section with a clip gets a small `muted` "Pause video" link under its text.
 - Under `prefers-reduced-motion` the poster image shows instead.
+
+### Home scene
+While Home has no video, a small scene plays at the foot of the screen: in the right
+five of twelve columns on wide screens, under the text on narrow ones. It stands on a
+`line` hairline that runs the width of the content. The season picks the scene; there
+is one so far.
+
+**Leaf pile (autumn).** Two bare-branched trees in `line`, 36 leaves in `accent`, and
+the penguin at full height in the logo's own colours and scarf.
+
+- The loop, about 45 seconds: the leaves fall, he carries them to a pile a few at a time, steps back, runs and jumps in. The pile bursts, a gust carries every leaf back to its tree while he naps where he landed, then he wakes and it starts again.
+- A pointer on the penguin makes him stop where he is and laugh for as long as it stays there. On a touch screen, a tap makes him laugh for a moment.
+- A click or tap on the pile blows it apart. He slumps, sad, for a couple of seconds, then gathers the leaves again.
+- It uses only what the page already has: `line`, `accent`, `muted` for the gust and the sleeping z's, and the penguin's three colours. No new colours, no outlines, no shadows.
+- It is small and off to the side. The name and links stay the first thing read.
+- It pauses when the tab is hidden, the dial is open, or the loading screen is up. A real home video replaces it.
+- Under `prefers-reduced-motion` it is a still picture: leaves on the trees, the penguin standing.
 
 ### Loading screen
 After anaiis.world. A black screen with nothing on it but my ASCII character.
@@ -200,16 +218,16 @@ projects"; the resume and GitHub are links beside it.
 | Theme change | The icon swaps at once, the page holds 300ms, then every colour fades over 1200ms |
 
 - Exits are faster than entrances. Hover effects apply only on devices with a mouse.
-- Nothing follows the pointer except the dial when it is being dragged.
-- The theme change is the one slow motion on the site, on purpose. Nothing else runs longer than the dial.
-- `prefers-reduced-motion` turns off the intro and video loops. The theme change drops its hold and fades in 240ms.
+- Nothing follows the pointer except the dial when it is being dragged. The home scene reacts to the pointer (a laugh, a blown pile) but does not follow it.
+- The theme change is the one slow transition on the site, on purpose. No other transition runs longer than the dial. The home scene is a loop, not a transition, and keeps its own unhurried pace.
+- `prefers-reduced-motion` turns off the intro and video loops and stills the home scene. The theme change drops its hold and fades in 240ms.
 
 ## 7. Accessibility
 
 - Text contrast is 4.5:1 or better in both themes, over video included.
 - Every interactive element is 44px minimum with a visible focus ring.
 - The dial is fully usable by keyboard and screen reader.
-- Videos are decorative and hidden from assistive tech. The ASCII character and the logo drawing are decorative; the logo button is labelled "Open navigation".
+- Videos and the home scene are decorative and hidden from assistive tech. Nothing a visitor needs is in the scene. The ASCII character and the logo drawing are decorative; the logo button is labelled "Open navigation".
 - The theme switch says which theme it switches to.
 - A skip link is the first Tab stop.
 
@@ -219,12 +237,12 @@ projects"; the resume and GitHub are links beside it.
 - Leave space empty.
 - Let my footage carry each section.
 - Keep the signature moments and nothing else loud.
-- Give each season one colour and, if I like, one outfit.
+- Give each season one colour and, if I like, one outfit and one home scene.
 
 **Don't**
 - Add cards, boxes, pills, rounded corners, gradients, glows, or shadows.
 - Add a second font family or extra colours.
-- Use stock or generated photos or video. Use placeholders until I supply my own.
+- Use stock or generated photos or video. Leave the canvas bare until I supply my own.
 - Use any other brand's logos, marks, patterns, or characters.
 - Add a new visual element without a line in DECISIONS.md.
 

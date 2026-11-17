@@ -32,6 +32,7 @@ npm run build
 | Hagrid font files (licensed, not in the repo) | `public/fonts/`, switched on in `src/styles/fonts.css` |
 | The logo (the penguin) | `src/assets/logo/penguin.svg` |
 | The penguin's outfits, one per file; a season picks one with `outfit:` | `src/assets/logo/outfits/` |
+| Home's animated scene (the leaf pile); a season picks it with `scene:` | `src/components/scenes/LeafPile.astro`, `src/scripts/leaf-pile.ts` |
 | Design tokens as CSS variables and Tailwind theme | `src/styles/tokens.css` |
 | Light theme colours and the timing of the dark/light fade | `src/styles/tokens.css` (`[data-theme="light"]`, `--duration-theme`, `--delay-theme`) |
 | Page shell: header, section, video layer | `src/layouts/BaseLayout.astro` |

@@ -28,7 +28,8 @@ loop behind each section. An ASCII character and a circular dial.
 STORY: A small character changes on a black screen, the page fades in, and the visitor
 reads a name, a trade, and a place, then goes to the projects or opens the dial.
 
-FIRST VIEWPORT: Full-screen video (placeholder until footage arrives). Logo top left.
+FIRST VIEWPORT: Full-screen video once footage arrives; until then the bare canvas with
+the season's small animated scene (the penguin and his leaf pile) low on the right. Logo top left.
 Season name top right. Along the left edge at mid height: the name large, the tagline,
 one outlined button, two links. The bottom-left corner is empty.
 

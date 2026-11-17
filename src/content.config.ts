@@ -15,6 +15,8 @@ const seasons = defineCollection({
     accent: hex,
     /** What the logo wears this season: a file name in src/assets/logo/outfits without the extension. */
     outfit: z.string().nullish(),
+    /** The small animated scene on Home while it has no video. Only "leaf-pile" exists so far. */
+    scene: z.enum(["leaf-pile"]).nullish(),
     /** Home's video for this season: a file name in public/video without the extension. Defaults to "home". */
     video: z.string().nullish(),
     mood: z.string().nullish(),

@@ -88,9 +88,28 @@ const leaves = [0, 1].flatMap((tree) =>
         <path class="stroke" d="M-7.500-47.200-1.500-49.600M12-47.200 6-49.600" />
       </g>
       <ellipse class="ink" data-beak cx="2.300" cy="-40.600" rx="3.700" ry="2" />
-      <path class="leaf" d="M7-31.500 12.500-32.500 14.500-19.500 9-18.500Z" />
-      <path class="leaf" d="M-14.800-37C-5-33 9-33 17-37L18-31.300C9-27.300-6-27.300-15.800-31.300Z" />
-      <path class="scarf-line" d="M-8.500-34.600-9.300-29M-1.500-33.400-1.800-27.900M6-33.500 6.300-28M12.500-35.200 13.500-29.800" />
+      <!-- The scarf: the same plaid as the logo's (src/assets/logo/outfits/scarf.svg), redrawn
+           at this size. The season colour as the ground, dark bands and thin bone lines
+           along it and across it, a fringed tail, and a dark line where the tail tucks in. -->
+      <defs>
+        <clipPath id="scene-scarf-tail"><path d="M7-31.500 12.500-32.500 14.500-19.500 12.400-20.400 11.300-18.300 9.800-19.900 8.300-17.700Z" /></clipPath>
+        <clipPath id="scene-scarf-band"><path d="M-14.800-37C-5-33 9-33 17-37L18-31.300C9-27.300-6-27.300-15.800-31.300Z" /></clipPath>
+      </defs>
+      <g clip-path="url(#scene-scarf-tail)">
+        <path class="leaf" d="M5-34H17V-16H5Z" />
+        <g transform="rotate(-8.700 9.800 -32)">
+          <path class="plaid-dark" d="M8.400-35V-15M5-26.500H16M5-21.300H16" />
+          <path class="plaid-light" d="M11.500-35V-15M5-23.900H16" />
+        </g>
+      </g>
+      <g clip-path="url(#scene-scarf-band)">
+        <path class="leaf" d="M-17-39H20V-26H-17Z" />
+        <path class="plaid-dark" d="M-15.400-35.600-12.200-34.400-8.800-33.600-5.300-32.900-1.800-32.600 1.800-32.400 5.300-32.600 8.700-32.900 11.900-33.600 14.900-34.400 17.700-35.600" />
+        <path class="plaid-dark" d="M-12.300-36.700-14.600-29.900M-7.100-35.400-8.500-28.300M-1.600-34.700-2.100-27.500M3.500-34.600 3.700-27.400M8.800-35.100 9.900-28M13.900-36.400 16.200-29.500" />
+        <path class="plaid-light" d="M-16.300-33.200-12.900-32-9.400-31.100-5.700-30.400-2-30 1.800-29.900 5.500-30 9.100-30.400 12.500-31.100 15.800-32.100 18.800-33.300" />
+        <path class="plaid-light" d="M-9.600-35.900-11.300-29M-4.200-35-5.100-27.800M0.900-34.600 0.800-27.400M6.400-34.800 7.100-27.700M11.400-35.700 13.100-28.700" />
+      </g>
+      <path class="scarf-tuck" d="M6.400-28.300C8.800-28.600 11-29.200 13.200-30" />
     </g>
 
     <g data-leaves>
@@ -170,11 +189,26 @@ const leaves = [0, 1].flatMap((tree) =>
     stroke-width: 1.500;
     stroke-linecap: round;
   }
-  .scarf-line {
+  /* The scarf's check, in the two neutrals, as on the logo. */
+  .plaid-dark {
     fill: none;
     stroke: #0c0c0c;
     stroke-opacity: 0.38;
-    stroke-width: 1.600;
+    stroke-width: 1.560;
+    stroke-linejoin: round;
+  }
+  .plaid-light {
+    fill: none;
+    stroke: #f2f0ea;
+    stroke-opacity: 0.9;
+    stroke-width: 0.500;
+    stroke-linejoin: round;
+  }
+  .scarf-tuck {
+    fill: none;
+    stroke: #0c0c0c;
+    stroke-width: 0.800;
+    stroke-linecap: round;
   }
   .wind {
     fill: none;

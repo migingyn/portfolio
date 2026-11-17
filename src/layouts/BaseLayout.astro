@@ -5,6 +5,7 @@ import textFont from "@fontsource/inter/files/inter-latin-500-normal.woff2?url";
 import displayFont from "@fontsource/inter/files/inter-latin-700-normal.woff2?url";
 import Character from "../components/Character.astro";
 import Dial from "../components/Dial";
+import Footer from "../components/Footer.astro";
 import NowPlaying from "../components/NowPlaying";
 import { site } from "../site.config";
 import { logoMarkup } from "../lib/logo";
@@ -133,6 +134,8 @@ const hasScene = !video.src && Astro.slots.has("scene");
       </section>
     </main>
 
+    <Footer />
+
     {
       spotifyPlaylistId && tracks.length > 0 && (
         <NowPlaying
@@ -169,6 +172,11 @@ const hasScene = !video.src && Astro.slots.has("scene");
       }
 
       document.addEventListener("astro:page-load", startVideo);
+
+      // Once the page is scrolled, what passes under the fixed logo and season label fades out.
+      const markScrolled = () => document.documentElement.toggleAttribute("data-scrolled", window.scrollY > 4);
+      window.addEventListener("scroll", markScrolled, { passive: true });
+      document.addEventListener("astro:page-load", markScrolled);
 
       // Theme switch. The icon changes at once; the colours hold, then fade slowly (global.css).
       const root = document.documentElement;
@@ -214,6 +222,24 @@ const hasScene = !video.src && Astro.slots.has("scene");
   .wrap {
     width: calc(100% - 2 * var(--margin));
     margin-inline: auto;
+  }
+
+  /* The logo, season and theme switch stay put while the page scrolls. So that text
+     never runs through them, the top of the screen fades to the canvas once the page
+     has moved (html[data-scrolled], set by the script above). */
+  .nav::before {
+    content: "";
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 25;
+    height: calc(var(--margin) + 72px);
+    background: linear-gradient(var(--color-canvas) 50%, color-mix(in srgb, var(--color-canvas) 0%, transparent));
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--duration-fast) var(--ease-out);
+  }
+  :global(html[data-scrolled]) .nav::before {
+    opacity: 1;
   }
 
   .skip {

@@ -77,7 +77,7 @@ export default function Dial({ items, currentPath }: Props) {
     document.querySelectorAll(OPENERS).forEach((opener) => opener.setAttribute("aria-expanded", String(open)));
     if (!open) return;
 
-    const outside = [...document.querySelectorAll<HTMLElement>("main")];
+    const outside = [...document.querySelectorAll<HTMLElement>("main, body > footer")];
     const root = document.documentElement;
     const opener = openerRef.current;
     const previousOverflow = root.style.overflow;

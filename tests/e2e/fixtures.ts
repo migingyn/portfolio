@@ -37,6 +37,11 @@ export const test = base.extend<Fixtures>({
     { auto: true },
   ],
   page: async ({ page, skipIntro }, use) => {
+    // The visitor count is a Vercel Function, which the local preview does not run.
+    // Stand in for it: 41 visitors so far, 42 once this browser is counted.
+    await page.route("**/api/views", (route) =>
+      route.fulfill({ json: { visitors: route.request().method() === "POST" ? 42 : 41 } }),
+    );
     if (skipIntro) {
       await page.addInitScript(() => {
         try {

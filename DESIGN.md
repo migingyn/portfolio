@@ -1,7 +1,7 @@
 ---
-version: 1.3
+version: 1.4
 name: Portfolio "Mikey Nguyen"
-status: Active. v1.3 adds the home scene (the penguin and his leaf pile) and drops the placeholder lines from sections with no video. How each rule got here is in DECISIONS.md.
+status: Active. v1.4 adds the footer with the public visitor count. How each rule got here is in DECISIONS.md.
 description: >
   A quiet, dark, media-led portfolio. Generous empty space, small type, and my own
   footage doing the talking. Three signature moments make it memorable. A small ASCII
@@ -121,6 +121,7 @@ No kickers above titles. No numbering unless order matters.
 - Each section is its own page and at least one full screen, with its video full-bleed behind it. It grows when a list needs the room.
 - Text sits small along the left edge of the screen. Never centred in a box.
 - Three corners are fixed on every page: logo top left, season and theme switch top right, now playing bottom right. The bottom left stays empty.
+- Under each section is a footer, reached by scrolling. Once the page has scrolled, the top of the screen fades to `canvas` so text never runs through the logo or the season label.
 - Margins are 64px desktop, 32px tablet, 16px phone.
 - Breakpoints are 480, 768, 1024, 1280. Touch targets are 44px minimum.
 - No cards, boxes, panels, pills, gradients, glows, or drop shadows.
@@ -201,6 +202,15 @@ hairlines: a `small` title or link, a `body` line, and `muted` `small` details.
 Stand-in entries carry a small "Placeholder" mark in `text` until real content
 replaces them.
 
+### Footer
+One quiet row under every page, below the first screen: a `line` hairline, then
+`small` `muted` type. On the left, the year and my name. On the right, how many
+people have visited: "1,284 visitors".
+
+- The count is public. Anyone who scrolls down sees the same number I do.
+- Each browser is counted once, the first time it opens the site. Nothing about the visitor is stored, only the number.
+- The number is kept by a small function on Vercel (`api/views.js`) in an Upstash Redis database. If that is not set up or cannot be reached, the count is simply not shown.
+
 ### Links and buttons
 Links are `text` in `small` type. On hover a 1px `accent` underline draws in from the
 left. There is one button style, a 1px `text` outline, square, `small` type, 44px tall.
@@ -227,6 +237,7 @@ projects"; the resume and GitHub are links beside it.
 - Text contrast is 4.5:1 or better in both themes, over video included.
 - Every interactive element is 44px minimum with a visible focus ring.
 - The dial is fully usable by keyboard and screen reader.
+- The visitor count is plain text in the footer, read out like any other line.
 - Videos and the home scene are decorative and hidden from assistive tech. Nothing a visitor needs is in the scene. The ASCII character and the logo drawing are decorative; the logo button is labelled "Open navigation".
 - The theme switch says which theme it switches to.
 - A skip link is the first Tab stop.

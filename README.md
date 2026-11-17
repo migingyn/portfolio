@@ -36,6 +36,7 @@ npm run build
 | Design tokens as CSS variables and Tailwind theme | `src/styles/tokens.css` |
 | Light theme colours and the timing of the dark/light fade | `src/styles/tokens.css` (`[data-theme="light"]`, `--duration-theme`, `--delay-theme`) |
 | Page shell: header, section, video layer | `src/layouts/BaseLayout.astro` |
+| Footer and the visitor count | `src/components/Footer.astro`, `api/views.js` |
 | Dial navigation | `src/components/Dial.tsx` |
 | Loading screen and its ASCII character | `src/components/Character.astro`, `src/scripts/ascii-character.ts` |
 | Now playing | `src/components/NowPlaying.tsx` |
@@ -108,6 +109,23 @@ fails, the run keeps a report you can download from its page on GitHub.
   3. On the Variables tab of the same page, add `VERCEL_DEPLOY` with the value `true`.
   4. In the Vercel project, under Settings, Git, turn off automatic deployments, so
      the site is not deployed twice.
+
+## Visitor count
+
+The footer shows how many people have visited. The number is kept in an Upstash
+Redis database by one Vercel Function, `api/views.js`. Until a database is connected
+the footer shows only the name, and nothing else is affected.
+
+To switch it on:
+
+1. In the Vercel project, open **Storage**, choose **Upstash** (Redis), and create a
+   database on the free plan.
+2. Connect it to this project. Vercel adds the two settings the function reads,
+   `KV_REST_API_URL` and `KV_REST_API_TOKEN` (`.env.example` lists them).
+3. Redeploy. The count starts at zero.
+
+Each browser is counted once. Only the number is stored. To start again from zero,
+delete the key `portfolio:visitors` in the database's data browser.
 
 ## Shipping
 

@@ -1,0 +1,74 @@
+---
+/**
+ * The footer (DESIGN.md section 5): one quiet row under every page. The visitor
+ * count comes from /api/views; it stays hidden until a number arrives, so a build
+ * with no counter behind it shows only the name.
+ */
+import { site } from "../site.config";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="closing">
+  <div class="wrap">
+    <p class="type-small">&copy; {year} {site.name}</p>
+    <p class="type-small" data-visitors hidden><span data-visitors-count></span> <span data-visitors-word>visitors</span></p>
+  </div>
+</footer>
+
+<style>
+  .closing {
+    color: var(--color-muted);
+  }
+  .wrap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 24px;
+    width: calc(100% - 2 * var(--margin));
+    margin-inline: auto;
+    border-top: 1px solid var(--color-line);
+    /* The bottom clears the now-playing line, which is fixed in the corner. */
+    padding-block: 24px calc(var(--margin) + 32px);
+  }
+</style>
+
+<script>
+  const COUNTED = "mn:counted";
+  /** The count, once known, so a page change does not ask again. */
+  let known: number | undefined;
+
+  /** A browser is counted once. If it cannot remember that, it is not counted at all. */
+  function firstVisit(): boolean {
+    try {
+      return !localStorage.getItem(COUNTED);
+    } catch {
+      return false;
+    }
+  }
+
+  async function count(): Promise<number> {
+    const first = firstVisit();
+    const response = await fetch("/api/views", { method: first ? "POST" : "GET" });
+    if (!response.ok) throw new Error("no count");
+    const { visitors } = (await response.json()) as { visitors: number };
+    if (!Number.isFinite(visitors)) throw new Error("no count");
+    if (first) localStorage.setItem(COUNTED, "1");
+    return visitors;
+  }
+
+  async function show() {
+    const line = document.querySelector<HTMLElement>("[data-visitors]");
+    if (!line) return;
+    try {
+      known ??= await count();
+    } catch {
+      return; // No counter behind this build, or it is down: the line stays hidden.
+    }
+    line.querySelector("[data-visitors-count]")!.textContent = new Intl.NumberFormat("en").format(known);
+    line.querySelector("[data-visitors-word]")!.textContent = known === 1 ? "visitor" : "visitors";
+    line.hidden = false;
+  }
+
+  document.addEventListener("astro:page-load", show);
+</script>

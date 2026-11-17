@@ -42,6 +42,11 @@ this file holds how they got there. New visual elements need a line here.
 | 2026-11-17 | The scene's penguin is the logo's penguin drawn at full height: same hood, face, eyes, beak and scarf, plus feet and flippers | The logo shows only his head and shoulders |
 | 2026-11-17 | A click on the pile wins over a click on the penguin when he is standing beside it | He usually is beside it; the click is meant for the pile |
 | 2026-11-17 | The home text column is 40rem wide (was 36rem) | At the largest size the name did not fit on one line |
+| 2026-11-17 | Every page gets a footer below the first screen: a hairline, the year and name on the left, the visitor count on the right, in `small` `muted` type. DESIGN.md is v1.4 | Owner: scrolling down shows a footer with the page's views, stored and visible to anyone |
+| 2026-11-17 | The count is of visitors: each browser is counted once (it remembers on the device that it was counted). A browser that cannot remember is not counted. Only the number is stored | Owner wants to see how many people have used the site. Counting every page load would mostly count the owner; counting once per browser needs no cookies and stores nothing personal |
+| 2026-11-17 | The number lives in an Upstash Redis database, read and written by one Vercel Function, `api/views.js`. The site itself stays a static build. With no database connected the footer shows only the name | The site needs somewhere to keep one number. A function in `/api` adds that without changing how the pages are built or tested |
+| 2026-11-17 | Once the page has scrolled, the top 72px plus the margin fades to `canvas` | With a footer every page scrolls, and text was sliding through the fixed logo and season label |
+| 2026-11-17 | taste-skill's gate passes with five stated exceptions: no kit "moment" is dealt; Home's two columns are not top-aligned; and three for the footer, which the kit expects to be a full-screen closing section with a call to action | The owner's brief and DESIGN.md come before the skill: the words stay at mid-height, the scene stands on the ground, and the footer is one quiet row |
 | 2026-11-16 | The loading screen takes the canvas colour: black on a first visit (which is always dark), light only when replayed with `?intro` after choosing the light theme | DESIGN.md's black screen holds for every first visit |
 
 
